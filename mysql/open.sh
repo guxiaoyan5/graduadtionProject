@@ -1,1 +1,0 @@
-sudo docker exec -it graduate_database /bin/bash
