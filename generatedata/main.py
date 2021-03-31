@@ -38,26 +38,27 @@ if __name__ == '__main__':
     for i in range(1, 500):
         collegeName = random.choice(college)
         studentClassName = random.choice(classname[collegeName])
-        sex = random.choice(['n', 'w'])
+        sex = random.choice(['男', '女'])
         sid = str(100000 + i)
         name = sid
-        sql = "insert into student(id,name,class,college,sex) values('{}','{}','{}','{}','{}')".format(sid, name,
-                                                                                                       studentClassName,
-                                                                                                       collegeName, sex)
+        sql = "insert into student(id,name,class, major,college,sex) values('{}','{}','{}','{}','{}','{}')".format(sid, name,
+                                                                                                             studentClassName,
+                                                                                                             studentClassName,
+                                                                                                             collegeName,
+                                                                                                             sex)
         cursor.execute(sql)
         conn.commit()
         for j in range(1, random.randint(1, 1000)):
-            s += 1
             execution_time = randomTime()
             money = random.random() * 100
-            merchant_name = random.choice(['212', '235', '456'])
-            sql = "insert into consume(sid,execution_time,money,merchant_name) values ('{}','{}',{},'{}')".format(sid,
+            merchant_name = random.choice(['南212', '北235', '东456','西45','北452'])
+            sql = "insert into consume(sid,execution_time,money,store_name) values ('{}','{}',{},'{}')".format(sid,
                                                                                                                   execution_time,
                                                                                                                   money,
                                                                                                                   merchant_name)
             cursor.execute(sql)
             conn.commit()
-            print(s)
+        print(i)
     cursor.close()
     conn.close()
     pass
