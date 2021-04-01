@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="@localhost" uuid="2ee292fc-1869-46f2-8e98-b43607e0ae34">
+    <data-source source="LOCAL" name="@localhost" uuid="5af0cc76-c57c-4e73-895e-8a911d5226e4">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://localhost:3306</jdbc-url>
       <driver-properties>
         <property name="serverTimezone" value="UTC" />
+        <property name="functionsNeverReturnBlobs" value="FALSE" />
       </driver-properties>
+    </data-source>
+    <data-source source="LOCAL" name="@192.168.43.101" uuid="5980ba24-184e-47b2-9159-97e06a09ec0f">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://192.168.43.101:3306</jdbc-url>
     </data-source>
   </component>
 </project>

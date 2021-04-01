@@ -32,7 +32,7 @@ def randomTime():
 
 
 if __name__ == '__main__':
-    conn = pymysql.connect(host='127.0.0.1', user='root', password='guyanjie0908', database='graduate')
+    conn = pymysql.connect(host='192.168.43.101', user='root', password='guyanjie0908GYJ$', database='graduate')
     cursor = conn.cursor()
     s = 0
     for i in range(1, 500):
