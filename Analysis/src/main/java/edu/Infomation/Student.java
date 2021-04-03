@@ -11,17 +11,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Student implements Writable, DBWritable {
-    String id;
-    String name;
-    String className;
-    String major;
-    String college;
-    String sex;
+    private String id;
+    private String name;
+    private int className;
+    private int major;
+    private int college;
+    private String sex;
 
     public Student() {
     }
 
-    public Student(String id, String name, String className, String major, String college, String sex) {
+    public Student(String id, String name, int className, int major, int college, String sex) {
         this.id = id;
         this.name = name;
         this.className = className;
@@ -58,27 +58,27 @@ public class Student implements Writable, DBWritable {
         this.name = name;
     }
 
-    public String getClassName() {
+    public int getClassName() {
         return className;
     }
 
-    public void setClassName(String className) {
+    public void setClassName(int className) {
         this.className = className;
     }
 
-    public String getMajor() {
+    public int getMajor() {
         return major;
     }
 
-    public void setMajor(String major) {
+    public void setMajor(int major) {
         this.major = major;
     }
 
-    public String getCollege() {
+    public int getCollege() {
         return college;
     }
 
-    public void setCollege(String college) {
+    public void setCollege(int college) {
         this.college = college;
     }
 
@@ -94,9 +94,9 @@ public class Student implements Writable, DBWritable {
     public void write(DataOutput dataOutput) throws IOException {
         dataOutput.writeUTF(this.id);
         dataOutput.writeUTF(this.name);
-        dataOutput.writeUTF(this.className);
-        dataOutput.writeUTF(this.major);
-        dataOutput.writeUTF(this.college);
+        dataOutput.writeInt(this.className);
+        dataOutput.writeInt(this.major);
+        dataOutput.writeInt(this.college);
         dataOutput.writeUTF(this.sex);
     }
 
@@ -104,9 +104,9 @@ public class Student implements Writable, DBWritable {
     public void readFields(DataInput dataInput) throws IOException {
         this.id = dataInput.readUTF();
         this.name = dataInput.readUTF();
-        this.className = dataInput.readUTF();
-        this.major = dataInput.readUTF();
-        this.college = dataInput.readUTF();
+        this.className = dataInput.readInt();
+        this.major = dataInput.readInt();
+        this.college = dataInput.readInt();
         this.sex = dataInput.readUTF();
     }
 
@@ -114,9 +114,9 @@ public class Student implements Writable, DBWritable {
     public void write(PreparedStatement preparedStatement) throws SQLException {
         preparedStatement.setString(1, this.id);
         preparedStatement.setString(2, this.name);
-        preparedStatement.setString(3, this.className);
-        preparedStatement.setString(4, this.major);
-        preparedStatement.setString(5, this.college);
+        preparedStatement.setInt(3, this.className);
+        preparedStatement.setInt(4, this.major);
+        preparedStatement.setInt(5, this.college);
         preparedStatement.setString(6, this.sex);
     }
 
@@ -124,9 +124,9 @@ public class Student implements Writable, DBWritable {
     public void readFields(ResultSet resultSet) throws SQLException {
         this.id = resultSet.getString(1);
         this.name = resultSet.getString(2);
-        this.className = resultSet.getString(3);
-        this.major = resultSet.getString(4);
-        this.college = resultSet.getString(5);
+        this.className = resultSet.getInt(3);
+        this.major = resultSet.getInt(4);
+        this.college = resultSet.getInt(5);
         this.sex = resultSet.getString(6);
     }
 }

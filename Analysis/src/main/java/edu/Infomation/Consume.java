@@ -14,19 +14,21 @@ import java.sql.SQLException;
 
 
 public class Consume implements Writable, DBWritable {
-    String sid;
-    Date execution_time;
-    float money;
-    String storeName;
+    private String sid;
+    private Date execution_time;
+    private float money;
+    private String storeName;
+    private String mode;
 
     public Consume() {
     }
 
-    public Consume(String sid, Date execution_time, float money, String storeName) {
+    public Consume(String sid, Date execution_time, float money, String storeName,String mode) {
         this.sid = sid;
         this.execution_time = execution_time;
         this.money = money;
         this.storeName = storeName;
+        this.mode = mode;
     }
 
     @Override
@@ -36,7 +38,16 @@ public class Consume implements Writable, DBWritable {
                 ", execution_time=" + execution_time +
                 ", money=" + money +
                 ", storeName='" + storeName + '\'' +
+                ", mode='" + mode + '\'' +
                 '}';
+    }
+
+    public String getMode() {
+        return mode;
+    }
+
+    public void setMode(String mode) {
+        this.mode = mode;
     }
 
     public String getSid() {
@@ -77,6 +88,7 @@ public class Consume implements Writable, DBWritable {
         Text.writeString(dataOutput, this.execution_time.toString());
         dataOutput.writeFloat(this.money);
         dataOutput.writeUTF(this.storeName);
+        dataOutput.writeUTF(this.mode);
     }
 
     @Override
@@ -85,21 +97,24 @@ public class Consume implements Writable, DBWritable {
         this.execution_time = Date.valueOf(Text.readString(dataInput));
         this.money = dataInput.readFloat();
         this.storeName = dataInput.readUTF();
+        this.mode = dataInput.readUTF();
     }
 
     @Override
     public void write(PreparedStatement preparedStatement) throws SQLException {
-        preparedStatement.setString(2, this.sid);
-        preparedStatement.setDate(3, this.execution_time);
-        preparedStatement.setFloat(4, this.money);
+        preparedStatement.setString(1, this.sid);
+        preparedStatement.setDate(2, this.execution_time);
+        preparedStatement.setFloat(3, this.money);
         preparedStatement.setString(4, this.storeName);
+        preparedStatement.setString(5,this.mode);
     }
 
     @Override
     public void readFields(ResultSet resultSet) throws SQLException {
-        this.sid = resultSet.getString(2);
-        this.execution_time = resultSet.getDate(3);
-        this.money = resultSet.getFloat(4);
-        this.storeName = resultSet.getString(5);
+        this.sid = resultSet.getString(1);
+        this.execution_time = resultSet.getDate(2);
+        this.money = resultSet.getFloat(3);
+        this.storeName = resultSet.getString(4);
+        this.mode = resultSet.getString(5);
     }
 }

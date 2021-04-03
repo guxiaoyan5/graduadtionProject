@@ -32,33 +32,74 @@ def randomTime():
 
 
 if __name__ == '__main__':
-    conn = pymysql.connect(host='192.168.43.101', user='root', password='guyanjie0908GYJ$', database='graduate')
+    conn = pymysql.connect(host='127.0.0.1', user='root', password='guyanjie0908', database='graduate')
     cursor = conn.cursor()
+    '''for i in college:
+        sql = "insert into college(college) values ('{}')".format(i)
+        cursor.execute(sql)
+    conn.commit()
+
+    for i, j in classname.items():
+        for k in j:
+            sql = "insert into major(major,college_id) select '{}',id from college where college='{}'".format(k, i)
+            cursor.execute(sql)
+    conn.commit()'''
+
+    '''for i in classname.values():
+        for k in i:
+            sql = "insert into class(class,major_id) select '{}',id from major where major='{}'".format(k, k)
+            cursor.execute(sql)
+    conn.commit()'''
+
+    sql = 'select * from college'
+    cursor.execute(sql)
+    college = cursor.fetchall()
+    sql = 'select * from major'
+    cursor.execute(sql)
+    major = cursor.fetchall()
+    sql = 'select * from class'
+    cursor.execute(sql)
+    classname = cursor.fetchall()
+    sql = 'select * from store'
+    cursor.execute(sql)
+    store = cursor.fetchall()
+
     s = 0
     for i in range(1, 500):
-        collegeName = random.choice(college)
-        studentClassName = random.choice(classname[collegeName])
+
+        studentClassName = random.choice(classname)
+        studentMajorName = major[studentClassName[2]-1]
+        studentCollegeName = college[studentMajorName[2]-1]
         sex = random.choice(['男', '女'])
         sid = str(100000 + i)
         name = sid
-        sql = "insert into student(id,name,class, major,college,sex) values('{}','{}','{}','{}','{}','{}')".format(sid, name,
-                                                                                                             studentClassName,
-                                                                                                             studentClassName,
-                                                                                                             collegeName,
-                                                                                                             sex)
+        sql = "insert into student(id,name,class_id, major_id,college_id,sex) values('{}','{}','{}','{}','{}','{}')".format(sid,
+                                                                                                                   name,
+                                                                                                                   studentClassName[
+                                                                                                                       0],
+                                                                                                                   studentMajorName[
+                                                                                                                       0],
+                                                                                                                   studentCollegeName[
+                                                                                                                       0],
+                                                                                                                   sex)
         cursor.execute(sql)
         conn.commit()
         for j in range(1, random.randint(1, 1000)):
             execution_time = randomTime()
             money = random.random() * 100
-            merchant_name = random.choice(['南212', '北235', '东456','西45','北452'])
-            sql = "insert into consume(sid,execution_time,money,store_name) values ('{}','{}',{},'{}')".format(sid,
-                                                                                                                  execution_time,
-                                                                                                                  money,
-                                                                                                                  merchant_name)
+            merchant_name = random.choice(store)
+            sql = "insert into consume(sid,execution_time,money,store_id) values ('{}','{}',{},'{}')".format(sid,
+                                                                                                               execution_time,
+                                                                                                               money,
+                                                                                                               merchant_name[
+                                                                                                                   0])
             cursor.execute(sql)
             conn.commit()
         print(i)
+    '''for i in ['南212', '北235', '东456','西45','北452']:
+        sql = "insert into store(store_name) values ('{}')".format(i)
+        cursor.execute(sql)
+    conn.commit()'''
     cursor.close()
     conn.close()
     pass
