@@ -28,7 +28,7 @@ public class CollegeMonthCSStatisticsToDB {
         Configuration configuration = new Configuration();
         configuration.set("mapreduce.framework.name", "yarn");
         DBConfiguration.configureDB(configuration, StaticConstant.jdbcDriver, StaticConstant.jdbcUrl, StaticConstant.jdbcUser, StaticConstant.jdbcPassword);
-        Job job = Job.getInstance(configuration, "major month consume");
+        Job job = Job.getInstance(configuration, "college month consume");
         //job.addArchiveToClassPath(new Path("hdfs://master:9000/user/util/mysql-connector-java-5.1.49.jar"));
         job.setJarByClass(CollegeMonthCSStatisticsToDB.class);
         job.setMapperClass(Map.class);

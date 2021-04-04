@@ -82,7 +82,7 @@ create table student_consumption_statistics
     consumption_count         int comment '消费次数',
     consumption_total_money   float comment '消费总金额',
     consumption_average_money float comment '消费平均次金额',
-    modify datetime comment '最后一次修改时间',
+    modify                    datetime comment '最后一次修改时间',
     foreign key (sid) references student (id)
 ) comment '学生消费信息';
 
@@ -131,7 +131,7 @@ create table class_month_consumption_statistics
 
 ) comment '班级每月消费信息';
 
-
+/*
 #学生三餐信息统计表
 create table student_three_meals_statistics
 (
@@ -186,10 +186,11 @@ create table major_three_meals_statistics
     student_count                     int comment '消费人数',
     foreign key (major_id) references major (id)
 ) comment '专业每月三餐消费信息表';
+
 create table class_three_meals_statistics
 (
     id                                int AUTO_INCREMENT primary key,
-    class_id                             int not null comment '班级',
+    class_id                          int not null comment '班级',
     consumption_category              enum ('早','午','晚'),
     month                             int comment '月份',
     year                              year comment '年',
@@ -201,13 +202,15 @@ create table class_three_meals_statistics
     foreign key (class_id) references class (id)
 ) comment '班级每月三餐消费信息表';
 
-
+*/
 #学生在商店消费数据统计表
-create table student_store_statistics
+create table student_store_month_statistics
 (
     id                        int AUTO_INCREMENT primary key,
     sid                       char(6) comment '学号',
     store_id                  int comment '商户名称',
+    month                             int comment '月份',
+    year                              year comment '年',
     consumption_count         int comment '消费次数',
     consumption_total_money   float comment '消费总金额',
     consumption_average_money float comment '消费平均金额',
@@ -215,10 +218,12 @@ create table student_store_statistics
     foreign key (store_id) references store (id)
 ) comment '学生在商店消费数据统计';
 #商店消费数据统计表
-create table store_consumption_statistics
+create table store_month_consumption_statistics
 (
     id                                int AUTO_INCREMENT primary key,
     store_id                          int comment '商户名字',
+    month                             int comment '月份',
+    year                              year comment '年',
     consumption_count                 int comment '消费次数',
     consumption_total_money           float comment '消费总金额',
     consumption_average_money         float comment '消费平均金额',

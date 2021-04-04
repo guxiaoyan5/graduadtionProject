@@ -17,17 +17,17 @@ public class Consume implements Writable, DBWritable {
     private String sid;
     private Date execution_time;
     private float money;
-    private String storeName;
+    private int store_id;
     private String mode;
 
     public Consume() {
     }
 
-    public Consume(String sid, Date execution_time, float money, String storeName,String mode) {
+    public Consume(String sid, Date execution_time, float money, int store_id,String mode) {
         this.sid = sid;
         this.execution_time = execution_time;
         this.money = money;
-        this.storeName = storeName;
+        this.store_id = store_id;
         this.mode = mode;
     }
 
@@ -37,7 +37,7 @@ public class Consume implements Writable, DBWritable {
                 "sid='" + sid + '\'' +
                 ", execution_time=" + execution_time +
                 ", money=" + money +
-                ", storeName='" + storeName + '\'' +
+                ", storeName='" + store_id+ '\'' +
                 ", mode='" + mode + '\'' +
                 '}';
     }
@@ -74,12 +74,12 @@ public class Consume implements Writable, DBWritable {
         this.money = money;
     }
 
-    public String getStoreName() {
-        return storeName;
+    public int getStore_id() {
+        return store_id;
     }
 
-    public void setStoreName(String storeName) {
-        this.storeName = storeName;
+    public void setStore_id(int store_id) {
+        this.store_id = store_id;
     }
 
     @Override
@@ -87,7 +87,7 @@ public class Consume implements Writable, DBWritable {
         dataOutput.writeUTF(this.sid);
         Text.writeString(dataOutput, this.execution_time.toString());
         dataOutput.writeFloat(this.money);
-        dataOutput.writeUTF(this.storeName);
+        dataOutput.writeInt(this.store_id);
         dataOutput.writeUTF(this.mode);
     }
 
@@ -96,7 +96,7 @@ public class Consume implements Writable, DBWritable {
         this.sid = dataInput.readUTF();
         this.execution_time = Date.valueOf(Text.readString(dataInput));
         this.money = dataInput.readFloat();
-        this.storeName = dataInput.readUTF();
+        this.store_id = dataInput.readInt();
         this.mode = dataInput.readUTF();
     }
 
@@ -105,7 +105,7 @@ public class Consume implements Writable, DBWritable {
         preparedStatement.setString(1, this.sid);
         preparedStatement.setDate(2, this.execution_time);
         preparedStatement.setFloat(3, this.money);
-        preparedStatement.setString(4, this.storeName);
+        preparedStatement.setInt(4, this.store_id);
         preparedStatement.setString(5,this.mode);
     }
 
@@ -114,7 +114,7 @@ public class Consume implements Writable, DBWritable {
         this.sid = resultSet.getString(1);
         this.execution_time = resultSet.getDate(2);
         this.money = resultSet.getFloat(3);
-        this.storeName = resultSet.getString(4);
+        this.store_id = resultSet.getInt(4);
         this.mode = resultSet.getString(5);
     }
 }
