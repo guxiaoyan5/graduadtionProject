@@ -9,7 +9,9 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+/*
+* 未实现
+* */
 public class StudentCS implements Writable, DBWritable {
     private String sid;
     private int consumption_count;

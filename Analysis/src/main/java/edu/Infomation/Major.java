@@ -10,15 +10,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class major implements Writable, DBWritable {
+public class Major implements Writable, DBWritable {
     private int id;
     private String name;
     private int collegeId;
 
-    public major() {
+    public Major() {
     }
 
-    public major(int id, String name, int collegeId) {
+    public Major(int id, String name, int collegeId) {
         this.id = id;
         this.name = name;
         this.collegeId = collegeId;

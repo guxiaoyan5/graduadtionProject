@@ -16,7 +16,9 @@ import org.apache.hadoop.mapreduce.lib.db.DBOutputFormat;
 import java.io.IOException;
 import java.sql.Date;
 
-
+/*
+未检验
+ */
 public class StudentDayCSStatisticsToDB {
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
         Configuration configuration = new Configuration();
