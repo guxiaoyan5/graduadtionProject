@@ -19,6 +19,9 @@ import org.apache.hadoop.mapreduce.lib.db.DBOutputFormat;
 
 import java.io.IOException;
 
+/**
+ * 已测试
+ */
 public class StudentMonthCSStatisticsToDB {
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
         Configuration configuration = new Configuration();
@@ -39,8 +42,10 @@ public class StudentMonthCSStatisticsToDB {
         job.setInputFormatClass(DBInputFormat.class);
         job.setOutputFormatClass(DBOutputFormat.class);
 
-        DBOutputFormat.setOutput(job, "student_month_consumption_statistics", new String[]{"sid", "month", "year", "consumption_count", "consumption_total_money", "consumption_average_money"});
-        DBInputFormat.setInput(job, StudentDayCS.class, "student_day_consumption_statistics", null, null, new String[]{"sid", "day", "consumption_count", "consumption_total_money", "consumption_average_money"});
+        DBOutputFormat.setOutput(job, "student_month_consumption_statistics",
+                new String[]{"sid", "month", "year", "consumption_count", "consumption_total_money", "consumption_average_money"});
+        DBInputFormat.setInput(job, StudentDayCS.class, "student_day_consumption_statistics", null, null,
+                new String[]{"sid", "day", "consumption_count", "consumption_total_money", "consumption_average_money"});
         boolean result = job.waitForCompletion(true);
         System.exit(result ? 0 : 1);
     }

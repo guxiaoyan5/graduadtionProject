@@ -19,7 +19,7 @@ import org.apache.hadoop.mapreduce.lib.db.DBOutputFormat;
 import java.io.IOException;
 
 /**
- * 中间步骤
+ * 中间步骤，已检验
  */
 public class StudentStoreMonthCSStatisticsToDB {
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {

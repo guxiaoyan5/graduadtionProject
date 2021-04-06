@@ -20,7 +20,7 @@ import org.apache.hadoop.mapreduce.lib.db.DBOutputFormat;
 
 import java.io.IOException;
 /*
-未检验
+已检验
  */
 public class MajorMonthCSStatisticsToDB {
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
@@ -44,9 +44,9 @@ public class MajorMonthCSStatisticsToDB {
 
         DBOutputFormat.setOutput(job, "major_month_consumption_statistics",
                 new String[]{"major_id", "month", "year", "consumption_count", "consumption_total_money", "consumption_average_money","consumption_student_average_money","student_count"});
-        DBInputFormat.setInput(job, ClassMonthCSMapInputValue.class,
-                "select class.class_id,major_id,month,year,consumption_count,consumption_total_money form class,class_month_consumption_statistics where class.class_id = class_month_consumption_statistics.class_id",
-                "select count(*) from class_month_consumption_statistics");
+        DBInputFormat.setInput(job, MajorMonthCSMapInputValue.class,
+                "select class.id,major_id,month,year,consumption_count,consumption_total_money,student_count from class,class_month_consumption_statistics where class.id = class_month_consumption_statistics.class_id",
+                "select count(1) from class_month_consumption_statistics");
 
         boolean result = job.waitForCompletion(true);
         System.exit(result ? 0 : 1);
