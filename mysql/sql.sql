@@ -233,4 +233,27 @@ create table store_month_consumption_statistics
 ) comment '商店消费数据统计';
 
 
-
+/*账户登录*/
+create table student_user
+(
+    name     varchar(6) primary key,
+    password varchar(20) not null,
+    foreign key (name) references student (id)
+);
+create table school_user
+(
+    name     char(10) primary key,
+    password varchar(20) not null
+);
+create table store_user
+(
+    name     char(10) primary key,
+    password varchar(20) not null,
+    store_id int         not null,
+    foreign key (store_id) references store_user (store_id)
+);
+create table admin_user
+(
+    name     char(4) primary key,
+    password varchar(20) not null
+);
