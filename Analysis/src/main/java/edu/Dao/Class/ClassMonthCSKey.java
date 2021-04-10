@@ -1,20 +1,21 @@
 package edu.Dao.Class;
 
+import edu.Infomation.Class.Class;
 import org.apache.hadoop.io.WritableComparable;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-public class ClassMonthCSMiddleKey implements WritableComparable<ClassMonthCSMiddleKey> {
+public class ClassMonthCSKey implements WritableComparable<ClassMonthCSKey> {
     private int class_id;
     private int month;
     private int year;
 
-    public ClassMonthCSMiddleKey() {
+    public ClassMonthCSKey() {
     }
 
-    public ClassMonthCSMiddleKey(int class_id, int month, int year) {
+    public ClassMonthCSKey(int class_id, int month, int year) {
         this.class_id = class_id;
         this.month = month;
         this.year = year;
@@ -54,15 +55,15 @@ public class ClassMonthCSMiddleKey implements WritableComparable<ClassMonthCSMid
     }
 
     @Override
-    public int compareTo(ClassMonthCSMiddleKey o) {
+    public int compareTo(ClassMonthCSKey o) {
         if (this.class_id > o.class_id) {
             return 1;
         } else if (this.class_id == o.class_id) {
-            if(this.year>o.year){
+            if (this.year > o.year) {
                 return 1;
-            }else if(this.year==o.year){
-                return Integer.compare(this.month,o.month);
-            }else {
+            } else if (this.year == o.year) {
+                return Integer.compare(this.month, o.month);
+            } else {
                 return -1;
             }
         } else {
