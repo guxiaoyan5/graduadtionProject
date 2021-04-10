@@ -1,14 +1,9 @@
 package edu.run.majorMonthCSStatistics;
 
-import edu.Dao.ClassMonthCS.ClassMonthCSKey;
-import edu.Dao.ClassMonthCS.ClassMonthCSMapInputValue;
-import edu.Dao.ClassMonthCS.ClassMonthCSValue;
-import edu.Dao.MajorMonthCS.MajorMonthCSKey;
-import edu.Dao.MajorMonthCS.MajorMonthCSMapInputValue;
-import edu.Dao.MajorMonthCS.MajorMonthCSValue;
-import edu.Infomation.ClassMonthCS;
-import edu.Infomation.MajorMonthCS;
-import edu.run.classMonthCSStatistics.ClassMonthCSStatisticsToDB;
+import edu.Dao.Major.MajorMonthCSKey;
+import edu.Dao.Major.MajorMonthCSMapInputValue;
+import edu.Dao.Major.MajorMonthCSValue;
+import edu.Infomation.Major.MajorMonthCS;
 import edu.util.StaticConstant;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.Job;
@@ -21,7 +16,8 @@ import org.apache.hadoop.mapreduce.lib.db.DBOutputFormat;
 import java.io.IOException;
 /*
 已检验
- */
+*/
+
 public class MajorMonthCSStatisticsToDB {
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
         Configuration configuration = new Configuration();

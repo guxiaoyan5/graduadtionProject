@@ -1,9 +1,10 @@
 package edu.run.classMonthCSStatistics;
 
-import edu.Dao.ClassMonthCS.ClassMonthCSKey;
-import edu.Dao.ClassMonthCS.ClassMonthCSMapInputValue;
-import edu.Dao.ClassMonthCS.ClassMonthCSValue;
-import edu.Infomation.ClassMonthCS;
+import edu.Dao.Class.ClassMonthCSKey;
+import edu.Dao.Class.ClassMonthCSMapInputValue;
+import edu.Dao.Class.ClassMonthCSValue;
+import edu.Infomation.Class.ClassMonthCS;
+import edu.Infomation.Consume;
 import edu.util.StaticConstant;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.Job;
@@ -17,6 +18,7 @@ import java.io.IOException;
 /*
 已检验
  */
+
 public class ClassMonthCSStatisticsToDB {
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
         Configuration configuration = new Configuration();
@@ -38,10 +40,11 @@ public class ClassMonthCSStatisticsToDB {
         job.setOutputFormatClass(DBOutputFormat.class);
 
         DBOutputFormat.setOutput(job, "class_month_consumption_statistics",
-                new String[]{"class_id", "month", "year", "consumption_count", "consumption_total_money", "consumption_average_money","consumption_student_average_money","student_count"});
-        DBInputFormat.setInput(job, ClassMonthCSMapInputValue.class,
-                "select student.id,class_id,month,year,consumption_count,consumption_total_money from student,student_month_consumption_statistics where student.id = student_month_consumption_statistics.sid",
-                "select count(1) from student_month_consumption_statistics");
+                "class_id", "month", "year", "consumption_count", "consumption_total_money",
+                "consumption_average_money","consumption_student_average_money","student_count","consumption_low_count",
+                "consumption_high_count","student_low_count","student_high_count");
+        DBInputFormat.setInput(job, Consume.class, "consume", null, null,
+                "sid", "execution_time", "money", "store_id ", "mode");
         boolean result = job.waitForCompletion(true);
         System.exit(result ? 0 : 1);
     }

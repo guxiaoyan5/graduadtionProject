@@ -1,11 +1,8 @@
 package edu.run.studentStoreMonthCSStatistics;
 
-import edu.Dao.StudentDayCS.StudentDayCSKey;
-import edu.Dao.StudentStoreMonthCS.StudentStoreMonthCSKey;
+import edu.Dao.StudentStore.StudentStoreMonthCSKey;
 import edu.Infomation.Consume;
-import edu.Infomation.StudentDayCS;
-import edu.Infomation.StudentStoreMonthCS;
-import edu.run.studentDayCSStatistics.StudentDayCSStatisticsToDB;
+import edu.Infomation.StudentStore.StudentStoreMonthCS;
 import edu.util.StaticConstant;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.FloatWritable;

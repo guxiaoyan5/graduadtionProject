@@ -1,14 +1,9 @@
 package edu.run.collegeMonthCSStatistics;
 
-import edu.Dao.ClassMonthCS.ClassMonthCSMapInputValue;
-import edu.Dao.CollegeMonthCS.CollegeMonthCSKey;
-import edu.Dao.CollegeMonthCS.CollegeMonthCSMapInputValue;
-import edu.Dao.CollegeMonthCS.CollegeMonthCSValue;
-import edu.Dao.MajorMonthCS.MajorMonthCSKey;
-import edu.Dao.MajorMonthCS.MajorMonthCSValue;
-import edu.Infomation.CollegeMonthCS;
-import edu.Infomation.MajorMonthCS;
-import edu.run.majorMonthCSStatistics.MajorMonthCSStatisticsToDB;
+import edu.Dao.College.CollegeMonthCSKey;
+import edu.Dao.College.CollegeMonthCSMapInputValue;
+import edu.Dao.College.CollegeMonthCSValue;
+import edu.Infomation.College.CollegeMonthCS;
 import edu.util.StaticConstant;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.Job;

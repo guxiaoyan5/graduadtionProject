@@ -1,15 +1,11 @@
 package edu.run.storeMonthCSStatistics;
 
-import edu.Dao.StoreMonthCS.StoreMonthCSKey;
-import edu.Dao.StoreMonthCS.StoreMonthCSValue;
-import edu.Dao.StudentStoreMonthCS.StudentStoreMonthCSKey;
-import edu.Infomation.Consume;
-import edu.Infomation.StoreMonthCS;
-import edu.Infomation.StudentStoreMonthCS;
-import edu.run.studentStoreMonthCSStatistics.StudentStoreMonthCSStatisticsToDB;
+import edu.Dao.Store.StoreMonthCSKey;
+import edu.Dao.Store.StoreMonthCSValue;
+import edu.Infomation.store.StoreMonthCS;
+import edu.Infomation.StudentStore.StudentStoreMonthCS;
 import edu.util.StaticConstant;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.io.FloatWritable;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
