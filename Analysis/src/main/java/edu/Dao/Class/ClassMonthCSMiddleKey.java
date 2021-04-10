@@ -6,15 +6,15 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-public class ClassMonthCSKey implements WritableComparable<ClassMonthCSKey> {
+public class ClassMonthCSMiddleKey implements WritableComparable<ClassMonthCSMiddleKey> {
     private int class_id;
     private int month;
     private int year;
 
-    public ClassMonthCSKey() {
+    public ClassMonthCSMiddleKey() {
     }
 
-    public ClassMonthCSKey(int class_id, int month, int year) {
+    public ClassMonthCSMiddleKey(int class_id, int month, int year) {
         this.class_id = class_id;
         this.month = month;
         this.year = year;
@@ -54,7 +54,7 @@ public class ClassMonthCSKey implements WritableComparable<ClassMonthCSKey> {
     }
 
     @Override
-    public int compareTo(ClassMonthCSKey o) {
+    public int compareTo(ClassMonthCSMiddleKey o) {
         if (this.class_id > o.class_id) {
             return 1;
         } else if (this.class_id == o.class_id) {

@@ -10,7 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ClassMonthCSMapInputValue implements Writable, DBWritable {
+public class ClassMonthCSMiddleInputValue implements Writable, DBWritable {
     private String sid;
     private int class_id;
     private int month;
@@ -18,10 +18,10 @@ public class ClassMonthCSMapInputValue implements Writable, DBWritable {
     private int consumption_count;
     private float consumption_total_money;
 
-    public ClassMonthCSMapInputValue() {
+    public ClassMonthCSMiddleInputValue() {
     }
 
-    public ClassMonthCSMapInputValue(String sid, int class_id, int month, int year, int consumption_count, float consumption_total_money) {
+    public ClassMonthCSMiddleInputValue(String sid, int class_id, int month, int year, int consumption_count, float consumption_total_money) {
         this.sid = sid;
         this.class_id = class_id;
         this.month = month;

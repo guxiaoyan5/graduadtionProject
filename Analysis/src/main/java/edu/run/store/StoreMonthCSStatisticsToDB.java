@@ -1,4 +1,4 @@
-package edu.run.storeMonthCSStatistics;
+package edu.run.store;
 
 import edu.Dao.Store.StoreMonthCSKey;
 import edu.Dao.Store.StoreMonthCSValue;
@@ -39,34 +39,34 @@ public class StoreMonthCSStatisticsToDB {
         job.setOutputFormatClass(DBOutputFormat.class);
 
         DBOutputFormat.setOutput(job, "store_month_consumption_statistics",
-                new String[]{"store_id", "month","year", "consumption_count", "consumption_total_money", "consumption_average_money","consumption_student_average_money","student_count"});
+                "store_id", "month","year", "consumption_count", "consumption_total_money", "consumption_average_money","consumption_student_average_money","student_count");
         DBInputFormat.setInput(job, StudentStoreMonthCS.class, "student_store_month_statistics", null, null,
-                new String[]{"sid", "store_id", "month","year", "consumption_count", "consumption_total_money", "consumption_average_money"});
+                "sid", "store_id", "month","year", "consumption_count", "consumption_total_money", "consumption_average_money");
         boolean result = job.waitForCompletion(true);
         System.exit(result ? 0 : 1);
     }
-}
-
-class Map extends Mapper<Object, StudentStoreMonthCS, StoreMonthCSKey, StoreMonthCSValue> {
-    @Override
-    protected void map(Object key, StudentStoreMonthCS value, Context context) throws IOException, InterruptedException {
-        context.write(new StoreMonthCSKey(value.getStore_id(), value.getMonth(), value.getYear()), new StoreMonthCSValue(value.getSid(), value.getConsumption_count(), value.getConsumption_total_money()));
-    }
-}
-
-class Reduce extends Reducer<StoreMonthCSKey, StoreMonthCSValue, StoreMonthCS, StoreMonthCS> {
-    @Override
-    protected void reduce(StoreMonthCSKey key, Iterable<StoreMonthCSValue> values, Context context) throws IOException, InterruptedException {
-        int student_count = 0;
-        float sum = 0;
-        int count = 0;
-        for (StoreMonthCSValue value : values) {
-            student_count += 1;
-            sum += value.getConsumption_total_money();
-            count += value.getConsumption_count();
+    private static class Map extends Mapper<Object, StudentStoreMonthCS, StoreMonthCSKey, StoreMonthCSValue> {
+        @Override
+        protected void map(Object key, StudentStoreMonthCS value, Context context) throws IOException, InterruptedException {
+            context.write(new StoreMonthCSKey(value.getStore_id(), value.getMonth(), value.getYear()), new StoreMonthCSValue(value.getSid(), value.getConsumption_count(), value.getConsumption_total_money()));
         }
-        float student_average = sum / student_count;
-        float average = sum / count;
-        context.write(new StoreMonthCS(key.getStore_id(), key.getMonth(), key.getYear(), count, sum, average, student_average, student_count), new StoreMonthCS(key.getStore_id(), key.getMonth(), key.getYear(), count, sum, average, student_average, student_count));
+    }
+
+    private static class Reduce extends Reducer<StoreMonthCSKey, StoreMonthCSValue, StoreMonthCS, StoreMonthCS> {
+        @Override
+        protected void reduce(StoreMonthCSKey key, Iterable<StoreMonthCSValue> values, Context context) throws IOException, InterruptedException {
+            int student_count = 0;
+            float sum = 0;
+            int count = 0;
+            for (StoreMonthCSValue value : values) {
+                student_count += 1;
+                sum += value.getConsumption_total_money();
+                count += value.getConsumption_count();
+            }
+            float student_average = sum / student_count;
+            float average = sum / count;
+            context.write(new StoreMonthCS(key.getStore_id(), key.getMonth(), key.getYear(), count, sum, average, student_average, student_count), new StoreMonthCS(key.getStore_id(), key.getMonth(), key.getYear(), count, sum, average, student_average, student_count));
+        }
     }
 }
+

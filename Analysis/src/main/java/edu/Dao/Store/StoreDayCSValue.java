@@ -1,4 +1,4 @@
-package edu.Dao.Class;
+package edu.Dao.Store;
 
 import org.apache.hadoop.io.Writable;
 
@@ -6,15 +6,15 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-public class ClassMonthCSValue implements Writable {
+public class StoreDayCSValue implements Writable {
     private String sid;
     private int consumption_count;
     private float consumption_total_money;
 
-    public ClassMonthCSValue() {
+    public StoreDayCSValue() {
     }
 
-    public ClassMonthCSValue(String sid, int consumption_count, float consumption_total_money) {
+    public StoreDayCSValue(String sid, int consumption_count, float consumption_total_money) {
         this.sid = sid;
         this.consumption_count = consumption_count;
         this.consumption_total_money = consumption_total_money;
@@ -22,7 +22,7 @@ public class ClassMonthCSValue implements Writable {
 
     @Override
     public String toString() {
-        return "ClassMonthCSValue{" +
+        return "StoreDayValue{" +
                 "sid='" + sid + '\'' +
                 ", consumption_count=" + consumption_count +
                 ", consumption_total_money=" + consumption_total_money +
