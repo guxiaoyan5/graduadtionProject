@@ -7,76 +7,63 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 public class MajorMonthCSValue implements Writable {
-    private int class_id;
-    private int consumption_count;
-    private float consumption_total_money;
-    private int student_count;
+    private String sid;
+    private float money;
+    private float studentTotalMoney;
 
     public MajorMonthCSValue() {
     }
 
-    public MajorMonthCSValue(int class_id, int consumption_count, float consumption_total_money, int student_count) {
-        this.class_id = class_id;
-        this.consumption_count = consumption_count;
-        this.consumption_total_money = consumption_total_money;
-        this.student_count = student_count;
+    public MajorMonthCSValue(String sid, float money, float studentTotalMoney) {
+        this.sid = sid;
+        this.money = money;
+        this.studentTotalMoney = studentTotalMoney;
     }
 
     @Override
     public String toString() {
         return "MajorMonthCSValue{" +
-                "class_id=" + class_id +
-                ", consumption_count=" + consumption_count +
-                ", consumption_total_money=" + consumption_total_money +
-                ", student_count=" + student_count +
+                "sid='" + sid + '\'' +
+                ", money=" + money +
+                ", studentTotalMoney=" + studentTotalMoney +
                 '}';
     }
 
-    public int getClass_id() {
-        return class_id;
+    public String getSid() {
+        return sid;
     }
 
-    public void setClass_id(int class_id) {
-        this.class_id = class_id;
+    public void setSid(String sid) {
+        this.sid = sid;
     }
 
-    public int getConsumption_count() {
-        return consumption_count;
+    public float getMoney() {
+        return money;
     }
 
-    public void setConsumption_count(int consumption_count) {
-        this.consumption_count = consumption_count;
+    public void setMoney(float money) {
+        this.money = money;
     }
 
-    public float getConsumption_total_money() {
-        return consumption_total_money;
+    public float getStudentTotalMoney() {
+        return studentTotalMoney;
     }
 
-    public void setConsumption_total_money(float consumption_total_money) {
-        this.consumption_total_money = consumption_total_money;
-    }
-
-    public int getStudent_count() {
-        return student_count;
-    }
-
-    public void setStudent_count(int student_count) {
-        this.student_count = student_count;
+    public void setStudentTotalMoney(float studentTotalMoney) {
+        this.studentTotalMoney = studentTotalMoney;
     }
 
     @Override
     public void write(DataOutput dataOutput) throws IOException {
-        dataOutput.writeInt(this.class_id);
-        dataOutput.writeInt(this.consumption_count);
-        dataOutput.writeFloat(this.consumption_total_money);
-        dataOutput.writeInt(this.student_count);
+        dataOutput.writeUTF(this.sid);
+        dataOutput.writeFloat(this.money);
+        dataOutput.writeFloat(this.studentTotalMoney);
     }
 
     @Override
     public void readFields(DataInput dataInput) throws IOException {
-        this.class_id = dataInput.readInt();
-        this.consumption_count = dataInput.readInt();
-        this.consumption_total_money = dataInput.readFloat();
-        this.student_count = dataInput.readInt();
+        this.sid = dataInput.readUTF();
+        this.money = dataInput.readFloat();
+        this.studentTotalMoney = dataInput.readFloat();
     }
 }

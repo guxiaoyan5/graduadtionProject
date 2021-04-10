@@ -1,32 +1,37 @@
 package edu.Dao.Major;
 
-import edu.Dao.Class.ClassMonthCSKey;
+import edu.Dao.Class.ClassDayCSKey;
+import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
+import org.apache.hadoop.mapreduce.lib.db.DBWritable;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-public class MajorMonthCSKey implements WritableComparable<MajorMonthCSKey> {
+public class MajorDayCSKey implements WritableComparable<MajorDayCSKey> {
     private int major_id;
     private int month;
     private int year;
+    private int day;
 
-    public MajorMonthCSKey() {
+    public MajorDayCSKey() {
     }
 
-    public MajorMonthCSKey(int major_id, int month, int year) {
+    public MajorDayCSKey(int major_id, int month, int year, int day) {
         this.major_id = major_id;
         this.month = month;
         this.year = year;
+        this.day = day;
     }
 
     @Override
     public String toString() {
-        return "MajorMonthCSKey{" +
+        return "MajorDayCSKey{" +
                 "major_id=" + major_id +
                 ", month=" + month +
                 ", year=" + year +
+                ", day=" + day +
                 '}';
     }
 
@@ -54,15 +59,29 @@ public class MajorMonthCSKey implements WritableComparable<MajorMonthCSKey> {
         this.year = year;
     }
 
+    public int getDay() {
+        return day;
+    }
+
+    public void setDay(int day) {
+        this.day = day;
+    }
+
     @Override
-    public int compareTo(MajorMonthCSKey o) {
+    public int compareTo(MajorDayCSKey o) {
         if (this.major_id > o.major_id) {
             return 1;
         } else if (this.major_id == o.major_id) {
             if (this.year > o.year) {
                 return 1;
             } else if (this.year == o.year) {
-                return Integer.compare(this.month, o.month);
+                if (this.month > o.month) {
+                    return 1;
+                } else if (this.month == o.month) {
+                    return Integer.compare(this.day, o.day);
+                } else {
+                    return -1;
+                }
             } else {
                 return -1;
             }
@@ -76,6 +95,7 @@ public class MajorMonthCSKey implements WritableComparable<MajorMonthCSKey> {
         dataOutput.writeInt(this.major_id);
         dataOutput.writeInt(this.month);
         dataOutput.writeInt(this.year);
+        dataOutput.writeInt(this.day);
     }
 
     @Override
@@ -83,5 +103,6 @@ public class MajorMonthCSKey implements WritableComparable<MajorMonthCSKey> {
         this.major_id = dataInput.readInt();
         this.month = dataInput.readInt();
         this.year = dataInput.readInt();
+        this.day = dataInput.readInt();
     }
 }

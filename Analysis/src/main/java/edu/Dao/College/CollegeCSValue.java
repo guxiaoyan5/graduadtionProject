@@ -6,23 +6,23 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-public class CollegeMonthCSValue implements Writable {
+public class CollegeCSValue implements Writable {
     private String sid;
     private float money;
     private float studentTotalMoney;
 
-    public CollegeMonthCSValue() {
-    }
-
-    public CollegeMonthCSValue(String sid, float money, float studentTotalMoney) {
+    public CollegeCSValue(String sid, float money, float studentTotalMoney) {
         this.sid = sid;
         this.money = money;
         this.studentTotalMoney = studentTotalMoney;
     }
 
+    public CollegeCSValue() {
+    }
+
     @Override
     public String toString() {
-        return "CollegeMonthCSValue{" +
+        return "ClassCSValue{" +
                 "sid='" + sid + '\'' +
                 ", money=" + money +
                 ", studentTotalMoney=" + studentTotalMoney +

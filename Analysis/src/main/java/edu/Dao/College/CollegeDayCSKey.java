@@ -1,32 +1,35 @@
 package edu.Dao.College;
 
-import edu.Dao.Class.ClassMonthCSKey;
+import edu.Dao.Class.ClassDayCSKey;
 import org.apache.hadoop.io.WritableComparable;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-public class CollegeMonthCSKey implements WritableComparable<CollegeMonthCSKey> {
+public class CollegeDayCSKey implements WritableComparable<CollegeDayCSKey> {
     private int college_id;
     private int month;
     private int year;
+    private int day;
 
-    public CollegeMonthCSKey() {
+    public CollegeDayCSKey() {
     }
 
-    public CollegeMonthCSKey(int college_id, int month, int year) {
+    public CollegeDayCSKey(int college_id, int month, int year, int day) {
         this.college_id = college_id;
         this.month = month;
         this.year = year;
+        this.day = day;
     }
 
     @Override
     public String toString() {
-        return "CollegeMonthCSKey{" +
+        return "CollegeDayCSKey{" +
                 "college_id=" + college_id +
                 ", month=" + month +
                 ", year=" + year +
+                ", day=" + day +
                 '}';
     }
 
@@ -54,15 +57,29 @@ public class CollegeMonthCSKey implements WritableComparable<CollegeMonthCSKey> 
         this.year = year;
     }
 
+    public int getDay() {
+        return day;
+    }
+
+    public void setDay(int day) {
+        this.day = day;
+    }
+
     @Override
-    public int compareTo(CollegeMonthCSKey o) {
+    public int compareTo(CollegeDayCSKey o) {
         if (this.college_id > o.college_id) {
             return 1;
         } else if (this.college_id == o.college_id) {
             if (this.year > o.year) {
                 return 1;
             } else if (this.year == o.year) {
-                return Integer.compare(this.month, o.month);
+                if (this.month > o.month) {
+                    return 1;
+                } else if (this.month == o.month) {
+                    return Integer.compare(this.day, o.day);
+                } else {
+                    return -1;
+                }
             } else {
                 return -1;
             }
@@ -76,6 +93,7 @@ public class CollegeMonthCSKey implements WritableComparable<CollegeMonthCSKey> 
         dataOutput.writeInt(this.college_id);
         dataOutput.writeInt(this.month);
         dataOutput.writeInt(this.year);
+        dataOutput.writeInt(this.day);
     }
 
     @Override
@@ -83,5 +101,6 @@ public class CollegeMonthCSKey implements WritableComparable<CollegeMonthCSKey> 
         this.college_id = dataInput.readInt();
         this.month = dataInput.readInt();
         this.year = dataInput.readInt();
+        this.day = dataInput.readInt();
     }
 }

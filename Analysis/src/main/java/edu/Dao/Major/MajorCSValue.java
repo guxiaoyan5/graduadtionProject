@@ -1,4 +1,4 @@
-package edu.Dao.College;
+package edu.Dao.Major;
 
 import org.apache.hadoop.io.Writable;
 
@@ -6,15 +6,15 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-public class CollegeMonthCSValue implements Writable {
+public class MajorCSValue implements Writable {
     private String sid;
     private float money;
     private float studentTotalMoney;
 
-    public CollegeMonthCSValue() {
+    public MajorCSValue() {
     }
 
-    public CollegeMonthCSValue(String sid, float money, float studentTotalMoney) {
+    public MajorCSValue(String sid, float money, float studentTotalMoney) {
         this.sid = sid;
         this.money = money;
         this.studentTotalMoney = studentTotalMoney;
@@ -22,7 +22,7 @@ public class CollegeMonthCSValue implements Writable {
 
     @Override
     public String toString() {
-        return "CollegeMonthCSValue{" +
+        return "MajorCSValue{" +
                 "sid='" + sid + '\'' +
                 ", money=" + money +
                 ", studentTotalMoney=" + studentTotalMoney +

@@ -1,4 +1,4 @@
-package edu.Dao.Class;
+package edu.Dao.College;
 
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
@@ -12,19 +12,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ClassDayCSInputValue implements DBWritable, Writable {
+public class CollegeMonthCSInputValue implements DBWritable, Writable {
     private String sid;
-    private int class_id;
+    private int college_id;
     private Date day;
     private float money;
     private float studentTotalMoney;
 
-    public ClassDayCSInputValue() {
+    public CollegeMonthCSInputValue() {
     }
 
-    public ClassDayCSInputValue(String sid, int class_id, Date day, float money, float studentTotalMoney) {
+    public CollegeMonthCSInputValue(String sid, int college_id, Date day, float money, float studentTotalMoney) {
         this.sid = sid;
-        this.class_id = class_id;
+        this.college_id = college_id;
         this.day = day;
         this.money = money;
         this.studentTotalMoney = studentTotalMoney;
@@ -32,9 +32,9 @@ public class ClassDayCSInputValue implements DBWritable, Writable {
 
     @Override
     public String toString() {
-        return "ClassDayCSInputValue{" +
+        return "CollegeMonthCSInputValue{" +
                 "sid='" + sid + '\'' +
-                ", class_id=" + class_id +
+                ", college_id=" + college_id +
                 ", day=" + day +
                 ", money=" + money +
                 ", studentTotalMoney=" + studentTotalMoney +
@@ -49,12 +49,12 @@ public class ClassDayCSInputValue implements DBWritable, Writable {
         this.sid = sid;
     }
 
-    public int getClass_id() {
-        return class_id;
+    public int getCollege_id() {
+        return college_id;
     }
 
-    public void setClass_id(int class_id) {
-        this.class_id = class_id;
+    public void setCollege_id(int college_id) {
+        this.college_id = college_id;
     }
 
     public Date getDay() {
@@ -84,7 +84,7 @@ public class ClassDayCSInputValue implements DBWritable, Writable {
     @Override
     public void write(DataOutput dataOutput) throws IOException {
         dataOutput.writeUTF(this.sid);
-        dataOutput.writeInt(this.class_id);
+        dataOutput.writeInt(this.college_id);
         Text.writeString(dataOutput, String.valueOf(day));
         dataOutput.writeFloat(this.money);
         dataOutput.writeFloat(this.studentTotalMoney);
@@ -93,7 +93,7 @@ public class ClassDayCSInputValue implements DBWritable, Writable {
     @Override
     public void readFields(DataInput dataInput) throws IOException {
         this.sid = dataInput.readUTF();
-        this.class_id = dataInput.readInt();
+        this.college_id = dataInput.readInt();
         this.day = Date.valueOf(Text.readString(dataInput));
         this.money = dataInput.readFloat();
         this.studentTotalMoney = dataInput.readFloat();
@@ -102,7 +102,7 @@ public class ClassDayCSInputValue implements DBWritable, Writable {
     @Override
     public void write(PreparedStatement preparedStatement) throws SQLException {
         preparedStatement.setString(1, this.sid);
-        preparedStatement.setInt(2, this.class_id);
+        preparedStatement.setInt(2, this.college_id);
         preparedStatement.setDate(3,this.day);
         preparedStatement.setFloat(4, this.money);
         preparedStatement.setFloat(5,this.studentTotalMoney);
@@ -111,7 +111,7 @@ public class ClassDayCSInputValue implements DBWritable, Writable {
     @Override
     public void readFields(ResultSet resultSet) throws SQLException {
         this.sid = resultSet.getString(1);
-        this.class_id = resultSet.getInt(2);
+        this.college_id = resultSet.getInt(2);
         this.day = resultSet.getDate(3);
         this.money = resultSet.getFloat(4);
         this.studentTotalMoney = resultSet.getFloat(5);
