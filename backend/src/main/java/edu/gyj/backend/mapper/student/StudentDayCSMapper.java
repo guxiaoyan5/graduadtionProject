@@ -14,7 +14,6 @@ public interface StudentDayCSMapper {
 
     List<StudentDayCSEntity> findBySid(String sid);
 
-    List<StudentDayCSEntity> findByName(String name);
 
     List<StudentDayCSEntity> findByDate(Date date);
 }

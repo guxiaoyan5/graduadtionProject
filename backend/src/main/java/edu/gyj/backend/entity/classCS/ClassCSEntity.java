@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class ClassCSEntity implements Serializable {
     private int class_id;
+    private String name;
     private int consumption_count;
     private float consumption_total_money;
     private float consumption_average_money;

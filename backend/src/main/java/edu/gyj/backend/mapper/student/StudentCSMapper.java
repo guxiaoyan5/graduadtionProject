@@ -14,6 +14,5 @@ public interface StudentCSMapper {
 
     List<StudentCSEntity> findBySid(String sid);
 
-    List<StudentCSEntity> findByName(String name);
 
 }

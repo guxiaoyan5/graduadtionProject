@@ -5,12 +5,12 @@ import java.io.Serializable;
 public class ClassEntity implements Serializable {
     private int id;
     private String name;
-    private int classId;
+    private int majorId;
 
-    public ClassEntity(int id, String name, int classId) {
+    public ClassEntity(int id, String name, int majorId) {
         this.id = id;
         this.name = name;
-        this.classId = classId;
+        this.majorId = majorId;
     }
 
     public ClassEntity() {
@@ -21,7 +21,7 @@ public class ClassEntity implements Serializable {
         return "Class{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", classId=" + classId +
+                ", classId=" + majorId +
                 '}';
     }
 
@@ -41,11 +41,11 @@ public class ClassEntity implements Serializable {
         this.name = name;
     }
 
-    public int getClassId() {
-        return classId;
+    public int getMajorId() {
+        return majorId;
     }
 
-    public void setClassId(int classId) {
-        this.classId = classId;
+    public void setMajorId(int majorId) {
+        this.majorId = majorId;
     }
 }

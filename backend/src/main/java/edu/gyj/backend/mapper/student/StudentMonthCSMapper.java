@@ -15,8 +15,6 @@ public interface StudentMonthCSMapper {
 
     List<StudentMonthCSEntity> findBySid(String sid);
 
-    List<StudentMonthCSEntity> findByName(String name);
-
     List<StudentMonthCSEntity> findByMonth(int month,int year);
 
     List<StudentMonthCSEntity> findByYear(int year);

@@ -16,24 +16,18 @@ class StudentMonthCSMapperTest {
     @Test
     void findBySid() {
         List<StudentMonthCSEntity> studentMonthCSEntities = studentMonthCSMapper.findBySid("100001");
-        studentMonthCSEntities.forEach(e->System.out.println(e));
-    }
-
-    @Test
-    void findByName() {
-        List<StudentMonthCSEntity> studentMonthCSEntities = studentMonthCSMapper.findByName("100001");
-        studentMonthCSEntities.forEach(e->System.out.println(e));
+        studentMonthCSEntities.forEach(System.out::println);
     }
 
     @Test
     void findByMonth() {
         List<StudentMonthCSEntity> studentMonthCSEntities = studentMonthCSMapper.findByMonth(3,2021);
-        studentMonthCSEntities.forEach(e->System.out.println(e));
+        studentMonthCSEntities.forEach(System.out::println);
     }
 
     @Test
     void findByYear() {
         List<StudentMonthCSEntity> studentMonthCSEntities = studentMonthCSMapper.findByYear(2021);
-        studentMonthCSEntities.forEach(e->System.out.println(e));
+        studentMonthCSEntities.forEach(System.out::println);
     }
 }

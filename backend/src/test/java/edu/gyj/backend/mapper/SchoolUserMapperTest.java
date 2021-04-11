@@ -20,7 +20,7 @@ class SchoolUserMapperTest{
     @Test
     void findAll() {
         List<SchoolUserEntity> schoolUserEntities = schoolUserMapper.findAll();
-        schoolUserEntities.forEach(e -> System.out.println(e));
+        schoolUserEntities.forEach(System.out::println);
     }
 
     @Test

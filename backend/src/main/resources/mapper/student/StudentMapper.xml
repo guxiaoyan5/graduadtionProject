@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.gyj.backend.mapper.student.StudentMapper">
+    <resultMap id="BaseResultMap" type="edu.gyj.backend.entity.student.StudentEntity">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="classId" column="class_id"/>
+        <result property="majorId" column="major_id"/>
+        <result property="collegeId" column="college_id"/>
+        <result property="sex" column="sex"/>
+    </resultMap>
+    <select id="findAll" resultMap="BaseResultMap">
+        select *
+        from graduate.student
+    </select>
+    <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select *
+        from graduate.student
+        where id = #{id}
+    </select>
+    <select id="findByClassId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select *
+        from graduate.student
+        where class_id = #{classId}
+    </select>
+    <select id="findByMajorId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select *
+        from graduate.student
+        where major_id = #{majorId}
+    </select>
+    <select id="findByCollegeId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select *
+        from graduate.student
+        where college_id = #{collegeId}
+    </select>
+    <insert id="insertStudent" parameterType="edu.gyj.backend.entity.student.StudentEntity">
+        insert into student(id, name, class_id, major_id, college_id, sex)
+        values (#{id}, #{name}, #{classId}, #{majorId}, #{collegeId}, #{sex})
+    </insert>
+    <update id="updateStudent" parameterType="edu.gyj.backend.entity.student.StudentEntity">
+        update graduate.student
+        set
+        <if test="name!=null and name != ''">name=#{name}
+            <if test="classId>0 or majorId!>0 or collegeId>0 or sex!=null">
+                ,
+            </if>
+        </if>
+        <if test="classId>0">class_id=#{classId}
+            <if test="majorId>0 or collegeId>0 or sex!=null">
+                ,
+            </if>
+        </if>
+        <if test="majorId>0">major_id=#{majorId}
+            <if test="collegeId>0 or sex!=null">
+                ,
+            </if>
+        </if>
+        <if test="collegeId>0">college_id=#{collegeId}
+            <if test="sex!=null">
+                ,
+            </if>
+        </if>
+        <if test="sex!=null">sex=#{sex}</if>
+    </update>
+    <delete id="deleteStudent" parameterType="java.lang.String">
+        delete
+        from graduate.student
+        where graduate.student.id = #{id}
+    </delete>
+</mapper>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.gyj.backend.mapper.classCS.ClassMapper">
+    <resultMap id="BaseResultMap" type="edu.gyj.backend.entity.classCS.ClassEntity">
+        <result column="id" property="id"/>
+        <result column="class" property="name"/>
+        <result column="major_id" property="majorId"/>
+    </resultMap>
+    <select id="findAll" resultMap="BaseResultMap">
+        select *
+        from class
+    </select>
+    <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select *
+        from class
+        where id = #{id}
+    </select>
+    <select id="findByMajorId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select *
+        from class
+        where major_id = #{majorId}
+    </select>
+    <insert id="insertClass" parameterType="edu.gyj.backend.entity.classCS.ClassEntity">
+        insert into class(class, major_id)
+        VALUES (#{name}, #{majorId})
+    </insert>
+    <update id="updateClass" parameterType="edu.gyj.backend.entity.classCS.ClassEntity">
+        update class
+        set
+        <if test="name != null and name != ''">class=#{name}
+            <if test="majorId>0">,</if>
+        </if>
+        <if test="majorId>0">major_id=#{majorId}</if>
+    </update>
+    <delete id="deleteClass" parameterType="java.lang.Integer">
+        delete
+        from class
+        where id = #{id}
+    </delete>
+</mapper>

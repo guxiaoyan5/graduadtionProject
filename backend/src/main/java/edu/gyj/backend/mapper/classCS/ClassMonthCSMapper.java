@@ -11,7 +11,6 @@ import java.util.List;
 public interface ClassMonthCSMapper {
     List<ClassMonthCSEntity> findAll();
     List<ClassMonthCSEntity> findByClassId(int classId);
-    List<ClassMonthCSEntity> findByClassName(String name);
     List<ClassMonthCSEntity> findByMonth(int month,int year);
     List<ClassMonthCSEntity> findByYear(int year);
 }

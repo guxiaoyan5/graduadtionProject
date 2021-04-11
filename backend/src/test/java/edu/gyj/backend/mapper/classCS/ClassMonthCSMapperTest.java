@@ -24,11 +24,6 @@ class ClassMonthCSMapperTest {
         classMonthCSEntities.forEach(e->System.out.println(e));
     }
 
-    @Test
-    void findByClassName() {
-        List<ClassMonthCSEntity> classMonthCSEntities = classMonthCSMapper.findByClassName("计171");
-        classMonthCSEntities.forEach(e->System.out.println(e));
-    }
 
     @Test
     void findByMonth() {
