@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.gyj.backend.mapper.SchoolUserMapper">
+    <resultMap id="BaseResultMap" type="edu.gyj.backend.entity.SchoolUserEntity">
+        <id column="id" property="id" jdbcType="CHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+    </resultMap>
+    <select id="findAll" resultMap="BaseResultMap">
+        select *
+        from school_user
+    </select>
+    <select id="findByName" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select *
+        from school_user
+        where id = #{id}
+    </select>
+    <insert id="insertSchoolUser" parameterType="edu.gyj.backend.entity.SchoolUserEntity">
+        insert into school_user(id, name, password)
+        VALUES (#{id}, #{name}, #{password})
+    </insert>
+    <update id="updateSchoolUser" parameterType="edu.gyj.backend.entity.SchoolUserEntity">
+        update school_user
+        set
+        <if test="name!=null and name!=''">name=#{name}
+            <if test="password!=null and password!=''">,</if>
+        </if>
+        <if test="password != null and password!=''">password=#{password}</if>
+        where
+        id=#{id}
+    </update>
+    <delete id="deleteSchoolUser" parameterType="java.lang.String">
+        delete
+        from school_user
+        where id = #{id}
+    </delete>
+</mapper>

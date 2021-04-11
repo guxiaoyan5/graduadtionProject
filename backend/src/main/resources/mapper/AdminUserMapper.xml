@@ -2,12 +2,20 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper>
-    <resultMap id="" type="">
-        <result column="" property=""/>
+<mapper namespace="edu.gyj.backend.mapper.AdminUserMapper">
+    <resultMap id="BaseResultMap" type="edu.gyj.backend.entity.AdminUserEntity">
+        <id column="name" property="id" />
+        <result column="password" property="password" />
     </resultMap>
-    <select id="" resultMap="">
-
+    <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select *
+        from admin_user
+        where name = #{id}
     </select>
-
+    <update id="updatePassword" parameterType="edu.gyj.backend.entity.AdminUserEntity">
+        update admin_user
+        set
+        <if test="password != null and password!=''">password=#{password}</if>
+        where name = #{id}
+    </update>
 </mapper>

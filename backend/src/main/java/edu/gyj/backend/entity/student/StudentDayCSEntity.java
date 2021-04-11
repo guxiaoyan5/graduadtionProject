@@ -5,6 +5,7 @@ import java.sql.Date;
 
 public class StudentDayCSEntity implements Serializable {
     private String sid;
+    private String name;
     private Date day;
     private int count;
     private float totalMoney;
@@ -15,8 +16,9 @@ public class StudentDayCSEntity implements Serializable {
     public StudentDayCSEntity() {
     }
 
-    public StudentDayCSEntity(String sid, Date day, int count, float totalMoney, float averageMoney) {
+    public StudentDayCSEntity(String sid, String name, Date day, int count, float totalMoney, float averageMoney) {
         this.sid = sid;
+        this.name = name;
         this.day = day;
         this.count = count;
         this.totalMoney = totalMoney;
@@ -27,11 +29,20 @@ public class StudentDayCSEntity implements Serializable {
     public String toString() {
         return "StudentDayCSEntity{" +
                 "sid='" + sid + '\'' +
+                ", name='" + name + '\'' +
                 ", day=" + day +
                 ", count=" + count +
                 ", totalMoney=" + totalMoney +
                 ", averageMoney=" + averageMoney +
                 '}';
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getSid() {
