@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.gyj.backend.mapper.ConsumeMapper">
+    <resultMap id="BaseResultMap" type="edu.gyj.backend.entity.ConsumeEntity">
+        <id property="id" column="id"/>
+        <result property="sid" column="sid"/>
+        <result property="execution_time" column="execution_time"/>
+        <result property="money" column="money"/>
+        <result property="store_id" column="store_id"/>
+        <result property="mode" column="mode"/>
+    </resultMap>
+    <select id="findAll" resultMap="BaseResultMap">
+        select *
+        from consume
+    </select>
+    <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select *
+        from consume
+        where id = #{id}
+    </select>
+    <select id="findBySid" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select *
+        from graduate.consume
+        where sid = #{sid}
+    </select>
+    <select id="findByDate" resultMap="BaseResultMap" parameterType="java.sql.Date">
+        select *
+        from graduate.consume
+        where execution_time = #{date}
+    </select>
+    <select id="findByStoreId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select *
+        from graduate.consume
+        where store_id = #{store_id}
+    </select>
+    <insert id="insertConsume" parameterType="edu.gyj.backend.entity.ConsumeEntity">
+        insert into graduate.consume(sid, execution_time, money, store_id, mode)
+        values (#{sid}, #{execution_time}, #{money}, #{store_id}, #{mode})
+    </insert>
+    <update id="updateConsume" parameterType="edu.gyj.backend.entity.ConsumeEntity">
+        update graduate.consume set
+        <if test="sid!=null and sid!=''">sid=#{sid}
+            <if test="execution_time!=null or money >0 or store_id>0 or (mode!=null and mode!='')">,</if>
+        </if>
+        <if test="execution_time!=null">execution_time=#{execution_time}
+            <if test="money >0 or store_id>0 or (mode!=null and mode!='')">,</if>
+        </if>
+        <if test="money>0">money=#{money}
+            <if test="store_id>0 or (mode!=null and mode!='')">,</if>
+        </if>
+        <if test="store_id>0">store_id=#{store_id}
+            <if test="mode!=null and mode!=''">,</if>
+        </if>
+        <if test="mode!=null and mode!=''">mode=#{mode}</if>
+        where id=#{sid}
+    </update>
+    <delete id="deleteConsume" parameterType="java.lang.Integer">
+        delete
+        from graduate.consume
+        where id = #{id}
+    </delete>
+</mapper>

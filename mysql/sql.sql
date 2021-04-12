@@ -38,7 +38,7 @@ create table student
     foreign key (major_id) references major (id),
     foreign key (college_id) references college (id)
 ) comment '学生信息表';
-create table consume
+create table consumeEntity
 (
     id             int AUTO_INCREMENT primary key,
     sid            char(6)  not null comment '学号',
