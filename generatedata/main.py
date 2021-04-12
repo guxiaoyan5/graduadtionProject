@@ -34,7 +34,7 @@ def randomTime():
 if __name__ == '__main__':
     conn = pymysql.connect(host='127.0.0.1', user='root', password='guyanjie0908', database='graduate')
     cursor = conn.cursor()
-    '''for i in college:
+    for i in college:
         sql = "insert into college(college) values ('{}')".format(i)
         cursor.execute(sql)
     conn.commit()
@@ -43,14 +43,17 @@ if __name__ == '__main__':
         for k in j:
             sql = "insert into major(major,college_id) select '{}',id from college where college='{}'".format(k, i)
             cursor.execute(sql)
-    conn.commit()'''
+    conn.commit()
 
-    '''for i in classname.values():
+    for i in classname.values():
         for k in i:
             sql = "insert into class(class,major_id) select '{}',id from major where major='{}'".format(k, k)
             cursor.execute(sql)
-    conn.commit()'''
-
+    conn.commit()
+    for i in ['南212', '北235', '东456','西45','北452']:
+        sql = "insert into store(store_name) values ('{}')".format(i)
+        cursor.execute(sql)
+    conn.commit()
     sql = 'select * from college'
     cursor.execute(sql)
     college = cursor.fetchall()
@@ -96,10 +99,6 @@ if __name__ == '__main__':
             cursor.execute(sql)
             conn.commit()
         print(i)
-    '''for i in ['南212', '北235', '东456','西45','北452']:
-        sql = "insert into store(store_name) values ('{}')".format(i)
-        cursor.execute(sql)
-    conn.commit()'''
     cursor.close()
     conn.close()
     pass

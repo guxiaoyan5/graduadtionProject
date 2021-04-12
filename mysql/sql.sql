@@ -1,7 +1,7 @@
-#create database graduate;
+create database graduate;
 use graduate;
 #原始信息表
-/*
+
 create table college
 (
     id      int AUTO_INCREMENT primary key,
@@ -38,7 +38,7 @@ create table student
     foreign key (major_id) references major (id),
     foreign key (college_id) references college (id)
 ) comment '学生信息表';
-create table consumeEntity
+create table consume
 (
     id             int AUTO_INCREMENT primary key,
     sid            char(6)  not null comment '学号',
@@ -49,7 +49,7 @@ create table consumeEntity
     foreign key (sid) references student (id),
     foreign key (store_id) references store (id)
 ) comment '消费信息表';
-*/
+
 
 create table student_day_consumption_statistics
 (
@@ -510,7 +510,7 @@ create table store_consumption_statistics
     foreign key (store_id) references store (id)
 ) comment '商店消费数据统计';
 
-/*
+
 create table school_user
 (
     id       char(10) primary key,
@@ -523,5 +523,4 @@ create table admin_user
     name     char(4) primary key,
     password varchar(20) not null
 );
-*/
 

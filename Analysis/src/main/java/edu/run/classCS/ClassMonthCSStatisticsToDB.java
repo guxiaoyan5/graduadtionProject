@@ -46,7 +46,7 @@ public class ClassMonthCSStatisticsToDB {
                 "consumption_low_count", "consumption_high_count", "student_low_count", "student_high_count"
         );
         DBInputFormat.setInput(job, ClassMonthCSInputValue.class,
-                "select student.id,class_id,execution_time,money,consumption_total_money from student,consume,student_month_consumption_statistics where student.id=consume.sid and student.id=student_month_consumption_statistics.sid",
+                "select student.id,class_id,execution_time,money,consumption_total_money from student,consume,student_month_consumption_statistics where student.id=consume.sid and student.id=student_month_consumption_statistics.sid and year(execution_time) = year and month(execution_time) = month",
                 "select count(1) from consume");
         boolean result = job.waitForCompletion(true);
         System.exit(result ? 0 : 1);

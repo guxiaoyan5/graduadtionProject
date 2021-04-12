@@ -42,7 +42,7 @@ public class ClassDayCSStatisticsToDB {
                 "consumption_low_count", "consumption_high_count", "student_low_count", "student_high_count"
         );
         DBInputFormat.setInput(job, ClassDayCSInputValue.class,
-                "select student.id,class_id,execution_time,money,consumption_total_money from student,consume,student_day_consumption_statistics where student.id=consume.sid and student.id=student_day_consumption_statistics.sid",
+                "select student.id,class_id,execution_time,money,consumption_total_money from student,consume,student_day_consumption_statistics where student.id=consume.sid and student.id=student_day_consumption_statistics.sid and to_days(execution_time)=to_days(day)",
                 "select count(1) from consume");
         boolean result = job.waitForCompletion(true);
         System.exit(result ? 0 : 1);
@@ -81,6 +81,7 @@ public class ClassDayCSStatisticsToDB {
             studentCount = sid.size();
             float average = totalMoney / count;
             float studentAverage = totalMoney / studentCount;
+
             for (ClassDayCSValue value : newValues) {
                 if (value.getMoney() < average) {
                     lowCount += 1;
@@ -93,6 +94,7 @@ public class ClassDayCSStatisticsToDB {
                     highLow.add(value.getSid());
                 }
             }
+
             studentLowCount = sidLow.size();
             studentHighCount = highLow.size();
             String date = key.getYear() + "-" + key.getMonth() + "-" + key.getDay();

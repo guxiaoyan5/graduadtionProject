@@ -42,18 +42,20 @@ public class ClassCSStatisticsToDB {
                 "consumption_low_count", "consumption_high_count", "student_low_count", "student_high_count"
         );
         DBInputFormat.setInput(job, ClassCSInputValue.class,
-                "select student.id,class_id,execution_time,money,consumption_total_money from student,consume,student_day_consumption_statistics where student.id=consume.sid and student.id=student_day_consumption_statistics.sid",
+                "select student.id,class_id,execution_time,money,consumption_total_money " +
+                        "from student,consume,student_consumption_statistics where student.id=consume.sid " +
+                        "and student.id=student_consumption_statistics.sid",
                 "select count(1) from consume");
         boolean result = job.waitForCompletion(true);
         System.exit(result ? 0 : 1);
     }
-    private static class Map extends Mapper<Object, ClassCSInputValue, ClassCSKey, ClassCSValue>{
+    private static class Map extends Mapper<Object, ClassCSInputValue, ClassCSKey, ClassCSValue> {
         @Override
         protected void map(Object key, ClassCSInputValue value, Context context) throws IOException, InterruptedException {
-            context.write(new ClassCSKey(value.getClass_id()),new ClassCSValue(value.getSid(), value.getMoney(), value.getStudentTotalMoney()));
+            context.write(new ClassCSKey(value.getClass_id()), new ClassCSValue(value.getSid(), value.getMoney(), value.getStudentTotalMoney()));
         }
     }
-    private static class Reduce extends Reducer<ClassCSKey,ClassCSValue, ClassCS,ClassCS>{
+    private static class Reduce extends Reducer<ClassCSKey, ClassCSValue, ClassCS, ClassCS> {
         @Override
         protected void reduce(ClassCSKey key, Iterable<ClassCSValue> values, Context context) throws IOException, InterruptedException {
             ArrayList<ClassCSValue> newValues = new ArrayList<>();
@@ -71,7 +73,7 @@ public class ClassCSStatisticsToDB {
                 count += 1;
                 totalMoney += value.getMoney();
                 sid.add(value.getSid());
-                ClassCSValue newValue = WritableUtils.clone(value,context.getConfiguration());
+                ClassCSValue newValue = WritableUtils.clone(value, context.getConfiguration());
                 newValues.add(newValue);
             }
             studentCount = sid.size();
@@ -92,7 +94,7 @@ public class ClassCSStatisticsToDB {
             studentLowCount = sidLow.size();
             studentHighCount = highLow.size();
             context.write(new ClassCS(key.getClass_id(), count, totalMoney, average, studentAverage, studentCount, lowCount, highCount, studentLowCount, studentHighCount),
-                    new ClassCS(key.getClass_id(),  count, totalMoney, average, studentAverage, studentCount, lowCount, highCount, studentLowCount, studentHighCount));
+                    new ClassCS(key.getClass_id(), count, totalMoney, average, studentAverage, studentCount, lowCount, highCount, studentLowCount, studentHighCount));
         }
     }
 }

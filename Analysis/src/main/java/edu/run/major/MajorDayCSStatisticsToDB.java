@@ -48,7 +48,7 @@ public class MajorDayCSStatisticsToDB {
                 "consumption_low_count", "consumption_high_count", "student_low_count", "student_high_count"
         );
         DBInputFormat.setInput(job, MajorDayCSInputValue.class,
-                "select student.id,Major_id,execution_time,money,consumption_total_money from student,consume,student_day_consumption_statistics where student.id=consume.sid and student.id=student_day_consumption_statistics.sid",
+                "select student.id,Major_id,execution_time,money,consumption_total_money from student,consume,student_day_consumption_statistics where student.id=consume.sid and student.id=student_day_consumption_statistics.sid and to_days(execution_time)=to_days(day)",
                 "select count(1) from consume");
         boolean result = job.waitForCompletion(true);
         System.exit(result ? 0 : 1);
