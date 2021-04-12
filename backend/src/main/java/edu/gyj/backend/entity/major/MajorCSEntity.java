@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class MajorCSEntity implements Serializable {
     private int major_id;
+    private String name;
     private int consumption_count;
     private float consumption_total_money;
     private float consumption_average_money;
@@ -17,8 +18,9 @@ public class MajorCSEntity implements Serializable {
     public MajorCSEntity() {
     }
 
-    public MajorCSEntity(int major_id, int consumption_count, float consumption_total_money, float consumption_average_money, float consumption_student_average_money, int student_count, int consumption_low_count, int consumption_high_count, int student_low_count, int student_high_count) {
+    public MajorCSEntity(int major_id, String name, int consumption_count, float consumption_total_money, float consumption_average_money, float consumption_student_average_money, int student_count, int consumption_low_count, int consumption_high_count, int student_low_count, int student_high_count) {
         this.major_id = major_id;
+        this.name = name;
         this.consumption_count = consumption_count;
         this.consumption_total_money = consumption_total_money;
         this.consumption_average_money = consumption_average_money;
@@ -34,6 +36,7 @@ public class MajorCSEntity implements Serializable {
     public String toString() {
         return "MajorCSEntity{" +
                 "major_id=" + major_id +
+                ", name='" + name + '\'' +
                 ", consumption_count=" + consumption_count +
                 ", consumption_total_money=" + consumption_total_money +
                 ", consumption_average_money=" + consumption_average_money +
@@ -44,6 +47,14 @@ public class MajorCSEntity implements Serializable {
                 ", student_low_count=" + student_low_count +
                 ", student_high_count=" + student_high_count +
                 '}';
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getMajor_id() {

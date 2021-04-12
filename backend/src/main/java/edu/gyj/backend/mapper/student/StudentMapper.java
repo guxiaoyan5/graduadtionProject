@@ -14,7 +14,7 @@ public interface StudentMapper {
     List<StudentEntity> findByClassId(int classId);
     List<StudentEntity> findByMajorId(int majorId);
     List<StudentEntity> findByCollegeId(int collegeId);
-    void insertStudent(StudentEntity studentEntity);
-    void updateStudent(StudentEntity studentEntity);
-    void deleteStudent(String id);
+    int insertStudent(StudentEntity studentEntity);
+    int updateStudent(StudentEntity studentEntity);
+    int deleteStudent(String id);
 }

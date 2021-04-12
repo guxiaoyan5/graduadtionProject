@@ -10,9 +10,9 @@ import java.util.List;
 @Mapper
 @Repository
 public interface SchoolUserMapper {
-    SchoolUserEntity findByName(String id);
+    SchoolUserEntity findById(String id);
     List<SchoolUserEntity> findAll();
-    void insertSchoolUser(SchoolUserEntity schoolUserEntity);
-    void updateSchoolUser(SchoolUserEntity schoolUserEntity);
-    void deleteSchoolUser(String id);
+    int insertSchoolUser(SchoolUserEntity schoolUserEntity);
+    int updateSchoolUser(SchoolUserEntity schoolUserEntity);
+    int deleteSchoolUser(String id);
 }

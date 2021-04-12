@@ -25,13 +25,6 @@
         where sid = student.id
           and student.id = #{id}
     </select>
-    <select id="findByName" resultMap="BaseResultMap" parameterType="java.lang.String">
-        select sid, name, month, year, consumption_count, consumption_total_money, consumption_average_money
-        from student_month_consumption_statistics,
-             graduate.student
-        where sid = student.id
-          and student.name = #{name}
-    </select>
     <select id="findByMonth" resultMap="BaseResultMap">
         select sid, name, month, year, consumption_count, consumption_total_money, consumption_average_money
         from student_month_consumption_statistics,

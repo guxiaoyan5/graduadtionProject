@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class MajorMonthCSEntity implements Serializable {
     private int major_id;
+    private String name;
     private int month;
     private int year;
     private int consumption_count;
@@ -19,8 +20,9 @@ public class MajorMonthCSEntity implements Serializable {
     public MajorMonthCSEntity() {
     }
 
-    public MajorMonthCSEntity(int major_id, int month, int year, int consumption_count, float consumption_total_money, float consumption_average_money, float consumption_student_average_money, int student_count, int consumption_low_count, int consumption_high_count, int student_low_count, int student_high_count) {
+    public MajorMonthCSEntity(int major_id, String name, int month, int year, int consumption_count, float consumption_total_money, float consumption_average_money, float consumption_student_average_money, int student_count, int consumption_low_count, int consumption_high_count, int student_low_count, int student_high_count) {
         this.major_id = major_id;
+        this.name = name;
         this.month = month;
         this.year = year;
         this.consumption_count = consumption_count;
@@ -38,6 +40,7 @@ public class MajorMonthCSEntity implements Serializable {
     public String toString() {
         return "MajorMonthCSEntity{" +
                 "major_id=" + major_id +
+                ", name='" + name + '\'' +
                 ", month=" + month +
                 ", year=" + year +
                 ", consumption_count=" + consumption_count +
@@ -50,6 +53,14 @@ public class MajorMonthCSEntity implements Serializable {
                 ", student_low_count=" + student_low_count +
                 ", student_high_count=" + student_high_count +
                 '}';
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getMajor_id() {

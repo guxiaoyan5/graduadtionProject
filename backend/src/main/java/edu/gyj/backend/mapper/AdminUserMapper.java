@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 public interface AdminUserMapper {
     AdminUserEntity findById(String id);
 
-    void updatePassword(AdminUserEntity adminUserEntity);
+    int updatePassword(AdminUserEntity adminUserEntity);
 }

@@ -34,12 +34,12 @@ class ClassMapperTest {
 
     @Test
     void insertClass() {
-        classMapper.insertClass(new ClassEntity(-1,"zxcv",1));
+        classMapper.insertClass(new ClassEntity(-1, "zxcv", 1));
     }
 
     @Test
     void updateClass() {
-        classMapper.updateClass(new ClassEntity(-1,"",2));
+        classMapper.updateClass(new ClassEntity(-1, "", 2));
     }
 
     @Test

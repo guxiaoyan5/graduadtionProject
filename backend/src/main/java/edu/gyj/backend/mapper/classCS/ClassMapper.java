@@ -12,7 +12,7 @@ public interface ClassMapper {
     List<ClassEntity> findAll();
     ClassEntity findById(int id);
     List<ClassEntity> findByMajorId(int majorId);
-    void insertClass(ClassEntity classEntity);
-    void updateClass(ClassEntity classEntity);
-    void deleteClass(int id);
+    int insertClass(ClassEntity classEntity);
+    int updateClass(ClassEntity classEntity);
+    int deleteClass(int id);
 }

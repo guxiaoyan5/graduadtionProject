@@ -22,6 +22,6 @@ class AdminUserMapperTest {
 
     @Test
     void updatePassword() {
-       adminUserMapper.updatePassword(new AdminUserEntity("root","root"));
+        adminUserMapper.updatePassword(new AdminUserEntity("root", "root"));
     }
 }

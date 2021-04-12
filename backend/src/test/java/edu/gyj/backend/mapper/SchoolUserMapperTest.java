@@ -9,12 +9,13 @@ import java.util.List;
 
 
 @SpringBootTest
-class SchoolUserMapperTest{
+class SchoolUserMapperTest {
     @Autowired
     SchoolUserMapper schoolUserMapper;
+
     @Test
     void findByName() {
-        System.out.println(schoolUserMapper.findByName("1234567890"));
+        System.out.println(schoolUserMapper.findById("1234567890"));
     }
 
     @Test
@@ -25,15 +26,15 @@ class SchoolUserMapperTest{
 
     @Test
     void insertSchoolUser() {
-        schoolUserMapper.insertSchoolUser(new SchoolUserEntity("1234567890","1234657890","1234567890"));
-        schoolUserMapper.insertSchoolUser(new SchoolUserEntity("1234567891","1234657891","1234567891"));
-        schoolUserMapper.insertSchoolUser(new SchoolUserEntity("1234567892","1234657892","1234567892"));
+        schoolUserMapper.insertSchoolUser(new SchoolUserEntity("1234567890", "1234657890", "1234567890"));
+        schoolUserMapper.insertSchoolUser(new SchoolUserEntity("1234567891", "1234657891", "1234567891"));
+        schoolUserMapper.insertSchoolUser(new SchoolUserEntity("1234567892", "1234657892", "1234567892"));
     }
 
     @Test
     void updateSchoolUser() {
-        schoolUserMapper.updateSchoolUser(new SchoolUserEntity("1234567891",null,"253"));
-        schoolUserMapper.updateSchoolUser(new SchoolUserEntity("1234567890","123",null));
+        schoolUserMapper.updateSchoolUser(new SchoolUserEntity("1234567891", null, "253"));
+        schoolUserMapper.updateSchoolUser(new SchoolUserEntity("1234567890", "123", null));
     }
 
     @Test

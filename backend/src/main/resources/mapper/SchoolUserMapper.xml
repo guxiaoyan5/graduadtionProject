@@ -12,7 +12,7 @@
         select *
         from school_user
     </select>
-    <select id="findByName" resultMap="BaseResultMap" parameterType="java.lang.String">
+    <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.String">
         select *
         from school_user
         where id = #{id}

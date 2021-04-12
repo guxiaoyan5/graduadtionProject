@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.gyj.backend.mapper.major.MajorMapper">
+    <resultMap id="BaseResultMap" type="edu.gyj.backend.entity.major.MajorEntity">
+        <result column="id" property="id"/>
+        <result column="major" property="major"/>
+        <result column="college_id" property="collegeId"/>
+    </resultMap>
+    <select id="findAll" resultMap="BaseResultMap">
+        select *
+        from major
+    </select>
+    <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select *
+        from major
+        where id = #{id}
+    </select>
+    <select id="findByCollegeId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select *
+        from major
+        where college_id = #{collegeId}
+    </select>
+    <insert id="insertMajor" parameterType="edu.gyj.backend.entity.major.MajorEntity">
+        insert into major(major, college_id)
+        VALUES (#{major}, #{collegeId})
+    </insert>
+    <update id="updateMajor" parameterType="edu.gyj.backend.entity.major.MajorEntity">
+        update major
+        set
+        <if test="major != null and major != ''">major=#{major}
+            <if test="collegeId>0">,</if>
+        </if>
+        <if test="collegeId>0">college_id=#{collegeId}</if>
+        where id=#{id}
+    </update>
+    <delete id="deleteMajor" parameterType="java.lang.Integer">
+        delete
+        from major
+        where id = #{id}
+    </delete>
+</mapper>

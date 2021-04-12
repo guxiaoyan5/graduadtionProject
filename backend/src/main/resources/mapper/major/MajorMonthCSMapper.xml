@@ -2,10 +2,10 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="edu.gyj.backend.mapper.classCS.ClassMonthCSMapper">
-    <resultMap id="BaseResultMap" type="edu.gyj.backend.entity.classCS.ClassMonthCSEntity">
-        <result column="class_id" property="class_id"/>
-        <result column="class" property="name"/>
+<mapper namespace="edu.gyj.backend.mapper.major.MajorMonthCSMapper">
+    <resultMap id="BaseResultMap" type="edu.gyj.backend.entity.major.MajorMonthCSEntity">
+        <result column="major_id" property="major_id"/>
+        <result column="major" property="name"/>
         <result column="month" property="month"/>
         <result column="year" property="year"/>
         <result column="consumption_count" property="consumption_count"/>
@@ -19,8 +19,8 @@
         <result column="student_high_count" property="student_high_count"/>
     </resultMap>
     <select id="findAll" resultMap="BaseResultMap">
-        select class_id,
-               class,
+        select major_id,
+               major,
                month,
                year,
                consumption_count,
@@ -32,13 +32,13 @@
                consumption_high_count,
                student_low_count,
                student_high_count
-        from class,
-             class_month_consumption_statistics
-        where class.id = class_month_consumption_statistics.class_id
+        from major,
+             major_month_consumption_statistics
+        where major.id = major_month_consumption_statistics.major_id
     </select>
-    <select id="findByClassId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
-        select class_id,
-               class,
+    <select id="findByMajorId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select major_id,
+               major,
                month,
                year,
                consumption_count,
@@ -50,14 +50,14 @@
                consumption_high_count,
                student_low_count,
                student_high_count
-        from class,
-             class_month_consumption_statistics
-        where class.id = class_month_consumption_statistics.class_id
-          and class.id = #{classId}
+        from major,
+             major_month_consumption_statistics
+        where major.id = major_month_consumption_statistics.major_id
+          and major.id = #{classId}
     </select>
     <select id="findByMonth" resultMap="BaseResultMap" parameterType="java.lang.Integer">
-        select class_id,
-               class,
+        select major_id,
+               major,
                month,
                year,
                consumption_count,
@@ -69,15 +69,15 @@
                consumption_high_count,
                student_low_count,
                student_high_count
-        from class,
-             class_month_consumption_statistics
-        where class.id = class_month_consumption_statistics.class_id
+        from major,
+             major_month_consumption_statistics
+        where major.id = major_month_consumption_statistics.major_id
           and month = #{month}
           and year = #{year}
     </select>
     <select id="findByYear" resultMap="BaseResultMap" parameterType="java.lang.Integer">
-        select class_id,
-               class,
+        select major_id,
+               major,
                month,
                year,
                consumption_count,
@@ -89,9 +89,9 @@
                consumption_high_count,
                student_low_count,
                student_high_count
-        from class,
-             class_month_consumption_statistics
-        where class.id = class_month_consumption_statistics.class_id
+        from major,
+             major_month_consumption_statistics
+        where major.id = major_month_consumption_statistics.major_id
           and year = #{year}
     </select>
 </mapper>

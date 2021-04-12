@@ -33,6 +33,7 @@
             <if test="majorId>0">,</if>
         </if>
         <if test="majorId>0">major_id=#{majorId}</if>
+        where id = #{id}
     </update>
     <delete id="deleteClass" parameterType="java.lang.Integer">
         delete

@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class StudentMapperTest {
     @Autowired
     StudentMapper studentMapper;
+
     @Test
     void findAll() {
         List<StudentEntity> studentEntities = studentMapper.findAll();
@@ -46,16 +47,16 @@ class StudentMapperTest {
 
     @Test
     void insertStudent() {
-        studentMapper.insertStudent(new StudentEntity("999999","999999",1,1,1,"男"));
+        studentMapper.insertStudent(new StudentEntity("999999", "999999", 1, 1, 1, "男"));
     }
 
     @Test
     void updateStudent() {
-        studentMapper.updateStudent(new StudentEntity("999999","",-1,-1,-1,"女"));
+        studentMapper.updateStudent(new StudentEntity("999999", "", -1, -1, -1, "女"));
     }
 
     @Test
     void deleteStudent() {
-    studentMapper.deleteStudent("999999");
+        studentMapper.deleteStudent("999999");
     }
 }
