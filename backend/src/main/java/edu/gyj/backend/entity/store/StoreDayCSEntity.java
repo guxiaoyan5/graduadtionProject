@@ -5,6 +5,7 @@ import java.sql.Date;
 
 public class StoreDayCSEntity implements Serializable {
     private int store_id;
+    private String store_name;
     private Date day;
     private int consumption_count;
     private float consumption_total_money;
@@ -15,8 +16,9 @@ public class StoreDayCSEntity implements Serializable {
     public StoreDayCSEntity() {
     }
 
-    public StoreDayCSEntity(int store_id, Date day, int consumption_count, float consumption_total_money, float consumption_average_money, float consumption_student_average_money, int student_count) {
+    public StoreDayCSEntity(int store_id, String store_name, Date day, int consumption_count, float consumption_total_money, float consumption_average_money, float consumption_student_average_money, int student_count) {
         this.store_id = store_id;
+        this.store_name = store_name;
         this.day = day;
         this.consumption_count = consumption_count;
         this.consumption_total_money = consumption_total_money;
@@ -29,6 +31,7 @@ public class StoreDayCSEntity implements Serializable {
     public String toString() {
         return "StoreDayCSEntity{" +
                 "store_id=" + store_id +
+                ", store_name='" + store_name + '\'' +
                 ", day=" + day +
                 ", consumption_count=" + consumption_count +
                 ", consumption_total_money=" + consumption_total_money +
@@ -36,6 +39,14 @@ public class StoreDayCSEntity implements Serializable {
                 ", consumption_student_average_money=" + consumption_student_average_money +
                 ", student_count=" + student_count +
                 '}';
+    }
+
+    public String getStore_name() {
+        return store_name;
+    }
+
+    public void setStore_name(String store_name) {
+        this.store_name = store_name;
     }
 
     public int getStore_id() {

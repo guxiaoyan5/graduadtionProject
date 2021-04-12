@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class StoreMonthCSEntity implements Serializable {
     private int store_id;
+    private String name;
     private int month;
     private int year;
     private int consumption_count;
@@ -15,8 +16,9 @@ public class StoreMonthCSEntity implements Serializable {
     public StoreMonthCSEntity() {
     }
 
-    public StoreMonthCSEntity(int store_id, int month, int year, int consumption_count, float consumption_total_money, float consumption_average_money, float consumption_student_average_money, int student_count) {
+    public StoreMonthCSEntity(int store_id, String name, int month, int year, int consumption_count, float consumption_total_money, float consumption_average_money, float consumption_student_average_money, int student_count) {
         this.store_id = store_id;
+        this.name = name;
         this.month = month;
         this.year = year;
         this.consumption_count = consumption_count;
@@ -30,6 +32,7 @@ public class StoreMonthCSEntity implements Serializable {
     public String toString() {
         return "StoreMonthCSEntity{" +
                 "store_id=" + store_id +
+                ", name='" + name + '\'' +
                 ", month=" + month +
                 ", year=" + year +
                 ", consumption_count=" + consumption_count +
@@ -38,6 +41,14 @@ public class StoreMonthCSEntity implements Serializable {
                 ", consumption_student_average_money=" + consumption_student_average_money +
                 ", student_count=" + student_count +
                 '}';
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getStore_id() {

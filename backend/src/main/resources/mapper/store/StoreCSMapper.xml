@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.gyj.backend.mapper.store.StoreCSMapper">
+    <resultMap id="BaseResultMap" type="edu.gyj.backend.entity.store.StoreCSEntity">
+        <result column="store_id" property="store_id"/>
+        <result column="store_name" property="name"/>
+        <result column="consumption_count" property="consumption_count"/>
+        <result column="consumption_total_money" property="consumption_total_money"/>
+        <result column="consumption_average_money" property="consumption_average_money"/>
+        <result column="consumption_student_average_money" property="consumption_student_average_money"/>
+        <result column="student_count" property="student_count"/>
+    </resultMap>
+    <select id="findAll" resultMap="BaseResultMap">
+        select store_id,
+               store_name,
+               consumption_count,
+               consumption_total_money,
+               consumption_average_money,
+               consumption_student_average_money,
+               student_count
+        from store,
+             store_day_consumption_statistics
+        where store.id = store_day_consumption_statistics.store_id
+    </select>
+    <select id="findByStoreId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select store_id,
+               store_name,
+               consumption_count,
+               consumption_total_money,
+               consumption_average_money,
+               consumption_student_average_money,
+               student_count
+        from store,
+             store_day_consumption_statistics
+        where store.id = store_day_consumption_statistics.store_id
+          and store.id = #{id};
+    </select>
+</mapper>

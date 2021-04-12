@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class StoreCSEntity implements Serializable {
     private int store_id;
+    private String name;
     private int consumption_count;
     private float consumption_total_money;
     private float consumption_average_money;
@@ -13,8 +14,9 @@ public class StoreCSEntity implements Serializable {
     public StoreCSEntity() {
     }
 
-    public StoreCSEntity(int store_id, int consumption_count, float consumption_total_money, float consumption_average_money, float consumption_student_average_money, int student_count) {
+    public StoreCSEntity(int store_id, String name, int consumption_count, float consumption_total_money, float consumption_average_money, float consumption_student_average_money, int student_count) {
         this.store_id = store_id;
+        this.name = name;
         this.consumption_count = consumption_count;
         this.consumption_total_money = consumption_total_money;
         this.consumption_average_money = consumption_average_money;
@@ -26,12 +28,21 @@ public class StoreCSEntity implements Serializable {
     public String toString() {
         return "StoreCSEntity{" +
                 "store_id=" + store_id +
+                ", name='" + name + '\'' +
                 ", consumption_count=" + consumption_count +
                 ", consumption_total_money=" + consumption_total_money +
                 ", consumption_average_money=" + consumption_average_money +
                 ", consumption_student_average_money=" + consumption_student_average_money +
                 ", student_count=" + student_count +
                 '}';
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getStore_id() {

@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface CollegeMonthCSMapper {
     List<CollegeMonthCSEntity> findAll();
-    List<CollegeMonthCSEntity> findByCollegeId(int MajorId);
+    List<CollegeMonthCSEntity> findByCollegeId(int collegeId);
     List<CollegeMonthCSEntity> findByMonth(int month, int year);
     List<CollegeMonthCSEntity> findByYear(int year);
 }
