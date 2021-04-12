@@ -5,6 +5,7 @@ import java.sql.Date;
 
 public class CollegeDayCSEntity implements Serializable {
     private int college_id;
+    private String name;
     private Date day;
     private int consumption_count;
     private float consumption_total_money;
@@ -19,8 +20,9 @@ public class CollegeDayCSEntity implements Serializable {
     public CollegeDayCSEntity() {
     }
 
-    public CollegeDayCSEntity(int college_id, Date day, int consumption_count, float consumption_total_money, float consumption_average_money, float consumption_student_average_money, int student_count, int consumption_low_count, int consumption_high_count, int student_low_count, int student_high_count) {
+    public CollegeDayCSEntity(int college_id, String name, Date day, int consumption_count, float consumption_total_money, float consumption_average_money, float consumption_student_average_money, int student_count, int consumption_low_count, int consumption_high_count, int student_low_count, int student_high_count) {
         this.college_id = college_id;
+        this.name = name;
         this.day = day;
         this.consumption_count = consumption_count;
         this.consumption_total_money = consumption_total_money;
@@ -37,6 +39,7 @@ public class CollegeDayCSEntity implements Serializable {
     public String toString() {
         return "CollegeDayCSEntity{" +
                 "college_id=" + college_id +
+                ", name='" + name + '\'' +
                 ", day=" + day +
                 ", consumption_count=" + consumption_count +
                 ", consumption_total_money=" + consumption_total_money +
@@ -48,6 +51,14 @@ public class CollegeDayCSEntity implements Serializable {
                 ", student_low_count=" + student_low_count +
                 ", student_high_count=" + student_high_count +
                 '}';
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getCollege_id() {

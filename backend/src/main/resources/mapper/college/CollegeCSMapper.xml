@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.gyj.backend.mapper.college.CollegeCSMapper">
+    <resultMap id="BaseResultMap" type="edu.gyj.backend.entity.college.CollegeCSEntity">
+        <result column="college_id" property="college_id"/>
+        <result column="college" property="name"/>
+        <result column="consumption_count" property="consumption_count"/>
+        <result column="consumption_total_money" property="consumption_total_money"/>
+        <result column="consumption_average_money" property="consumption_average_money"/>
+        <result column="consumption_student_average_money" property="consumption_student_average_money"/>
+        <result column="student_count" property="student_count"/>
+        <result column="consumption_low_count" property="consumption_low_count"/>
+        <result column="consumption_high_count" property="consumption_high_count"/>
+        <result column="student_low_count" property="student_low_count"/>
+        <result column="student_high_count" property="student_high_count"/>
+    </resultMap>
+    <select id="findAll" resultMap="BaseResultMap">
+        select college_id,
+               college,
+               consumption_count,
+               consumption_total_money,
+               consumption_average_money,
+               consumption_student_average_money,
+               student_count,
+               consumption_low_count,
+               consumption_high_count,
+               student_low_count,
+               student_high_count
+        from college,
+             college_day_consumption_statistics
+        where college.id = college_day_consumption_statistics.college_id
+    </select>
+    <select id="findByCollegeId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select college_id,
+               college,
+               consumption_count,
+               consumption_total_money,
+               consumption_average_money,
+               consumption_student_average_money,
+               student_count,
+               consumption_low_count,
+               consumption_high_count,
+               student_low_count,
+               student_high_count
+        from college,
+             college_day_consumption_statistics
+        where college.id = college_day_consumption_statistics.college_id
+          and college.id = #{id};
+    </select>
+</mapper>

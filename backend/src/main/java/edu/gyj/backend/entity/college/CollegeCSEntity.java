@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class CollegeCSEntity implements Serializable {
     private int college_id;
+    private String name;
     private int consumption_count;
     private float consumption_total_money;
     private float consumption_average_money;
@@ -14,8 +15,13 @@ public class CollegeCSEntity implements Serializable {
     private int student_low_count;
     private int student_high_count;
 
-    public CollegeCSEntity(int college_id, int consumption_count, float consumption_total_money, float consumption_average_money, float consumption_student_average_money, int student_count, int consumption_low_count, int consumption_high_count, int student_low_count, int student_high_count) {
+
+    public CollegeCSEntity() {
+    }
+
+    public CollegeCSEntity(int college_id, String name, int consumption_count, float consumption_total_money, float consumption_average_money, float consumption_student_average_money, int student_count, int consumption_low_count, int consumption_high_count, int student_low_count, int student_high_count) {
         this.college_id = college_id;
+        this.name = name;
         this.consumption_count = consumption_count;
         this.consumption_total_money = consumption_total_money;
         this.consumption_average_money = consumption_average_money;
@@ -27,13 +33,11 @@ public class CollegeCSEntity implements Serializable {
         this.student_high_count = student_high_count;
     }
 
-    public CollegeCSEntity() {
-    }
-
     @Override
     public String toString() {
         return "CollegeCSEntity{" +
                 "college_id=" + college_id +
+                ", name='" + name + '\'' +
                 ", consumption_count=" + consumption_count +
                 ", consumption_total_money=" + consumption_total_money +
                 ", consumption_average_money=" + consumption_average_money +
@@ -44,6 +48,14 @@ public class CollegeCSEntity implements Serializable {
                 ", student_low_count=" + student_low_count +
                 ", student_high_count=" + student_high_count +
                 '}';
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getCollege_id() {
