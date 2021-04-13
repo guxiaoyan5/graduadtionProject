@@ -27,7 +27,7 @@ class ClassDayCSMapperTest {
 
     @Test
     void findDate() {
-        List<ClassDayCSEntity> classDayCSEntities = classDayCSMapper.findByDate(Date.valueOf("2021-4-1"));
+        List<ClassDayCSEntity> classDayCSEntities = classDayCSMapper.findByDate(Date.valueOf("2021-4-2"));
         classDayCSEntities.forEach(System.out::println);
     }
 }

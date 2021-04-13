@@ -1,7 +1,7 @@
 {
   "name": "frontend",
   "version": "1.0.0",
-  "description": "A Vue.js project",
+  "description": "前端",
   "author": "love5yan <54840826+love5yan@users.noreply.github.com>",
   "private": true,
   "scripts": {
@@ -10,9 +10,6 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "axios": "^0.21.1",
-    "echarts": "^5.0.2",
-    "element-ui": "^2.15.1",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
   },
