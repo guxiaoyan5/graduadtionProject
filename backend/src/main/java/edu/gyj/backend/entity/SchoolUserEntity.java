@@ -8,6 +8,11 @@ public class SchoolUserEntity {
     public SchoolUserEntity() {
     }
 
+    public SchoolUserEntity(String id, String password) {
+        this.id = id;
+        this.password = password;
+    }
+
     public SchoolUserEntity(String id, String name, String password) {
         this.id = id;
         this.name = name;
