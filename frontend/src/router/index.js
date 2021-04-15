@@ -1,12 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import SchoolLogin from "../view/school/Login";
-import SchoolHome from "../view/school/Home";
-//import echarts from 'echarts'
+import SchoolHome from "../view/school/Test";
 //import Cookies from 'js-cookie';
 Vue.use(Router)
-//Vue.prototype.$echarts = echarts
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
@@ -17,8 +15,24 @@ export default new Router({
       name: 'SchoolLogin',
       component: SchoolLogin
     }, {
-      path: '/home',
-      component: SchoolHome
+      path: '/schoolHome',
+      component: SchoolHome,
+      name: 'SchoolHome',
+      children: []
     }
   ]
+});
+router.beforeEach((to, from, next) => {
+  if (to.path === '/' || to.path === '/schoolLogin') {
+    next();
+  } else {
+    const tokenStr = localStorage.getItem('token')
+    if (!tokenStr) {
+      next('/schoolLogin')
+    } else {
+      next();
+    }
+  }
 })
+export default router;
+

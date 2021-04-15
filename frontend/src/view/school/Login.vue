@@ -19,7 +19,10 @@
 
 
 <script>
+import {mapMutations} from 'vuex'
+
 export default {
+
   name: "SchoolLogin",
   data() {
     let validateId = (rule, value, callback) => {
@@ -43,6 +46,7 @@ export default {
         id: '',
         password: ''
       },
+      loading : false,
       rules: {
         id: [
           {validator: validateId, trigger: 'blur'}
@@ -54,17 +58,22 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(['setToken']),
     submitForm(formName) {
       let _this = this
+      _this.loading = true;
       this.$refs[formName].validate((valid) => {
         if (valid) {
           _this.$axios.post('http://localhost:9090/schoolUser/login', {
             id: _this.ruleForm.id,
             password: _this.ruleForm.password
           }).then(function (response) {
+            _this.loading = false;
             let data = response.data
             if (data.code === 2) {
-              _this.$router.push('/home')
+              _this.token = data.token;
+              _this.setToken({token: data.token},{token:data.token})
+              _this.$router.push('/schoolHome')
             } else if (data.code === 0) {
               alert(data.message)
             } else if (data.code === 1) {
@@ -73,9 +82,11 @@ export default {
               alert(data.message)
             }
           }).catch(function (error) {
-              console.log(error);
-            });
+            _this.loading = false;
+            console.log(error);
+          });
         } else {
+          _this.loading = false;
           console.log('error submit!!');
           return false;
         }
