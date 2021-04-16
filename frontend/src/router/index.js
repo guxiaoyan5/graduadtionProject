@@ -1,14 +1,17 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import SchoolLogin from "../view/school/Login";
-import SchoolHome from "../view/school/Test";
+import SchoolHome from "../view/school/Home";
+import Header from "../components/Header";
+import ChangePassword from "../components/ChangePassword";
+import ChangeName from "../components/ChangeName";
 //import Cookies from 'js-cookie';
 Vue.use(Router)
 const router = new Router({
   routes: [
     {
       path: '/',
-      //component: SchoolLogin,
+      // component: SchoolHome,
       redirect: {name: 'SchoolLogin'}
     }, {
       path: '/schoolLogin',
@@ -18,7 +21,17 @@ const router = new Router({
       path: '/schoolHome',
       component: SchoolHome,
       name: 'SchoolHome',
-      children: []
+      children: [
+        {
+          path: '/changePassword',
+          component: ChangePassword,
+          name: '修改密码'
+        }, {
+          path: '/changeName',
+          component: ChangeName,
+          name: '修改昵称',
+        }
+      ]
     }
   ]
 });

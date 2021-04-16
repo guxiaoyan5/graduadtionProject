@@ -46,7 +46,7 @@ export default {
         id: '',
         password: ''
       },
-      loading : false,
+      loading: false,
       rules: {
         id: [
           {validator: validateId, trigger: 'blur'}
@@ -58,7 +58,7 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(['setToken']),
+    ...mapMutations(['setToken', 'setSchoolUser']),
     submitForm(formName) {
       let _this = this
       _this.loading = true;
@@ -72,7 +72,8 @@ export default {
             let data = response.data
             if (data.code === 2) {
               _this.token = data.token;
-              _this.setToken({token: data.token},{token:data.token})
+              _this.setToken({token: data.token}, {token: data.token})
+              _this.setSchoolUser({id: data.data.id, name: data.data.name}, {id: data.data.id, name: data.data.name})
               _this.$router.push('/schoolHome')
             } else if (data.code === 0) {
               alert(data.message)
