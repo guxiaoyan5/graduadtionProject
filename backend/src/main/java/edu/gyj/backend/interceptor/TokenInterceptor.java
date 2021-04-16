@@ -22,7 +22,6 @@ public class TokenInterceptor implements HandlerInterceptor {
         if(token != null){
             boolean result = TokenUtil.verify(token);
             if(result){
-                System.out.println("通过拦截器");
                 return true;
             }
         }
@@ -36,7 +35,6 @@ public class TokenInterceptor implements HandlerInterceptor {
             json.put("msg","认证失败，未通过拦截器");
             json.put("code","50000");
             response.getWriter().append(json.toJSONString());
-            System.out.println("认证失败，未通过拦截器");
             //        response.getWriter().write("50000");
         }catch (Exception e){
             e.printStackTrace();

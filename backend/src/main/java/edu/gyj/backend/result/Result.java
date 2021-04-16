@@ -1,32 +1,32 @@
 package edu.gyj.backend.result;
 
-public class SchoolUserResult {
+public class Result {
     private int code;
     private String message;
     private String token;
     private Object data;
-    public SchoolUserResult() {
+    public Result() {
     }
 
-    public SchoolUserResult(int code, String message) {
+    public Result(int code, String message) {
         this.code = code;
         this.message = message;
     }
 
-    public SchoolUserResult(int code, String message, String token, Object data) {
+    public Result(int code, String message, String token, Object data) {
         this.code = code;
         this.message = message;
         this.token = token;
         this.data = data;
     }
 
-    public SchoolUserResult(int code, String message, Object data) {
+    public Result(int code, String message, Object data) {
         this.code = code;
         this.message = message;
         this.data = data;
     }
 
-    public SchoolUserResult(int code, String message, String token) {
+    public Result(int code, String message, String token) {
         this.code = code;
         this.message = message;
         this.token = token;

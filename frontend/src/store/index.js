@@ -18,6 +18,10 @@ const store = new Vuex.Store({
       localStorage.setItem("id", token.id);
       state.name = token.name
       localStorage.setItem("name", token.name);
+    },
+    setAdminUser(state,token){
+      state.id = token.id
+      localStorage.setItem("id", token.id);
     }
   },
   getters:{

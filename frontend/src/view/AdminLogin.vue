@@ -1,7 +1,7 @@
 <template>
   <el-form :rules="rules" class="login-container" label-position="left"
            label-width="0px" v-loading="loading" :model="ruleForm" ref="ruleForm">
-    <h3 class="login_title">系统登录</h3>
+    <h3 class="login_title">管理员登录</h3>
     <el-form-item prop="id">
       <el-input type="text" v-model="ruleForm.id" auto-complete="off" placeholder="账号" autocomplete="off"
                 prefix-icon="el-icon-user"></el-input>
@@ -17,18 +17,14 @@
   </el-form>
 </template>
 
-
 <script>
 import {mapMutations} from 'vuex'
-
 export default {
-  name: "SchoolLogin",
+  name: "AdminLogin",
   data() {
     let validateId = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入账号'));
-      } else if (value.length !== 10) {
-        callback(new Error('账号长度不为10'));
       } else {
         callback();
       }
@@ -57,13 +53,13 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(['setToken', 'setSchoolUser']),
+    ...mapMutations(['setToken', 'setAdminUser']),
     submitForm(formName) {
       let _this = this
       _this.loading = true;
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          _this.$axios.post('http://localhost:9090/schoolUser/login', {
+          _this.$axios.post('http://localhost:9090/adminUser/login', {
             id: _this.ruleForm.id,
             password: _this.ruleForm.password
           }).then(function (response) {
@@ -72,8 +68,8 @@ export default {
             if (data.code === 2) {
               _this.token = data.token;
               _this.setToken({token: data.token}, {token: data.token})
-              _this.setSchoolUser({id: data.data.id, name: data.data.name}, {id: data.data.id, name: data.data.name})
-              _this.$router.push('/schoolHome')
+              _this.setAdminUser({id: data.data.id}, {id: data.data.id})
+              _this.$router.push('/adminHome')
             } else if (data.code === 0) {
               alert(data.message)
             } else if (data.code === 1) {
@@ -98,6 +94,7 @@ export default {
   }
 }
 </script>
+
 <style>
 .login-container {
   border-radius: 15px;
@@ -122,3 +119,6 @@ export default {
 }
 </style>
 
+<style scoped>
+
+</style>

@@ -22,7 +22,7 @@ public class CorsConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         List<String> excludePath=new ArrayList<>();
         excludePath.add("/schoolUser/login");
-        excludePath.add("/schoolUser/logout");
+        excludePath.add("/adminUser/login");
         excludePath.add("/static/**");
         excludePath.add("/assets/**");
         registry.addInterceptor(tokenInterceptor)

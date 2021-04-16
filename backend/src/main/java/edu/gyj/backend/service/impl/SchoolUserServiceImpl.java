@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SchoolUserServerImpl implements SchoolUserService {
+public class SchoolUserServiceImpl implements SchoolUserService {
     @Autowired
     SchoolUserMapper schoolUserMapper;
 

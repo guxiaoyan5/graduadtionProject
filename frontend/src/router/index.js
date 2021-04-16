@@ -2,17 +2,18 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import SchoolLogin from "../view/school/Login";
 import SchoolHome from "../view/school/Home";
-import Header from "../components/Header";
 import ChangePassword from "../components/ChangePassword";
 import ChangeName from "../components/ChangeName";
-//import Cookies from 'js-cookie';
+import AdminLogin from "../view/AdminLogin";
+import AdminHome from "../view/AdminHome";
+
 Vue.use(Router)
 const router = new Router({
   routes: [
     {
       path: '/',
-      // component: SchoolHome,
-      redirect: {name: 'SchoolLogin'}
+
+      redirect: {name: 'AdminLogin'}
     }, {
       path: '/schoolLogin',
       name: 'SchoolLogin',
@@ -20,7 +21,7 @@ const router = new Router({
     }, {
       path: '/schoolHome',
       component: SchoolHome,
-      name: 'SchoolHome',
+      name: '首页',
       children: [
         {
           path: '/changePassword',
@@ -32,16 +33,25 @@ const router = new Router({
           name: '修改昵称',
         }
       ]
+    }, {
+      path: '/adminLogin',
+      name: 'AdminLogin',
+      component: AdminLogin
+    }, {
+      path: '/adminHome',
+      name: '管理员首页',
+      component: AdminHome,
+      children: []
     }
   ]
 });
 router.beforeEach((to, from, next) => {
-  if (to.path === '/' || to.path === '/schoolLogin') {
+  if (to.path === '/' || to.path === '/schoolLogin' || to.path === '/adminLogin') {
     next();
   } else {
     const tokenStr = localStorage.getItem('token')
     if (!tokenStr) {
-      next('/schoolLogin')
+      next('/')
     } else {
       next();
     }
