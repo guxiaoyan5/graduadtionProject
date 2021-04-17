@@ -6,13 +6,17 @@ import ChangePassword from "../components/ChangePassword";
 import ChangeName from "../components/ChangeName";
 import AdminLogin from "../view/AdminLogin";
 import AdminHome from "../view/AdminHome";
+import AdminConsume from "../components/AdminConsume";
+import AdminStudent from "../components/AdminStudent";
+import AdminStore from "../components/AdminStore";
+import AdminSchool from "../components/AdminSchool";
+import AdminChangePassword from "../components/AdminChangePassword";
 
 Vue.use(Router)
 const router = new Router({
   routes: [
     {
       path: '/',
-
       redirect: {name: 'AdminLogin'}
     }, {
       path: '/schoolLogin',
@@ -41,8 +45,28 @@ const router = new Router({
       path: '/adminHome',
       name: '管理员首页',
       component: AdminHome,
-      children: []
-    }
+      children: [{
+        path: '/student',
+        name: '学生管理',
+        component: AdminStudent,
+      }, {
+        path: '/store',
+        name: '商户管理',
+        component: AdminStore
+      }, {
+        path: '/consume',
+        name: '消费管理',
+        component: AdminConsume
+      },{
+        path : '/school',
+        name : '学校管理员信息管理',
+        component: AdminSchool,
+      },{
+        path : '/adminChangePassword',
+        name : '修改密码',
+        component: AdminChangePassword,
+      }]
+    },
   ]
 });
 router.beforeEach((to, from, next) => {

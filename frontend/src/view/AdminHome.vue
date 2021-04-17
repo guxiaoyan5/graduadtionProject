@@ -1,17 +1,18 @@
 <template>
-  <div class="" layout>
+  <div class="layout">
     <el-container class="container">
       <el-aside width="200px" class="aside">
         <div class="head">
           <div>
-            <img src="../../assets/image/logo.png" alt="logo">
+            <img src="../assets/image/logo.png" alt="logo">
             <span>admin</span>
           </div>
         </div>
         <div class="line"/>
         <el-menu
           router
-          default-active="3"
+          default-active="1"
+          collapse-transition="true"
           :unique-opened="true"
           class="el-menu-vertical-demo"
           @open="handleOpen"
@@ -26,19 +27,29 @@
               <span>基本信息管理</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="1-1">学生</el-menu-item>
-              <el-menu-item index="1-2">商户</el-menu-item>
-              <el-menu-item index="1-3">消费数据</el-menu-item>
+              <el-menu-item index="/student">学生</el-menu-item>
+              <el-menu-item index="/store">商户</el-menu-item>
+              <el-menu-item index="/consume">消费数据</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
 
           <el-submenu index="2">
             <template slot="title">
               <i class="el-icon-location"></i>
+              <span>学校管理员</span>
+            </template>
+            <el-menu-item-group>
+              <el-menu-item index="/school">信息管理</el-menu-item>
+            </el-menu-item-group>
+          </el-submenu>
+
+          <el-submenu index="3">
+            <template slot="title">
+              <i class="el-icon-location"></i>
               <span>设置</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="/changePassword">修改密码</el-menu-item>
+              <el-menu-item index="/adminChangePassword">修改密码</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
         </el-menu>
@@ -80,6 +91,9 @@ export default {
 </script>
 
 <style scoped>
+.el-menu-vertical-demo{
+  text-align: left;
+}
 /*.el-header, .el-footer {*/
 /*  background-color: #B3C0D1;*/
 /*  color: #333;*/
