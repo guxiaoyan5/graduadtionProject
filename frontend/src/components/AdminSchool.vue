@@ -105,9 +105,6 @@
         <el-form-item label="确认密码" prop="checkPassword">
           <el-input type="password" v-model="ruleForm.checkPassword" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-        </el-form-item>
       </el-form>
 
       <div slot="footer" class="dialog-footer">

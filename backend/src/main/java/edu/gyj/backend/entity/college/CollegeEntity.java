@@ -9,6 +9,10 @@ public class CollegeEntity implements Serializable {
     public CollegeEntity() {
     }
 
+    public CollegeEntity(String college) {
+        this.college = college;
+    }
+
     public CollegeEntity(int id, String college) {
         this.id = id;
         this.college = college;

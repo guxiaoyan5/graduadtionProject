@@ -11,6 +11,7 @@
         <div class="line"/>
         <el-menu
           router
+          width="200px"
           default-active="1"
           collapse-transition="true"
           :unique-opened="true"
@@ -27,9 +28,7 @@
               <span>基本信息管理</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="/student">学生</el-menu-item>
-              <el-menu-item index="/store">商户</el-menu-item>
-              <el-menu-item index="/consume">消费数据</el-menu-item>
+              <el-menu-item index="/adminBaseInformation">信息管理</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
 
