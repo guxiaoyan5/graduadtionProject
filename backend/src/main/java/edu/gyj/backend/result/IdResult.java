@@ -1,12 +1,12 @@
 package edu.gyj.backend.result;
 
-public class Id {
+public class IdResult {
     private String id;
 
-    public Id() {
+    public IdResult() {
     }
 
-    public Id(String id) {
+    public IdResult(String id) {
         this.id = id;
     }
 

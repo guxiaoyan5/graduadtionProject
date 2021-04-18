@@ -2,18 +2,66 @@
   <div>
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="学生管理" name="first">
-
       </el-tab-pane>
       <el-tab-pane label="商户管理" name="second">
-
+        <el-table
+          :data="StoreData.filter(data => !search || data.storeName.toLowerCase().includes(search.toLowerCase()))"
+          highlight-current-row
+          style="width: 90%;margin-left: 50px;">
+          <el-table-column
+            label="序号"
+            type="index"
+            width="200">
+          </el-table-column>
+          <el-table-column
+            label="商户"
+            width="500"
+            prop="storeName">
+          </el-table-column>
+          <el-table-column
+            align="right">
+            <template slot="header" slot-scope="scope">
+              <el-row :gutter="20">
+                <el-col :span="16">
+                  <div class="grid-content bg-purple">
+                    <el-input
+                      v-model="search"
+                      clearable
+                      prefix-icon="el-icon-search"
+                      placeholder="输入关键字搜索"/>
+                  </div>
+                </el-col>
+                <el-col :span="8">
+                  <div class="grid-content bg-purple">
+                    <el-button type="primary" icon="el-icon-circle-plus-outline" :loading="addStoreLoading"
+                               @click="addStoreFormVisible = true">添加
+                    </el-button>
+                  </div>
+                </el-col>
+              </el-row>
+            </template>
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                @click="StoreHandleEdit(scope.$index, scope.row)">Edit
+              </el-button>
+              <el-button
+                size="mini"
+                type="danger"
+                @click="StoreHandleDelete(scope.$index, scope.row)">Delete
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
       </el-tab-pane>
       <el-tab-pane label="消费管理" name="third">
 
       </el-tab-pane>
       <el-tab-pane label="班级管理" name="fourth">
         <el-table
-          :data="ClassData.filter(data => !search || data.college.toLowerCase().includes(search.toLowerCase())||data.major.toLowerCase().includes(search.toLowerCase())||data.class.toLowerCase().includes(search.toLowerCase()))"
+          :data="ClassData.filter(data => !search || data.college.toLowerCase().includes(search.toLowerCase())||data.major.toLowerCase().includes(search.toLowerCase())||data.className.toLowerCase().includes(search.toLowerCase()))"
           highlight-current-row
+          v-loading="classLoading"
           style="width: 90%;margin-left: 50px;">
           <el-table-column
             label="序号"
@@ -43,6 +91,7 @@
                   <div class="grid-content bg-purple">
                     <el-input
                       v-model="search"
+                      clearable
                       prefix-icon="el-icon-search"
                       placeholder="输入关键字搜索"/>
                   </div>
@@ -98,6 +147,7 @@
                   <div class="grid-content bg-purple">
                     <el-input
                       v-model="search"
+                      clearable
                       prefix-icon="el-icon-search"
                       placeholder="输入关键字搜索"/>
                   </div>
@@ -149,6 +199,7 @@
                   <div class="grid-content bg-purple">
                     <el-input
                       v-model="search"
+                      clearable
                       prefix-icon="el-icon-search"
                       placeholder="输入关键字搜索"/>
                   </div>
@@ -178,11 +229,45 @@
       </el-tab-pane>
     </el-tabs>
 
+    <!--商户-->
+    <el-popover
+      placement="top"
+      width="160"
+      v-model="deleteStoreVisible">
+      <p>请确认是否删除{{ row.storeName }}</p>
+      <div style="text-align: right; margin: 0">
+        <el-button size="mini" type="text" @click="deleteStoreVisible = false">取消</el-button>
+        <el-button type="primary" size="mini" @click="deleteStore">确定</el-button>
+      </div>
+    </el-popover>
+    <el-dialog title="修改商户信息" :visible.sync="updateStoreFormVisible">
+      <el-form :model="storeForm" ref="storeForm">
+        <el-form-item label="商户名" :label-width="'120px'" prop="storeName">
+          <el-input v-model="storeForm.storeName" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="updateStoreFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="updateStore('storeForm')">确 定</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog title="添加商户" :visible.sync="addStoreFormVisible">
+      <el-form :model="storeForm" ref="storeForm">
+        <el-form-item label="商户名" :label-width="'120px'" prop="storeName">
+          <el-input v-model="storeForm.storeName" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="addStoreFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addStore('storeForm')">确 定</el-button>
+      </div>
+    </el-dialog>
+
     <!--班级-->
     <el-popover
       width="160"
       v-model="deleteClassVisible">
-      <p>请确认是否删除{{ row.className }}({{row.major}})({{ row.college }})</p>
+      <p>请确认是否删除{{ row.className }}({{ row.major }})({{ row.college }})</p>
       <div style="text-align: right; margin: 0">
         <el-button size="mini" type="text" @click="deleteClassVisible = false">取消</el-button>
         <el-button type="primary" size="mini" @click="deleteClass">确定</el-button>
@@ -358,23 +443,9 @@ export default {
       CollegeData: [],
       MajorData: [],
       ClassData: [],
+      StoreData: [],
       activeName: 'first',
       search: '',
-      addCollegeLoading: false,
-      addMajorLoading: false,
-      addClassLoading: false,
-      addCollegeFormVisible: false,
-      addMajorFormVisible: false,
-      addClassFormVisible: false,
-      updateCollegeFormVisible: false,
-      updateMajorFormVisible: false,
-      updateClassFormVisible: false,
-      deleteVisible: false,
-      deleteMajorVisible: false,
-      deleteClassVisible: false,
-      form: {
-        college: ''
-      },
       rules: {
         college: [
           {validator: validateCollegeName, trigger: 'blur'}
@@ -385,8 +456,31 @@ export default {
         className: [
           {validator: validateCollegeName, trigger: 'blur'}
         ],
+        storeName:[
+          {validator: validateCollegeName, trigger: 'blur'}
+        ],
       },
       row: '',
+      addCollegeLoading: false,
+      addMajorLoading: false,
+      addClassLoading: false,
+      addStoreLoading: false,
+      classLoading: true,
+      addCollegeFormVisible: false,
+      addMajorFormVisible: false,
+      addClassFormVisible: false,
+      addStoreFormVisible: false,
+      updateCollegeFormVisible: false,
+      updateMajorFormVisible: false,
+      updateClassFormVisible: false,
+      updateStoreFormVisible: false,
+      deleteVisible: false,
+      deleteMajorVisible: false,
+      deleteClassVisible: false,
+      deleteStoreVisible: false,
+      form: {
+        college: ''
+      },
       majorForm: {
         major: '',
         collegeId: ''
@@ -395,6 +489,9 @@ export default {
         className: '',
         majorId: '',
         collegeId: ''
+      },
+      storeForm:{
+        storeName:'',
       }
     };
   },
@@ -424,13 +521,23 @@ export default {
       let data = response.data
       if (data.code === 1) {
         _this.ClassData = data.data;
+        _this.classLoading = false;
       } else {
         alert(data.message)
       }
     }).catch(function (error) {
       console.log(error)
     });
-
+    this.$axios.get("http://localhost:9090/store/getAll").then(function (response) {
+      let data = response.data
+      if (data.code === 1) {
+        _this.StoreData = data.data;
+      } else {
+        alert(data.message)
+      }
+    }).catch(function (error) {
+      console.log(error)
+    });
   },
   methods: {
     handleClick(tab, event) {
@@ -603,8 +710,8 @@ export default {
         if (valid) {
           this.$axios.post("http://localhost:9090/class/update", {
             id: _this.row.id,
-            className:_this.classForm.className,
-            majorId:_this.classForm.majorId
+            className: _this.classForm.className,
+            majorId: _this.classForm.majorId
           }).then(function (response) {
             let data = response.data;
             if (data.code === 1) {
@@ -628,8 +735,8 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.$axios.post("http://localhost:9090/class/add", {
-            name:_this.classForm.className,
-            majorId:_this.classForm.majorId
+            name: _this.classForm.className,
+            majorId: _this.classForm.majorId
           }).then(function (response) {
             let data = response.data;
             if (data.code === 1) {
@@ -653,7 +760,7 @@ export default {
       this.$axios.post("http://localhost:9090/class/delete", {
         id: this.row.id,
         className: this.row.className,
-        majorId:this.row.majorId
+        majorId: this.row.majorId
       }).then(function (response) {
         let data = response.data
         alert(data.message);
@@ -662,11 +769,79 @@ export default {
       })
       this.deleteVisible = false;
     },
+    StoreHandleEdit(index, row) {
+      this.row = row;
+      this.updateStoreFormVisible = true;
+      this.form.college = row.name;
+    },
+    StoreHandleDelete(index, row) {
+      this.row = row;
+      this.deleteStoreVisible = true;
+    },
+    deleteStore() {
+      let _this = this
+      this.$axios.post("http://localhost:9090/store/delete", {
+        id: this.row.id,
+        storeName: this.row.storeName
+      }).then(function (response) {
+        let data = response.data
+        alert(data.message);
+      }).catch(function (error) {
+        console.log(error)
+      })
+      this.deleteStoreVisible = false;
+    },
+    updateStore(formName) {
+      let _this = this;
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$axios.post("http://localhost:9090/store/update", {
+            id: _this.row.id,
+            storeName: _this.storeForm.storeName
+          }).then(function (response) {
+            let data = response.data;
+            if (data.code === 1) {
+              alert(data.message);
+              _this.$refs[formName].resetFields();
+              _this.updateStoreFormVisible = false;
+            } else {
+              alert(data.message);
+            }
+          }).catch(function (error) {
+            console.log(error);
+          })
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      })
+    },
+    addStore(formName) {
+      let _this = this;
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$axios.post("http://localhost:9090/store/add", {
+            storeName: _this.storeForm.storeName
+          }).then(function (response) {
+            let data = response.data;
+            if (data.code === 1) {
+              alert(data.message);
+              _this.$refs[formName].resetFields();
+              _this.addStoreFormVisible = false;
+            } else {
+              alert(data.message);
+            }
+          }).catch(function (error) {
+            console.log(error)
+          })
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
+    },
   },
 }
 </script>
-
 <style scoped>
-
-
 </style>

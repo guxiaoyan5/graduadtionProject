@@ -2,10 +2,9 @@ package edu.gyj.backend.controller;
 
 import edu.gyj.backend.entity.AdminUserEntity;
 import edu.gyj.backend.entity.SchoolUserEntity;
-import edu.gyj.backend.result.Id;
+import edu.gyj.backend.result.IdResult;
 import edu.gyj.backend.result.Result;
 import edu.gyj.backend.service.AdminUserService;
-import edu.gyj.backend.service.impl.AdminUserServiceImpl;
 import edu.gyj.backend.utils.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -75,7 +74,7 @@ public class AdminUserController {
     }
     @ResponseBody
     @RequestMapping(value = "/deleteSchoolUser",method = RequestMethod.POST)
-    public Result deleteSchoolName(@RequestBody Id id){
+    public Result deleteSchoolName(@RequestBody IdResult id){
         int result = adminUserService.deleteSchoolUser(id.getId());
         if (result == 1) {
             return new Result(1, "删除成功");

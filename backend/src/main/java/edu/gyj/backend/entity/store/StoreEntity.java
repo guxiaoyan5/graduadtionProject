@@ -9,6 +9,10 @@ public class StoreEntity implements Serializable {
     public StoreEntity() {
     }
 
+    public StoreEntity(String storeName) {
+        this.storeName = storeName;
+    }
+
     public StoreEntity(int id, String storeName) {
         this.id = id;
         this.storeName = storeName;
