@@ -49,4 +49,42 @@ public class StudentServiceImpl implements StudentService {
         }
         return studentResults;
     }
+
+    @Override
+    public List<StudentResult> getByClassId(ClassEntity classEntity) {
+        ClassEntity classEntity1 = classMapper.findById(classEntity.getId());
+        MajorEntity majorEntity = majorMapper.findById(classMapper.findById(classEntity.getId()).getMajorId());
+        CollegeEntity collegeEntity = collegeMapper.findById(majorEntity.getCollegeId());
+        List<StudentEntity> studentEntities = studentMapper.findByClassId(classEntity.getId());
+        List<StudentResult> studentResults = new ArrayList<>();
+        for(StudentEntity studentEntity:studentEntities){
+            studentResults.add(new StudentResult(
+                    studentEntity.getId(),
+                    studentEntity.getName(),
+                    classEntity1.getName(),
+                    majorEntity.getMajor(),
+                    collegeEntity.getCollege(),
+                    studentEntity.getSex(),
+                    classEntity1.getId(),
+                    majorEntity.getId(),
+                    collegeEntity.getId()
+            ));
+        }
+        return studentResults;
+    }
+
+    @Override
+    public int add(StudentEntity studentEntity) {
+        return studentMapper.insertStudent(studentEntity);
+    }
+
+    @Override
+    public int update(StudentEntity studentEntity) {
+        return studentMapper.updateStudent(studentEntity);
+    }
+
+    @Override
+    public int delete(StudentEntity studentEntity) {
+        return studentMapper.deleteStudent(studentEntity.getId());
+    }
 }

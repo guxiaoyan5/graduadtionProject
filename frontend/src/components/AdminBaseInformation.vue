@@ -2,6 +2,129 @@
   <div>
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="学生管理" name="first">
+        <el-table
+          :data="studentData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()) || data.sid.toLowerCase().includes(search.toLowerCase()))"
+          v-loading="studentLoading"
+          style="width: 100%">
+          <el-table-column
+            label="序号"
+            type="index"
+            align="center"
+            width="80">
+          </el-table-column>
+          <el-table-column>
+            <template slot="header" slot-scope="scope">
+              <el-form :inline="true" :model="StudentQueryForm" class="demo-form-inline">
+                <el-form-item label="学院:" :label-width="'120px'" style="text-align: left">
+                  <el-select v-model="StudentQueryForm.collegeId" clearable placeholder="请选择">
+                    <el-option
+                      v-for="item in CollegeData"
+                      :key="item.id"
+                      :label="item.college"
+                      :value="item.id">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="专业" :label-width="'120px'" style="text-align: left">
+                  <el-select v-model="StudentQueryForm.majorId" clearable placeholder="请选择">
+                    <el-option
+                      v-for="item in MajorData"
+                      v-show="item.collegeId === StudentQueryForm.collegeId"
+                      :key="item.id"
+                      :label="item.major"
+                      :value="item.id">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="班级" :label-width="'120px'" style="text-align: left">
+                  <el-select v-model="StudentQueryForm.classId" clearable placeholder="请选择">
+                    <el-option
+                      v-for="item in ClassData"
+                      v-show="item.majorId === StudentQueryForm.majorId"
+                      :key="item.id"
+                      :label="item.className"
+                      :value="item.id">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item>
+                  <el-button type="primary" @click="StudentQuerySubmit('StudentQueryForm')">查询</el-button>
+                </el-form-item>
+              </el-form>
+            </template>
+            <el-table-column
+              prop="sid"
+              label="学号"
+              align="center"
+              width="100">
+            </el-table-column>
+            <el-table-column
+              prop="name"
+              label="姓名"
+              align="center"
+              width="100">
+            </el-table-column>
+            <el-table-column
+              prop="className"
+              label="班级"
+              align="center"
+              width="150">
+            </el-table-column>
+            <el-table-column
+              prop="major"
+              label="专业"
+              align="center"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              prop="college"
+              label="学院"
+              align="center"
+              width="250">
+            </el-table-column>
+            <el-table-column
+              prop="sex"
+              label="性别"
+              align="center"
+              width="80">
+            </el-table-column>
+            <el-table-column
+              align="right">
+              <template slot="header" slot-scope="scope">
+                <el-row :gutter="20">
+                  <el-col :span="16">
+                    <div class="grid-content bg-purple">
+                      <el-input
+                        v-model="search"
+                        size="small"
+                        clearable
+                        prefix-icon="el-icon-search"
+                        placeholder="输入关键字搜索"/>
+                    </div>
+                  </el-col>
+                  <el-col :span="8">
+                    <div class="grid-content bg-purple">
+                      <el-button type="primary" icon="el-icon-circle-plus-outline" :loading="addStudentLoading"
+                                 @click="addStudentFormVisible = true">添加
+                      </el-button>
+                    </div>
+                  </el-col>
+                </el-row>
+              </template>
+              <template slot-scope="scope">
+                <el-button
+                  size="mini"
+                  @click="studentHandleEdit(scope.$index, scope.row)">Edit
+                </el-button>
+                <el-button
+                  size="mini"
+                  type="danger"
+                  @click="studentHandleDelete(scope.$index, scope.row)">Delete
+                </el-button>
+              </template>
+            </el-table-column>
+          </el-table-column>
+        </el-table>
       </el-tab-pane>
       <el-tab-pane label="商户管理" name="second">
         <el-table
@@ -228,7 +351,115 @@
         </el-table>
       </el-tab-pane>
     </el-tabs>
+    <!--学生-->
+    <el-popover
+      width="160"
+      v-model="deleteStudentVisible">
+      <p>请确认是否删除{{ row.name }}({{ row.sid }})</p>
+      <div style="text-align: right; margin: 0">
+        <el-button size="mini" type="text" @click="deleteStudentVisible = false">取消</el-button>
+        <el-button type="primary" size="mini" @click="deleteStudent">确定</el-button>
+      </div>
+    </el-popover>
+    <el-dialog title="修改学生信息" :visible.sync="updateStudentFormVisible">
+      <el-form :model="StudentForm" ref="StudentForm">
+        <el-form-item label="学号" :label-width="'120px'" prop="sid" style="text-align: left;width: 48%">
+          <el-input v-model="StudentForm.sid" autocomplete="off" :disabled="true"></el-input>
+        </el-form-item>
+        <el-form-item label="姓名" :label-width="'120px'" prop="name" style="text-align: left;width: 48%">
+          <el-input v-model="StudentForm.name" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="学院" :label-width="'120px'" style="text-align: left;width: 48%">
+          <el-select v-model="StudentForm.collegeId" clearable placeholder="请选择">
+            <el-option
+              v-for="item in CollegeData"
+              :key="item.id"
+              :label="item.college"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="专业" :label-width="'120px'" style="text-align: left;width: 48%">
+          <el-select v-model="StudentForm.majorId" clearable placeholder="请选择">
+            <el-option
+              v-for="item in MajorData"
+              v-show="item.collegeId === StudentForm.collegeId"
+              :key="item.id"
+              :label="item.major"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="班级" :label-width="'120px'" style="text-align: left;width: 48%">
+          <el-select v-model="StudentForm.classId" clearable placeholder="请选择">
+            <el-option
+              v-for="item in ClassData"
+              v-show="item.majorId === StudentForm.majorId"
+              :key="item.id"
+              :label="item.className"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="updateStudentFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="updateStudent('StudentForm')">确 定</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog title="添加学生" :visible.sync="addStudentFormVisible">
+      <el-form :model="StudentForm" ref="StudentForm">
+        <el-form-item label="学号" :label-width="'120px'" prop="sid" style="text-align: left;width: 48%">
+          <el-input v-model="StudentForm.sid" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="姓名" :label-width="'120px'" prop="name" style="text-align: left;width: 48%">
+          <el-input v-model="StudentForm.name" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="学院" :label-width="'120px'" style="text-align: left;width: 48%">
+          <el-select v-model="StudentForm.collegeId" clearable placeholder="请选择">
+            <el-option
+              v-for="item in CollegeData"
+              :key="item.id"
+              :label="item.college"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="专业" :label-width="'120px'" style="text-align: left;width: 48%">
+          <el-select v-model="StudentForm.majorId" clearable placeholder="请选择">
+            <el-option
+              v-for="item in MajorData"
+              v-show="item.collegeId === StudentForm.collegeId"
+              :key="item.id"
+              :label="item.major"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="班级" :label-width="'120px'" style="text-align: left;width: 48%">
+          <el-select v-model="StudentForm.classId" clearable placeholder="请选择">
+            <el-option
+              v-for="item in ClassData"
+              v-show="item.majorId === StudentForm.majorId"
+              :key="item.id"
+              :label="item.className"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="性别" :label-width="'120px'" style="text-align: left;width: 48%">
+          <el-select v-model="StudentForm.sex" clearable placeholder="请选择">
+            <el-option label="男" value="男"></el-option>
+            <el-option label="女" value="女"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
 
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="addStudentFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addStudent('StudentForm')">确 定</el-button>
+      </div>
+    </el-dialog>
     <!--商户-->
     <el-popover
       placement="top"
@@ -435,7 +666,15 @@ export default {
   data() {
     let validateCollegeName = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请输入昵称'));
+        callback(new Error('请输入'));
+      }
+      callback();
+    };
+    let validateSid = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入学号'));
+      } else if (value.length !== 6) {
+        callback(new Error('学号长度为6'));
       }
       callback();
     };
@@ -444,6 +683,7 @@ export default {
       MajorData: [],
       ClassData: [],
       StoreData: [],
+      studentData: [],
       activeName: 'first',
       search: '',
       rules: {
@@ -456,28 +696,39 @@ export default {
         className: [
           {validator: validateCollegeName, trigger: 'blur'}
         ],
-        storeName:[
+        storeName: [
+          {validator: validateCollegeName, trigger: 'blur'}
+        ],
+        id: [
+          {validator: validateSid, trigger: 'blur'}
+        ],
+        name: [
           {validator: validateCollegeName, trigger: 'blur'}
         ],
       },
       row: '',
       addCollegeLoading: false,
       addMajorLoading: false,
+      addStudentLoading: false,
       addClassLoading: false,
       addStoreLoading: false,
+      studentLoading: false,
       classLoading: true,
       addCollegeFormVisible: false,
       addMajorFormVisible: false,
       addClassFormVisible: false,
       addStoreFormVisible: false,
+      addStudentFormVisible: false,
       updateCollegeFormVisible: false,
       updateMajorFormVisible: false,
       updateClassFormVisible: false,
       updateStoreFormVisible: false,
+      updateStudentFormVisible: false,
       deleteVisible: false,
       deleteMajorVisible: false,
       deleteClassVisible: false,
       deleteStoreVisible: false,
+      deleteStudentVisible: false,
       form: {
         college: ''
       },
@@ -490,8 +741,21 @@ export default {
         majorId: '',
         collegeId: ''
       },
-      storeForm:{
-        storeName:'',
+      storeForm: {
+        storeName: '',
+      },
+      StudentQueryForm: {
+        collegeId: '',
+        majorId: '',
+        classId: '',
+      },
+      StudentForm: {
+        id: '',
+        name: '',
+        classId: '',
+        majorId: '',
+        collegeId: '',
+        sex: '',
       }
     };
   },
@@ -772,7 +1036,7 @@ export default {
     StoreHandleEdit(index, row) {
       this.row = row;
       this.updateStoreFormVisible = true;
-      this.form.college = row.name;
+      this.storeForm.storeName = row.name;
     },
     StoreHandleDelete(index, row) {
       this.row = row;
@@ -828,6 +1092,111 @@ export default {
               alert(data.message);
               _this.$refs[formName].resetFields();
               _this.addStoreFormVisible = false;
+            } else {
+              alert(data.message);
+            }
+          }).catch(function (error) {
+            console.log(error)
+          })
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
+    },
+    studentHandleEdit(index, row) {
+      this.row = row;
+      this.updateStudentFormVisible = true;
+      this.StudentForm = {
+        sid: row.sid,
+        name: row.name,
+        classId: row.classId,
+        majorId: row.majorId,
+        collegeId: row.collegeId,
+        sex: row.sex,
+      }
+    },
+    studentHandleDelete(index, row) {
+      this.deleteStudentVisible=true;
+      this.row = row;
+    },
+    StudentQuerySubmit(formName) {
+      this.studentLoading = true;
+      let _this = this;
+      this.$axios.post("http://localhost:9090/student/getByClassId", {
+        id: _this.StudentQueryForm.classId,
+      }).then(function (response) {
+        if (response.data.code === 1) {
+          _this.studentData = response.data.data;
+          _this.studentLoading = false
+        } else {
+          alert("加载失败");
+        }
+      }).catch(function (error) {
+        console.log(error);
+      })
+    },
+    deleteStudent() {
+      let _this = this
+      this.$axios.post("http://localhost:9090/student/delete", {
+        id: this.row.sid,
+      }).then(function (response) {
+        let data = response.data
+        alert(data.message);
+      }).catch(function (error) {
+        console.log(error)
+      })
+      this.deleteStudentVisible = false;
+    },
+    addStudent(formName) {
+      this.addStudentLoading = true;
+      let _this = this;
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$axios.post("http://localhost:9090/student/add", {
+            id: this.StudentForm.sid,
+            name: this.StudentForm.name,
+            classId: this.StudentForm.classId,
+            majorId: this.StudentForm.majorId,
+            collegeId: this.StudentForm.collegeId,
+            sex: this.StudentForm.sex,
+          }).then(function (response) {
+            let data = response.data;
+            if (data.code === 1) {
+              alert(data.message);
+              _this.$refs[formName].resetFields();
+              _this.addStudentFormVisible = false;
+            } else {
+              alert(data.message);
+            }
+          }).catch(function (error) {
+            console.log(error)
+          })
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+        _this.addStudentLoading = false;
+      });
+    },
+    updateStudent(formName) {
+      let _this = this;
+      console.log(this.StudentForm)
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$axios.post("http://localhost:9090/student/update", {
+            id: this.StudentForm.sid,
+            name: this.StudentForm.name,
+            classId: this.StudentForm.classId,
+            majorId: this.StudentForm.majorId,
+            collegeId: this.StudentForm.collegeId,
+            sex: this.StudentForm.sex,
+          }).then(function (response) {
+            let data = response.data;
+            if (data.code === 1) {
+              alert(data.message);
+              _this.$refs[formName].resetFields();
+              _this.updateStudentFormVisible = false;
             } else {
               alert(data.message);
             }

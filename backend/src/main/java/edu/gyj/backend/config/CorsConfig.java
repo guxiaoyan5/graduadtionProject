@@ -1,6 +1,5 @@
 package edu.gyj.backend.config;
 
-
 import edu.gyj.backend.interceptor.TokenInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -20,7 +19,7 @@ public class CorsConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        List<String> excludePath=new ArrayList<>();
+        List<String> excludePath = new ArrayList<>();
         excludePath.add("/schoolUser/login");
         excludePath.add("/adminUser/login");
         excludePath.add("/static/**");
@@ -36,8 +35,8 @@ public class CorsConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOriginPatterns("*")
                 .allowCredentials(true)
-                .allowedMethods("GET","POST","PUT","DELETE","OPTIONS")
-                .maxAge(3600*24)
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .maxAge(3600 * 24)
                 .allowedHeaders("*");
     }
 }

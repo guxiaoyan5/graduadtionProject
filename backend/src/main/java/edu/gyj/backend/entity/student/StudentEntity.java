@@ -22,6 +22,10 @@ public class StudentEntity implements Serializable {
         this.sex = sex;
     }
 
+    public StudentEntity(String id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return "Student{" +

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Statistic">
+    <option name="fileTypes" value="class;svn-base;svn-work;Extra;gif;png;jpg;jpeg;bmp;tga;tiff;ear;war;zip;jar;iml;iws;ipr;bz2;gz;pyc;json;cmd;editorconfig;babelrc;gitignore;gitkeep;txt" />
+    <option name="excludedDirectories">
+      <list>
+        <option value="$PROJECT_DIR$/.idea" />
+        <option value="$PROJECT_DIR$/Analysis/target" />
+        <option value="$PROJECT_DIR$/node_modules" />
+        <option value="$PROJECT_DIR$/frontend/node_modules" />
+        <option value="$PROJECT_DIR$/backend/.mvn" />
+        <option value="$PROJECT_DIR$/backend/target" />
+        <option value="$PROJECT_DIR$/frontend/build" />
+        <option value="$PROJECT_DIR$/frontend/config" />
+      </list>
+    </option>
+  </component>
+</project>
