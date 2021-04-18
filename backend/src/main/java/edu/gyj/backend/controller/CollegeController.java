@@ -28,6 +28,7 @@ public class CollegeController {
     @ResponseBody
     @RequestMapping(value = "/add",method = RequestMethod.POST)
     public Result add(@RequestBody CollegeEntity collegeEntity){
+        System.out.println();
         int result = collegeService.add(collegeEntity);
         if(result == -1){
             return new Result(2,"已存在该学院名");
@@ -48,7 +49,7 @@ public class CollegeController {
         }
     }
     @ResponseBody
-    @RequestMapping(value = "/dalete",method = RequestMethod.POST)
+    @RequestMapping(value = "/delete",method = RequestMethod.POST)
     public Result delete(@RequestBody CollegeEntity collegeEntity){
         int result = collegeService.delete(collegeEntity);
         if(result == 1){

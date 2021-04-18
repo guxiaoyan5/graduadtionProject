@@ -1,0 +1,50 @@
+package edu.gyj.backend.service.impl;
+
+import edu.gyj.backend.entity.college.CollegeEntity;
+import edu.gyj.backend.entity.major.MajorEntity;
+import edu.gyj.backend.mapper.college.CollegeMapper;
+import edu.gyj.backend.mapper.major.MajorCSMapper;
+import edu.gyj.backend.mapper.major.MajorMapper;
+import edu.gyj.backend.result.MajorResult;
+import edu.gyj.backend.service.MajorService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Service
+public class MajorServiceImpl implements MajorService {
+    @Autowired
+    MajorMapper majorMapper;
+    @Autowired
+    CollegeMapper collegeMapper;
+
+    @Override
+    public List<MajorResult> getAll() {
+        List<MajorResult> majorResults = new ArrayList<>();
+        List<CollegeEntity> collegeEntities = collegeMapper.findAll();
+        for (CollegeEntity collegeEntity : collegeEntities) {
+            List<MajorEntity> majorEntities = majorMapper.findByCollegeId(collegeEntity.getId());
+            for (MajorEntity majorEntity : majorEntities) {
+                majorResults.add(new MajorResult(majorEntity.getId(), majorEntity.getMajor(), collegeEntity.getCollege(), collegeEntity.getId()));
+            }
+        }
+        return majorResults;
+    }
+
+    @Override
+    public int addMajor(MajorEntity majorEntity) {
+        return majorMapper.insertMajor(majorEntity);
+    }
+
+    @Override
+    public int update(MajorEntity majorEntity) {
+        return majorMapper.updateMajor(majorEntity);
+    }
+
+    @Override
+    public int delete(MajorEntity majorEntity) {
+        return majorMapper.deleteMajor(majorEntity.getId());
+    }
+}

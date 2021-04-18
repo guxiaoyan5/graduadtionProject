@@ -16,6 +16,11 @@ public class MajorEntity implements Serializable {
         this.collegeId = collegeId;
     }
 
+    public MajorEntity(String major, int collegeId) {
+        this.major = major;
+        this.collegeId = collegeId;
+    }
+
     @Override
     public String toString() {
         return "Major{" +
