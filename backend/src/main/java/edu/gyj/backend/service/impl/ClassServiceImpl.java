@@ -1,0 +1,65 @@
+package edu.gyj.backend.service.impl;
+
+import edu.gyj.backend.entity.classCS.ClassEntity;
+import edu.gyj.backend.entity.college.CollegeEntity;
+import edu.gyj.backend.entity.major.MajorEntity;
+import edu.gyj.backend.mapper.classCS.ClassMapper;
+import edu.gyj.backend.mapper.college.CollegeMapper;
+import edu.gyj.backend.mapper.major.MajorMapper;
+import edu.gyj.backend.result.ClassResult;
+import edu.gyj.backend.service.ClassService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Service
+public class ClassServiceImpl implements ClassService {
+    @Autowired
+    ClassMapper classMapper;
+    @Autowired
+    MajorMapper majorMapper;
+    @Autowired
+    CollegeMapper collegeMapper;
+
+    @Override
+    public List<ClassResult> getAll() {
+        List<ClassResult> classResults = new ArrayList<>();
+        List<ClassEntity> classEntities = classMapper.findAll();
+        for (ClassEntity classEntity : classEntities) {
+            MajorEntity majorEntity = majorMapper.findById(classEntity.getMajorId());
+            CollegeEntity collegeEntity = collegeMapper.findById(majorEntity.getCollegeId());
+            classResults.add(new ClassResult(classEntity.getId(), classEntity.getName(),
+                    majorEntity.getMajor(), collegeEntity.getCollege(), majorEntity.getId(),
+                    collegeEntity.getId()));
+        }
+        return classResults;
+    }
+
+    @Override
+    public int add(ClassEntity classEntity) {
+        List<ClassEntity> classEntities = classMapper.findAll();
+        boolean tag =false;
+        for(ClassEntity c:classEntities){
+            if(c.getName().compareTo(classEntity.getName())==0 && c.getMajorId()==classEntity.getMajorId()){
+                tag = true;
+            }
+        }
+        if(tag){
+            return -1;
+        }
+        return classMapper.insertClass(classEntity);
+    }
+
+    @Override
+    public int update(ClassEntity classEntity) {
+        return classMapper.updateClass(classEntity);
+    }
+
+    @Override
+    public int delete(ClassEntity classEntity) {
+        return classMapper.deleteClass(classEntity.getId());
+    }
+
+}

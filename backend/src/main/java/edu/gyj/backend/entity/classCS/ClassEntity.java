@@ -13,6 +13,11 @@ public class ClassEntity implements Serializable {
         this.majorId = majorId;
     }
 
+    public ClassEntity(String name, int majorId) {
+        this.name = name;
+        this.majorId = majorId;
+    }
+
     public ClassEntity() {
     }
 
