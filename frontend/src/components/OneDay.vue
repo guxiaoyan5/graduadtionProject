@@ -47,7 +47,10 @@
       </el-form>
     </el-header>
     <el-main>
-
+      <div>
+        <div id="chart" ref="chart"></div>
+        <div id="chart1" ref="chart"></div>
+      </div>
     </el-main>
   </el-container>
 </template>
@@ -55,7 +58,14 @@
 <script>
 import axios from 'axios'
 
-let id = 0;
+const echarts = require('echarts/lib/echarts');
+require('echarts/lib/component/title');
+require('echarts/lib/component/toolbox');
+require('echarts/lib/component/tooltip');
+require('echarts/lib/component/grid');
+require('echarts/lib/component/legend');
+require('echarts/lib/chart/line');
+
 export default {
   name: "OneDay",
   data() {
@@ -146,42 +156,181 @@ export default {
           }
         }]
       },
+      monthData: [],
+      myChart: '',
+      // myChart1: ''
     };
+  },
+  mounted() {
+    this.initChart();
+    // this.initChart1();
   },
   methods: {
     onSubmit(formName) {
-      let _this = this;
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          let _this = this;
           const nodes = _this.$refs['id'].getCheckedNodes();
           let obj = [];
-          nodes.forEach(node=>{
+          nodes.forEach(node => {
             obj.push({
-              value:node.value,
-              label:node.label,
-              level:node.level,
+              value: node.value,
+              label: node.label,
+              level: node.level,
             })
           });
           axios.post('http://localhost:9090/schoolUser/getConsume', {
-            id:obj,
-            choice:_this.formInline.choice,
-            date:_this.formInline.date
+            id: obj,
+            choice: _this.formInline.choice,
+            date: _this.formInline.date
           }).then(function (response) {
-            console.log(response.data)
+            _this.monthData = response.data.data;
           }).catch(function (error) {
             console.log('error!!');
             console.log(error)
           })
+          this.fetchData();
         } else {
           console.log('error submit!!');
           return false;
         }
       });
-    }
+    },
+    initChart() {
+      this.myChart = echarts.init(document.getElementById('chart'));
+      let option = {
+        title: {
+          text: '消费数据统计图'
+        },
+        tooltip: {
+          trigger: 'axis'
+        },
+        legend: {
+          data: []
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {}
+          }
+        },
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: []
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: []
+      };
+      this.myChart.setOption(option);
+      this.myChart.hideLoading()
+    },
+    // initChart1() {
+    //   this.myChart1 = echarts.init(document.getElementById('chart1'));
+    //   let option = {
+    //     title: {
+    //       text: '消费统计图'
+    //     },
+    //     tooltip: {
+    //       trigger: 'axis'
+    //     },
+    //     legend: {
+    //       data: []
+    //     },
+    //     grid: {
+    //       left: '3%',
+    //       right: '4%',
+    //       bottom: '3%',
+    //       containLabel: true
+    //     },
+    //     toolbox: {
+    //       feature: {
+    //         saveAsImage: {}
+    //       }
+    //     },
+    //     xAxis: {
+    //       type: 'category',
+    //       boundaryGap: false,
+    //       data: []
+    //     },
+    //     yAxis: {
+    //       type: 'value'
+    //     },
+    //     series: []
+    //   };
+    //   this.myChart1.setOption(option);
+    //   this.myChart1.hideLoading()
+    // },
+    fetchData() {
+      this.myChart.showLoading();
+      let name = [];
+      this.monthData.forEach(item => (
+        name.push(item.name)
+      ));
+      let date = new Set();
+      this.monthData.forEach(item => (
+        item.consumeMonthData.forEach(item1 => (
+          date.add(item1.year + "-" + item1.month)
+        ))
+      ));
+      date = Array.from(date).sort();
+      let dataResult = [];
+      for (let i = 0; i < this.monthData.length; i++) {
+        let temp = {
+          name: this.monthData[i].name,
+          type: 'line',
+          // stack: '平均人次消费',
+          data: Array.from({length: date.length}).map(item => (0)),
+        };
+        for (let j = 0; j < this.monthData[i].consumeMonthData.length; j++) {
+          let tempDate = this.monthData[i].consumeMonthData[j].year + '-' + this.monthData[i].consumeMonthData[j].month
+          for (let k = 0; k < date.length; k++) {
+            if (tempDate === date[k]) {
+              temp.data[k] = this.monthData[i].consumeMonthData[j].consumption_average_money;
+              break;
+            }
+          }
+        }
+        dataResult.push(temp);
+      }
+      this.myChart.setOption({
+        legend: {
+          data: name,
+        },
+        xAxis: {
+          data: date,
+        },
+        series: dataResult,
+      });
+      this.myChart.hideLoading();
+    },
   }
 }
 </script>
 
 <style scoped>
+#chart {
+  width: 600px;
+  height: 400px;
+  /* background-color:black;  */
+  margin-top: 20px;
+  float: left;
+  margin-left: 20px;
+}
 
+/*#chart1 {*/
+/*  width: 600px;*/
+/*  height: 400px;*/
+/*  float: left;*/
+/*  !* background-color:black;  *!*/
+/*  margin-top: 20px;*/
+/*  margin-left: 20px;*/
+/*}*/
 </style>
