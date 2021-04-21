@@ -2,9 +2,11 @@ package edu.gyj.backend.service.impl;
 
 import edu.gyj.backend.entity.college.CollegeEntity;
 import edu.gyj.backend.entity.major.MajorEntity;
+import edu.gyj.backend.entity.major.MajorMonthCSEntity;
 import edu.gyj.backend.mapper.college.CollegeMapper;
 import edu.gyj.backend.mapper.major.MajorCSMapper;
 import edu.gyj.backend.mapper.major.MajorMapper;
+import edu.gyj.backend.mapper.major.MajorMonthCSMapper;
 import edu.gyj.backend.result.MajorResult;
 import edu.gyj.backend.service.MajorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,8 @@ public class MajorServiceImpl implements MajorService {
     MajorMapper majorMapper;
     @Autowired
     CollegeMapper collegeMapper;
+    @Autowired
+    MajorMonthCSMapper majorMonthCSMapper;
 
     @Override
     public List<MajorResult> getAll() {
@@ -34,6 +38,11 @@ public class MajorServiceImpl implements MajorService {
     }
 
     @Override
+    public List<MajorEntity> getCollegeId(int collegeId) {
+        return majorMapper.findByCollegeId(collegeId);
+    }
+
+    @Override
     public int addMajor(MajorEntity majorEntity) {
         return majorMapper.insertMajor(majorEntity);
     }
@@ -46,5 +55,16 @@ public class MajorServiceImpl implements MajorService {
     @Override
     public int delete(MajorEntity majorEntity) {
         return majorMapper.deleteMajor(majorEntity.getId());
+    }
+
+
+    @Override
+    public List<MajorMonthCSEntity> findByMajorIdAndYearAndMonth(int majorId, int year, int month) {
+        return majorMonthCSMapper.findByMajorIdAndYearAndMonth(majorId, year, month);
+    }
+
+    @Override
+    public List<MajorMonthCSEntity> findByMajorIdAndYear(int majorId, int year) {
+        return majorMonthCSMapper.findByMajorIdAndYear(majorId, year);
     }
 }

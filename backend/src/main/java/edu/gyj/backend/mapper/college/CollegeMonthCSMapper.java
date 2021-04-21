@@ -14,4 +14,6 @@ public interface CollegeMonthCSMapper {
     List<CollegeMonthCSEntity> findByCollegeId(int collegeId);
     List<CollegeMonthCSEntity> findByMonth(int month, int year);
     List<CollegeMonthCSEntity> findByYear(int year);
+    List<CollegeMonthCSEntity> findByCollegeIdAndYear(int collegeId,int year);
+    List<CollegeMonthCSEntity> findByCollegeIdAndYearAndMonth(int collegeId,int year,int month);
 }

@@ -177,9 +177,9 @@
           </el-table-column>
         </el-table>
       </el-tab-pane>
-      <el-tab-pane label="消费管理" name="third">
-
-      </el-tab-pane>
+<!--      <el-tab-pane label="消费管理" name="third">-->
+<!--        -->
+<!--      </el-tab-pane>-->
       <el-tab-pane label="班级管理" name="fourth">
         <el-table
           :data="ClassData.filter(data => !search || data.college.toLowerCase().includes(search.toLowerCase())||data.major.toLowerCase().includes(search.toLowerCase())||data.className.toLowerCase().includes(search.toLowerCase()))"
@@ -361,7 +361,7 @@
         <el-button type="primary" size="mini" @click="deleteStudent">确定</el-button>
       </div>
     </el-popover>
-    <el-dialog title="修改学生信息" :visible.sync="updateStudentFormVisible">
+    <el-dialog title="修改学生信息" :visible.sync="updateStudentFormVisible" :rules="rules">
       <el-form :model="StudentForm" ref="StudentForm">
         <el-form-item label="学号" :label-width="'120px'" prop="sid" style="text-align: left;width: 48%">
           <el-input v-model="StudentForm.sid" autocomplete="off" :disabled="true"></el-input>
@@ -408,7 +408,7 @@
       </div>
     </el-dialog>
     <el-dialog title="添加学生" :visible.sync="addStudentFormVisible">
-      <el-form :model="StudentForm" ref="StudentForm">
+      <el-form :model="StudentForm" ref="StudentForm" :rules="rules">
         <el-form-item label="学号" :label-width="'120px'" prop="sid" style="text-align: left;width: 48%">
           <el-input v-model="StudentForm.sid" autocomplete="off"></el-input>
         </el-form-item>
@@ -472,7 +472,7 @@
       </div>
     </el-popover>
     <el-dialog title="修改商户信息" :visible.sync="updateStoreFormVisible">
-      <el-form :model="storeForm" ref="storeForm">
+      <el-form :model="storeForm" ref="storeForm" :rules="rules">
         <el-form-item label="商户名" :label-width="'120px'" prop="storeName">
           <el-input v-model="storeForm.storeName" autocomplete="off"></el-input>
         </el-form-item>
@@ -483,7 +483,7 @@
       </div>
     </el-dialog>
     <el-dialog title="添加商户" :visible.sync="addStoreFormVisible">
-      <el-form :model="storeForm" ref="storeForm">
+      <el-form :model="storeForm" ref="storeForm" :rules="rules">
         <el-form-item label="商户名" :label-width="'120px'" prop="storeName">
           <el-input v-model="storeForm.storeName" autocomplete="off"></el-input>
         </el-form-item>
@@ -505,7 +505,7 @@
       </div>
     </el-popover>
     <el-dialog title="修改班级信息" :visible.sync="updateClassFormVisible">
-      <el-form :model="classForm" ref="classForm">
+      <el-form :model="classForm" ref="classForm" :rules="rules">
         <el-form-item label="班级名" :label-width="'120px'" prop="className" style="width: 48%">
           <el-input v-model="classForm.className" autocomplete="off"></el-input>
         </el-form-item>
@@ -537,7 +537,7 @@
       </div>
     </el-dialog>
     <el-dialog title="添加班级" :visible.sync="addClassFormVisible">
-      <el-form :model="classForm" ref="classForm">
+      <el-form :model="classForm" ref="classForm" :rules="rules">
         <el-form-item label="班级名" :label-width="'120px'" prop="className" style="width: 48%">
           <el-input v-model="classForm.className" autocomplete="off"></el-input>
         </el-form-item>
@@ -582,7 +582,7 @@
       </div>
     </el-popover>
     <el-dialog title="修改专业信息" :visible.sync="updateMajorFormVisible">
-      <el-form :model="majorForm" ref="majorForm">
+      <el-form :model="majorForm" ref="majorForm" :rules="rules">
         <el-form-item label="专业名" :label-width="'120px'" prop="major" style="width: 48%">
           <el-input v-model="majorForm.major" autocomplete="off"></el-input>
         </el-form-item>
@@ -603,7 +603,7 @@
       </div>
     </el-dialog>
     <el-dialog title="添加专业" :visible.sync="addMajorFormVisible">
-      <el-form :model="majorForm" ref="majorForm">
+      <el-form :model="majorForm" ref="majorForm" :rules="rules">
         <el-form-item label="专业名" :label-width="'120px'" prop="major" style="width: 48%">
           <el-input v-model="majorForm.major" autocomplete="off"></el-input>
         </el-form-item>
@@ -636,7 +636,7 @@
       </div>
     </el-popover>
     <el-dialog title="修改学院信息" :visible.sync="updateCollegeFormVisible">
-      <el-form :model="form">
+      <el-form :model="form" :rules="rules">
         <el-form-item label="活动名称" :label-width="'120px'" prop="college">
           <el-input v-model="form.college" autocomplete="off"></el-input>
         </el-form-item>
@@ -647,7 +647,7 @@
       </div>
     </el-dialog>
     <el-dialog title="添加学院" :visible.sync="addCollegeFormVisible">
-      <el-form :model="form" ref="form">
+      <el-form :model="form" ref="form" :rules="rules">
         <el-form-item label="学院名" :label-width="'120px'" prop="college">
           <el-input v-model="form.college" autocomplete="off"></el-input>
         </el-form-item>
@@ -1117,7 +1117,7 @@ export default {
       }
     },
     studentHandleDelete(index, row) {
-      this.deleteStudentVisible=true;
+      this.deleteStudentVisible = true;
       this.row = row;
     },
     StudentQuerySubmit(formName) {

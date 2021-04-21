@@ -9,13 +9,14 @@ import AdminHome from "../view/AdminHome";
 import AdminSchool from "../components/AdminSchool";
 import AdminChangePassword from "../components/AdminChangePassword";
 import AdminBaseInformation from "../components/AdminBaseInformation";
+import OneDay from "../components/OneDay";
 
 Vue.use(Router)
 const router = new Router({
   routes: [
     {
       path: '/',
-      redirect: {name: 'AdminLogin'}
+      redirect: {name: 'SchoolLogin'}
     }, {
       path: '/schoolLogin',
       name: 'SchoolLogin',
@@ -33,6 +34,10 @@ const router = new Router({
           path: '/changeName',
           component: ChangeName,
           name: '修改昵称',
+        }, {
+          path: '/oneDay',
+          component: OneDay,
+          name: "一日消费分析"
         }
       ]
     }, {
@@ -44,16 +49,16 @@ const router = new Router({
       name: '管理员首页',
       component: AdminHome,
       children: [{
-        path : '/school',
-        name : '学校管理员信息管理',
+        path: '/school',
+        name: '学校管理员信息管理',
         component: AdminSchool,
-      },{
-        path : '/adminChangePassword',
-        name : '修改密码',
+      }, {
+        path: '/adminChangePassword',
+        name: '修改密码',
         component: AdminChangePassword,
-      },{
-        path:'/adminBaseInformation',
-        name:'基本信息',
+      }, {
+        path: '/adminBaseInformation',
+        name: '基本信息',
         component: AdminBaseInformation
       }]
     },

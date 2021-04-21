@@ -13,4 +13,6 @@ public interface ClassMonthCSMapper {
     List<ClassMonthCSEntity> findByClassId(int classId);
     List<ClassMonthCSEntity> findByMonth(int month,int year);
     List<ClassMonthCSEntity> findByYear(int year);
+    List<ClassMonthCSEntity> findByClassIdAndYearAndMonth(int classId,int year,int month);
+    List<ClassMonthCSEntity> findByClassIdAndYear(int classId,int year);
 }

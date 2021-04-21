@@ -11,7 +11,14 @@ import java.util.List;
 @Mapper
 public interface MajorMonthCSMapper {
     List<MajorMonthCSEntity> findAll();
+
     List<MajorMonthCSEntity> findByMajorId(int MajorId);
+
     List<MajorMonthCSEntity> findByMonth(int month, int year);
+
     List<MajorMonthCSEntity> findByYear(int year);
+
+    List<MajorMonthCSEntity> findByMajorIdAndYearAndMonth(int majorId, int year, int month);
+
+    List<MajorMonthCSEntity> findByMajorIdAndYear(int majorId, int year);
 }
