@@ -14,4 +14,5 @@ public interface CollegeDayCSMapper {
     List<CollegeDayCSEntity> findAll();
     List<CollegeDayCSEntity> findByCollegeId(int id);
     List<CollegeDayCSEntity> findByDate(Date date);
+    List<CollegeDayCSEntity> findByDates(int id,Date start,Date end);
 }

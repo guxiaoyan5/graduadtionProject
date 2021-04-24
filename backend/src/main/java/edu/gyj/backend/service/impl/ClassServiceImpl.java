@@ -1,9 +1,11 @@
 package edu.gyj.backend.service.impl;
 
+import edu.gyj.backend.entity.classCS.ClassDayCSEntity;
 import edu.gyj.backend.entity.classCS.ClassEntity;
 import edu.gyj.backend.entity.classCS.ClassMonthCSEntity;
 import edu.gyj.backend.entity.college.CollegeEntity;
 import edu.gyj.backend.entity.major.MajorEntity;
+import edu.gyj.backend.mapper.classCS.ClassDayCSMapper;
 import edu.gyj.backend.mapper.classCS.ClassMapper;
 import edu.gyj.backend.mapper.classCS.ClassMonthCSMapper;
 import edu.gyj.backend.mapper.college.CollegeMapper;
@@ -13,6 +15,7 @@ import edu.gyj.backend.service.ClassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +29,8 @@ public class ClassServiceImpl implements ClassService {
     CollegeMapper collegeMapper;
     @Autowired
     ClassMonthCSMapper classMonthCSMapper;
+    @Autowired
+    ClassDayCSMapper classDayCSMapper;
 
     @Override
     public List<ClassResult> getAll() {
@@ -79,6 +84,11 @@ public class ClassServiceImpl implements ClassService {
     @Override
     public List<ClassMonthCSEntity> findByClassIdAndYear(int classId, int year) {
         return classMonthCSMapper.findByClassIdAndYear(classId, year);
+    }
+
+    @Override
+    public List<ClassDayCSEntity> findByClassIdAndDates(int classId, Date start, Date end) {
+        return classDayCSMapper.findByDates(classId,new java.sql.Date(start.getTime()),new java.sql.Date(end.getTime()));
     }
 
 }

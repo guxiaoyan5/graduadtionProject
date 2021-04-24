@@ -14,4 +14,5 @@ public interface MajorDayCSMapper {
     List<MajorDayCSEntity> findAll();
     List<MajorDayCSEntity> findByMajorId(int id);
     List<MajorDayCSEntity> findByDate(Date date);
+    List<MajorDayCSEntity> findByDates(int id,Date start,Date end);
 }

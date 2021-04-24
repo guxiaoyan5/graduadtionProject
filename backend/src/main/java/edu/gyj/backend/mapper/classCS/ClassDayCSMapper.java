@@ -13,4 +13,5 @@ public interface ClassDayCSMapper {
     List<ClassDayCSEntity> findAll();
     List<ClassDayCSEntity> findByClassId(int id);
     List<ClassDayCSEntity> findByDate(Date date);
+    List<ClassDayCSEntity> findByDates(int id,Date start,Date end);
 }

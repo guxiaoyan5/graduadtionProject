@@ -1,10 +1,12 @@
 package edu.gyj.backend.service.impl;
 
 import edu.gyj.backend.entity.college.CollegeEntity;
+import edu.gyj.backend.entity.major.MajorDayCSEntity;
 import edu.gyj.backend.entity.major.MajorEntity;
 import edu.gyj.backend.entity.major.MajorMonthCSEntity;
 import edu.gyj.backend.mapper.college.CollegeMapper;
 import edu.gyj.backend.mapper.major.MajorCSMapper;
+import edu.gyj.backend.mapper.major.MajorDayCSMapper;
 import edu.gyj.backend.mapper.major.MajorMapper;
 import edu.gyj.backend.mapper.major.MajorMonthCSMapper;
 import edu.gyj.backend.result.MajorResult;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -23,6 +26,8 @@ public class MajorServiceImpl implements MajorService {
     CollegeMapper collegeMapper;
     @Autowired
     MajorMonthCSMapper majorMonthCSMapper;
+    @Autowired
+    MajorDayCSMapper majorDayCSMapper;
 
     @Override
     public List<MajorResult> getAll() {
@@ -66,5 +71,10 @@ public class MajorServiceImpl implements MajorService {
     @Override
     public List<MajorMonthCSEntity> findByMajorIdAndYear(int majorId, int year) {
         return majorMonthCSMapper.findByMajorIdAndYear(majorId, year);
+    }
+
+    @Override
+    public List<MajorDayCSEntity> findByMajorIdAndDates(int majorId, Date start, Date end) {
+        return majorDayCSMapper.findByDates(majorId,new java.sql.Date(start.getTime()),new java.sql.Date(end.getTime()));
     }
 }

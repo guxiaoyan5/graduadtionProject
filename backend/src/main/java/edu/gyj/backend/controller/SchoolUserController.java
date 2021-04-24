@@ -6,16 +6,16 @@ import edu.gyj.backend.Input.DataInput;
 import edu.gyj.backend.Input.Node;
 import edu.gyj.backend.Input.QueryDataInput;
 import edu.gyj.backend.entity.SchoolUserEntity;
+import edu.gyj.backend.entity.classCS.ClassDayCSEntity;
 import edu.gyj.backend.entity.classCS.ClassEntity;
 import edu.gyj.backend.entity.classCS.ClassMonthCSEntity;
+import edu.gyj.backend.entity.college.CollegeDayCSEntity;
 import edu.gyj.backend.entity.college.CollegeEntity;
 import edu.gyj.backend.entity.college.CollegeMonthCSEntity;
+import edu.gyj.backend.entity.major.MajorDayCSEntity;
 import edu.gyj.backend.entity.major.MajorEntity;
 import edu.gyj.backend.entity.major.MajorMonthCSEntity;
-import edu.gyj.backend.result.ConsumeMonthData;
-import edu.gyj.backend.result.ConsumeMonthResult;
-import edu.gyj.backend.result.DataResult;
-import edu.gyj.backend.result.Result;
+import edu.gyj.backend.result.*;
 import edu.gyj.backend.service.ClassService;
 import edu.gyj.backend.service.CollegeService;
 import edu.gyj.backend.service.MajorService;
@@ -24,10 +24,7 @@ import edu.gyj.backend.utils.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping(value = "/schoolUser")
@@ -186,7 +183,7 @@ public class SchoolUserController {
                             )));
                             consumeMonthResult.getConsumeMonthData().addAll(consumeMonthData);
                         }
-                    } else{
+                    } else {
                         for (int i = startMonth; i <= endMonth; i++) {
                             List<CollegeMonthCSEntity> collegeMonthCSEntities = collegeService.findByCollegeIdAndYearAndMonth(node.getValue(), startYear, i);
                             List<ConsumeMonthData> consumeMonthData = new ArrayList<>();
@@ -262,7 +259,7 @@ public class SchoolUserController {
                             )));
                             consumeMonthResult.getConsumeMonthData().addAll(consumeMonthData);
                         }
-                    }else{
+                    } else {
                         for (int i = startMonth; i <= endMonth; i++) {
                             List<MajorMonthCSEntity> majorMonthCSEntities = majorService.findByMajorIdAndYearAndMonth(node.getValue(), startYear, i);
                             List<ConsumeMonthData> consumeMonthData = new ArrayList<>();
@@ -283,7 +280,7 @@ public class SchoolUserController {
                         }
                     }
                 } else if (node.getLevel() == 3) {
-                    if(startYear!=endYear) {
+                    if (startYear != endYear) {
                         for (int i = startMonth; i <= 12; i++) {
                             List<ClassMonthCSEntity> classMonthCSEntities = classService.findByClassIdAndYearAndMonth(node.getValue(), startYear, i);
                             List<ConsumeMonthData> consumeMonthData = new ArrayList<>();
@@ -338,7 +335,7 @@ public class SchoolUserController {
                             )));
                             consumeMonthResult.getConsumeMonthData().addAll(consumeMonthData);
                         }
-                    }else{
+                    } else {
                         for (int i = startMonth; i <= endMonth; i++) {
                             List<ClassMonthCSEntity> classMonthCSEntities = classService.findByClassIdAndYearAndMonth(node.getValue(), startYear, i);
                             List<ConsumeMonthData> consumeMonthData = new ArrayList<>();
@@ -363,8 +360,66 @@ public class SchoolUserController {
             }
             return new Result(1, "加载成功", consumeMonthResults);
         } else {
-
+            List<ConsumeDayResult> consumeDayResults = new ArrayList<>();
+            Date startDate = queryDataInput.getDate().get(0);
+            Date endDate = queryDataInput.getDate().get(1);
+            for(Node node:queryDataInput.getId()){
+                ConsumeDayResult consumeDayResult = new ConsumeDayResult(node.getValue(),node.getLabel());
+                if(node.getLevel()==1){
+                    List<CollegeDayCSEntity> collegeDayCSEntities = collegeService.findByCollegeIdAndDates(node.getValue(),
+                            startDate,endDate);
+                    List<ConsumeDayData> consumeDayData = new ArrayList<>();
+                    collegeDayCSEntities.forEach(collegeDayCSEntity -> consumeDayData.add(new ConsumeDayData(
+                            collegeDayCSEntity.getDay(),
+                            collegeDayCSEntity.getConsumption_count(),
+                            collegeDayCSEntity.getConsumption_total_money(),
+                            collegeDayCSEntity.getConsumption_average_money(),
+                            collegeDayCSEntity.getConsumption_student_average_money(),
+                            collegeDayCSEntity.getStudent_count(),
+                            collegeDayCSEntity.getConsumption_low_count(),
+                            collegeDayCSEntity.getConsumption_high_count(),
+                            collegeDayCSEntity.getStudent_low_count(),
+                            collegeDayCSEntity.getStudent_low_count()
+                    )));
+                    consumeDayResult.getConsumeDayData().addAll(consumeDayData);
+                }else if(node.getLevel() == 2){
+                    List<MajorDayCSEntity> majorDayCSEntities = majorService.findByMajorIdAndDates(node.getValue(),
+                            startDate,endDate);
+                    List<ConsumeDayData> consumeDayData = new ArrayList<>();
+                    majorDayCSEntities.forEach(classDayCSEntity -> consumeDayData.add(new ConsumeDayData(
+                            classDayCSEntity.getDay(),
+                            classDayCSEntity.getConsumption_count(),
+                            classDayCSEntity.getConsumption_total_money(),
+                            classDayCSEntity.getConsumption_average_money(),
+                            classDayCSEntity.getConsumption_student_average_money(),
+                            classDayCSEntity.getStudent_count(),
+                            classDayCSEntity.getConsumption_low_count(),
+                            classDayCSEntity.getConsumption_high_count(),
+                            classDayCSEntity.getStudent_low_count(),
+                            classDayCSEntity.getStudent_low_count()
+                    )));
+                    consumeDayResult.getConsumeDayData().addAll(consumeDayData);
+                }else if(node.getLevel() == 3){
+                    List<ClassDayCSEntity> classDayCSEntities = classService.findByClassIdAndDates(node.getValue(),
+                            startDate,endDate);
+                    List<ConsumeDayData> consumeDayData = new ArrayList<>();
+                    classDayCSEntities.forEach(classDayCSEntity -> consumeDayData.add(new ConsumeDayData(
+                            classDayCSEntity.getDay(),
+                            classDayCSEntity.getConsumption_count(),
+                            classDayCSEntity.getConsumption_total_money(),
+                            classDayCSEntity.getConsumption_average_money(),
+                            classDayCSEntity.getConsumption_student_average_money(),
+                            classDayCSEntity.getStudent_count(),
+                            classDayCSEntity.getConsumption_low_count(),
+                            classDayCSEntity.getConsumption_high_count(),
+                            classDayCSEntity.getStudent_low_count(),
+                            classDayCSEntity.getStudent_low_count()
+                    )));
+                    consumeDayResult.getConsumeDayData().addAll(consumeDayData);
+                }
+                consumeDayResults.add(consumeDayResult);
+            }
+            return new Result(1,"加载成功",consumeDayResults);
         }
-        return null;
     }
 }

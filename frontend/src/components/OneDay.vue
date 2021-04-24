@@ -82,7 +82,7 @@
             :data="tableData"
             height="300px"
             border
-            style="width: 100%">
+            style="width: 100%;text-align: center">
             <el-table-column
               label="序号"
               type="index"
@@ -373,11 +373,19 @@ export default {
         name.push(item.name)
       ));
       let date = new Set();
-      this.monthData.forEach(item => (
-        item.consumeMonthData.forEach(item1 => (
-          date.add(item1.year + "-" + item1.month)
-        ))
-      ));
+      if (this.formInline.choice) {
+        this.monthData.forEach(item => (
+          item.consumeMonthData.forEach(item1 => (
+            date.add(item1.year + "-" + item1.month)
+          ))
+        ));
+      } else {
+        this.monthData.forEach(item => (
+          item.consumeDayData.forEach(item1 => (
+            date.add(item1.date + "")
+          ))
+        ));
+      }
       date = Array.from(date).sort();
       let dataResult = [];
       let dataResult1 = [];
@@ -394,24 +402,46 @@ export default {
           type: 'line',
           data: Array.from({length: date.length}).map(item => (0)),
         };
-        for (let j = 0; j < this.monthData[i].consumeMonthData.length; j++) {
-          let tempDate = this.monthData[i].consumeMonthData[j].year + '-' + this.monthData[i].consumeMonthData[j].month
-          for (let k = 0; k < date.length; k++) {
-            if (tempDate === date[k]) {
-              temp.data[k] = this.monthData[i].consumeMonthData[j].consumption_average_money;
-              temp1.data[k] = this.monthData[i].consumeMonthData[j].consumption_student_average_money;
-              break;
+        if (this.formInline.choice) {
+          for (let j = 0; j < this.monthData[i].consumeMonthData.length; j++) {
+            let tempDate = this.monthData[i].consumeMonthData[j].year + '-' + this.monthData[i].consumeMonthData[j].month
+            for (let k = 0; k < date.length; k++) {
+              if (tempDate === date[k]) {
+                temp.data[k] = this.monthData[i].consumeMonthData[j].consumption_average_money;
+                temp1.data[k] = this.monthData[i].consumeMonthData[j].consumption_student_average_money;
+                break;
+              }
             }
+            dataResult3[i] += this.monthData[i].consumeMonthData[j].consumption_total_money;
+            this.tableData.push({
+              name: this.monthData[i].name,
+              date: tempDate,
+              consumption_low_count: this.monthData[i].consumeMonthData[j].consumption_low_count,
+              consumption_high_count: this.monthData[i].consumeMonthData[j].consumption_high_count,
+              student_low_count: this.monthData[i].consumeMonthData[j].student_low_count,
+              student_high_count: this.monthData[i].consumeMonthData[j].student_high_count,
+            })
           }
-          dataResult3[i] += this.monthData[i].consumeMonthData[j].consumption_total_money;
-          this.tableData.push({
-            name:this.monthData[i].name,
-            date:tempDate,
-            consumption_low_count:this.monthData[i].consumeMonthData[j].consumption_low_count,
-            consumption_high_count:this.monthData[i].consumeMonthData[j].consumption_high_count,
-            student_low_count:this.monthData[i].consumeMonthData[j].student_low_count,
-            student_high_count:this.monthData[i].consumeMonthData[j].student_high_count,
-          })
+        } else {
+          for (let j = 0; j < this.monthData[i].consumeDayData.length; j++) {
+            let tempDate = this.monthData[i].consumeDayData[j].date + ''
+            for (let k = 0; k < date.length; k++) {
+              if (tempDate === date[k]) {
+                temp.data[k] = this.monthData[i].consumeDayData[j].consumption_average_money;
+                temp1.data[k] = this.monthData[i].consumeDayData[j].consumption_student_average_money;
+                break;
+              }
+            }
+            dataResult3[i] += this.monthData[i].consumeDayData[j].consumption_total_money;
+            this.tableData.push({
+              name: this.monthData[i].name,
+              date: tempDate,
+              consumption_low_count: this.monthData[i].consumeDayData[j].consumption_low_count,
+              consumption_high_count: this.monthData[i].consumeDayData[j].consumption_high_count,
+              student_low_count: this.monthData[i].consumeDayData[j].student_low_count,
+              student_high_count: this.monthData[i].consumeDayData[j].student_high_count,
+            })
+          }
         }
         dataResult.push(temp);
         dataResult1.push(temp1);
