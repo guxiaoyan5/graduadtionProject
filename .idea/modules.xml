@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/generatedata/generatedata.iml" filepath="$PROJECT_DIR$/generatedata/generatedata.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Analysis/Analysis.iml" filepath="$PROJECT_DIR$/Analysis/Analysis.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend/backend.iml" filepath="$PROJECT_DIR$/backend/backend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/graduadtionProject.iml" filepath="$PROJECT_DIR$/graduadtionProject.iml" />
     </modules>
   </component>
 </project>

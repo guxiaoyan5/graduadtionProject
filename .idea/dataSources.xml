@@ -1,27 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="@localhost" uuid="5af0cc76-c57c-4e73-895e-8a911d5226e4">
+    <data-source source="LOCAL" name="MySQL - @localhost" uuid="f8c2f720-c231-4af2-a06a-8ecbda38aa20">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://localhost:3306</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
       <driver-properties>
         <property name="serverTimezone" value="UTC" />
-        <property name="functionsNeverReturnBlobs" value="FALSE" />
       </driver-properties>
-    </data-source>
-    <data-source source="LOCAL" name="@192.168.43.101" uuid="5980ba24-184e-47b2-9159-97e06a09ec0f">
-      <driver-ref>mysql.8</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://192.168.43.101:3306</jdbc-url>
-    </data-source>
-    <data-source source="LOCAL" name="jdbc:mysql://rm-uf681p16bbtd2ojhgco.mysql.rds.aliyuncs.com :3306" uuid="6c517745-2872-46b1-b832-1c1635f58e2a">
-      <driver-ref>mysql.8</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://rm-uf681p16bbtd2ojhgco.mysql.rds.aliyuncs.com :3306</jdbc-url>
     </data-source>
   </component>
 </project>

@@ -49,24 +49,26 @@ public class StudentCSStatisticsToDB {
         System.exit(result ? 0 : 1);
 
     }
+
+    static class StudentMap extends Mapper<Object, Consume, StudentCSKey, StudentCSValue> {
+        @Override
+        protected void map(Object key, Consume value, Context context) throws IOException, InterruptedException {
+            context.write(new StudentCSKey(value.getSid()), new StudentCSValue(value.getMoney()));
+        }
+    }
+
+    static class StudentReduce extends Reducer<StudentCSKey, StudentCSValue, StudentCS, StudentCS> {
+        @Override
+        protected void reduce(StudentCSKey key, Iterable<StudentCSValue> values, Context context) throws IOException, InterruptedException {
+            int count = 0;
+            float totalMoney = 0;
+            for (StudentCSValue value : values) {
+                count += 1;
+                totalMoney += value.getMoney();
+            }
+            float average = totalMoney / count;
+            context.write(new StudentCS(key.getSid(), count, totalMoney, average), new StudentCS(key.getSid(), count, totalMoney, average));
+        }
+    }
 }
 
-class StudentMap extends Mapper<Object, Consume, StudentCSKey, StudentCSValue>{
-    @Override
-    protected void map(Object key, Consume value, Context context) throws IOException, InterruptedException {
-        context.write(new StudentCSKey(value.getSid()),new StudentCSValue(value.getMoney()));
-    }
-}
-class StudentReduce extends Reducer<StudentCSKey,StudentCSValue, StudentCS,StudentCS>{
-    @Override
-    protected void reduce(StudentCSKey key, Iterable<StudentCSValue> values, Context context) throws IOException, InterruptedException {
-        int count = 0;
-        float totalMoney = 0;
-        for (StudentCSValue value : values) {
-            count += 1;
-            totalMoney += value.getMoney();
-        }
-        float average = totalMoney / count;
-        context.write(new StudentCS(key.getSid(), count, totalMoney, average), new StudentCS(key.getSid(), count, totalMoney, average));
-    }
-}

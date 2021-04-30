@@ -49,30 +49,30 @@ public class StudentDayCSStatisticsToDB {
         System.exit(result ? 0 : 1);
 
     }
-}
-
-class StudentDayMap extends Mapper<Object, Consume, StudentDayCSKey, StudentDayCSValue> {
-    @Override
-    protected void map(Object key, Consume value, Context context) throws IOException, InterruptedException {
-        String new_value = value.getExecution_time().toString().split(" ")[0];
-        int year = Integer.parseInt(new_value.split("-")[0]);
-        int month = Integer.parseInt(new_value.split("-")[1]);
-        int day = Integer.parseInt(new_value.split("-")[2]);
-        context.write(new StudentDayCSKey(value.getSid(), month, year, day), new StudentDayCSValue(value.getMoney()));
-    }
-}
-
-class StudentDayReduce extends Reducer<StudentDayCSKey, StudentDayCSValue, StudentDayCS, StudentDayCS> {
-    @Override
-    protected void reduce(StudentDayCSKey key, Iterable<StudentDayCSValue> values, Context context) throws IOException, InterruptedException {
-        int count = 0;
-        float totalMoney = 0;
-        for (StudentDayCSValue value : values) {
-            count += 1;
-            totalMoney += value.getMoney();
+    static class StudentDayMap extends Mapper<Object, Consume, StudentDayCSKey, StudentDayCSValue> {
+        @Override
+        protected void map(Object key, Consume value, Context context) throws IOException, InterruptedException {
+            String new_value = value.getExecution_time().toString().split(" ")[0];
+            int year = Integer.parseInt(new_value.split("-")[0]);
+            int month = Integer.parseInt(new_value.split("-")[1]);
+            int day = Integer.parseInt(new_value.split("-")[2]);
+            context.write(new StudentDayCSKey(value.getSid(), month, year, day), new StudentDayCSValue(value.getMoney()));
         }
-        float average = totalMoney / count;
-        String date = key.getYear() + "-" + key.getMonth() + "-" + key.getDay();
-        context.write(new StudentDayCS(key.getSid(), Date.valueOf(date), count, totalMoney, average), new StudentDayCS(key.getSid(), Date.valueOf(date), count, totalMoney, average));
+    }
+
+    static class StudentDayReduce extends Reducer<StudentDayCSKey, StudentDayCSValue, StudentDayCS, StudentDayCS> {
+        @Override
+        protected void reduce(StudentDayCSKey key, Iterable<StudentDayCSValue> values, Context context) throws IOException, InterruptedException {
+            int count = 0;
+            float totalMoney = 0;
+            for (StudentDayCSValue value : values) {
+                count += 1;
+                totalMoney += value.getMoney();
+            }
+            float average = totalMoney / count;
+            String date = key.getYear() + "-" + key.getMonth() + "-" + key.getDay();
+            context.write(new StudentDayCS(key.getSid(), Date.valueOf(date), count, totalMoney, average), new StudentDayCS(key.getSid(), Date.valueOf(date), count, totalMoney, average));
+        }
     }
 }
+

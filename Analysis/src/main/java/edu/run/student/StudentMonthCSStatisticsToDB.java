@@ -46,28 +46,29 @@ public class StudentMonthCSStatisticsToDB {
         boolean result = job.waitForCompletion(true);
         System.exit(result ? 0 : 1);
     }
-}
-
-class StudentMonthMap extends Mapper<Object, Consume, StudentMonthCSKey, StudentMonthCSValue> {
-    @Override
-    protected void map(Object key, Consume value, Context context) throws IOException, InterruptedException {
-        String new_value = value.getExecution_time().toString().split(" ")[0];
-        int year = Integer.parseInt(new_value.split("-")[0]);
-        int month = Integer.parseInt(new_value.split("-")[1]);
-        context.write(new StudentMonthCSKey(value.getSid(), month, year), new StudentMonthCSValue(value.getMoney()));
-    }
-}
-
-class StudentMonthReduce extends Reducer<StudentMonthCSKey, StudentMonthCSValue, StudentMonthCS, StudentMonthCS> {
-    @Override
-    protected void reduce(StudentMonthCSKey key, Iterable<StudentMonthCSValue> values, Context context) throws IOException, InterruptedException {
-        int count = 0;
-        float totalMoney = 0;
-        for (StudentMonthCSValue value : values) {
-            count += 1;
-            totalMoney += value.getMoney();
+    static class StudentMonthMap extends Mapper<Object, Consume, StudentMonthCSKey, StudentMonthCSValue> {
+        @Override
+        protected void map(Object key, Consume value, Context context) throws IOException, InterruptedException {
+            String new_value = value.getExecution_time().toString().split(" ")[0];
+            int year = Integer.parseInt(new_value.split("-")[0]);
+            int month = Integer.parseInt(new_value.split("-")[1]);
+            context.write(new StudentMonthCSKey(value.getSid(), month, year), new StudentMonthCSValue(value.getMoney()));
         }
-        float average = totalMoney / count;
-        context.write(new StudentMonthCS(key.getSid(), key.getMonth(), key.getYear(), count, totalMoney, average), new StudentMonthCS(key.getSid(), key.getMonth(), key.getYear(), count, totalMoney, average));
     }
+
+    static class StudentMonthReduce extends Reducer<StudentMonthCSKey, StudentMonthCSValue, StudentMonthCS, StudentMonthCS> {
+        @Override
+        protected void reduce(StudentMonthCSKey key, Iterable<StudentMonthCSValue> values, Context context) throws IOException, InterruptedException {
+            int count = 0;
+            float totalMoney = 0;
+            for (StudentMonthCSValue value : values) {
+                count += 1;
+                totalMoney += value.getMoney();
+            }
+            float average = totalMoney / count;
+            context.write(new StudentMonthCS(key.getSid(), key.getMonth(), key.getYear(), count, totalMoney, average), new StudentMonthCS(key.getSid(), key.getMonth(), key.getYear(), count, totalMoney, average));
+        }
+    }
+
 }
+
