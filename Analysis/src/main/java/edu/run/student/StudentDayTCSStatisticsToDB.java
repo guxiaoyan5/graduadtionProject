@@ -1,10 +1,8 @@
 package edu.run.student;
 
-import edu.Dao.Student.StudentCSKey;
-import edu.Dao.Student.StudentCSValue;
-import edu.Dao.Student.StudentTCSKey;
-import edu.Dao.Student.StudentTCSValue;
+import edu.Dao.Student.*;
 import edu.Infomation.Consume;
+import edu.Infomation.Student.StudentDayTCS;
 import edu.Infomation.Student.StudentTCS;
 import edu.Infomation.enumObject.ThreeMeals;
 import edu.util.StaticConstant;
@@ -20,27 +18,27 @@ import java.io.IOException;
 import java.sql.Date;
 import java.util.Calendar;
 
-public class StudentTCSStatisticsToDB {
+public class StudentDayTCSStatisticsToDB {
     public static void main(String[] args) throws IOException, InterruptedException, ClassNotFoundException {
         Configuration configuration = new Configuration();
         configuration.set("mapreduce.framework.name", "yarn");
         DBConfiguration.configureDB(configuration, StaticConstant.jdbcDriver, StaticConstant.jdbcUrl, StaticConstant.jdbcUser, StaticConstant.jdbcPassword);
-        Job job = Job.getInstance(configuration, "student Three consume");
-        job.setJarByClass(StudentTCSStatisticsToDB.class);
+        Job job = Job.getInstance(configuration, "student day Three meals consume");
+        job.setJarByClass(StudentDayTCSStatisticsToDB.class);
         job.setMapperClass(Map.class);
         job.setReducerClass(Reduce.class);
 
-        job.setMapOutputKeyClass(StudentTCSKey.class);
-        job.setMapOutputValueClass(StudentCSValue.class);
+        job.setMapOutputKeyClass(StudentDayTCSKey.class);
+        job.setMapOutputValueClass(StudentDayTCSValue.class);
 
-        job.setOutputKeyClass(StudentTCS.class);
-        job.setOutputValueClass(StudentTCS.class);
+        job.setOutputKeyClass(StudentDayTCS.class);
+        job.setOutputValueClass(StudentDayTCS.class);
 
         job.setInputFormatClass(DBInputFormat.class);
         job.setOutputFormatClass(DBOutputFormat.class);
 
-        DBOutputFormat.setOutput(job, "student_three_meals_statistics",
-                "sid", "consumption_category", "consumption_count", "consumption_total_money",
+        DBOutputFormat.setOutput(job, "student_day_three_meals_statistics",
+                "sid", "day", "consumption_category", "consumption_count", "consumption_total_money",
                 "consumption_average_money");
         DBInputFormat.setInput(job, Consume.class, "consume", null, null,
                 "sid", "execution_time", "money", "store_id ", "mode");
@@ -48,12 +46,15 @@ public class StudentTCSStatisticsToDB {
         System.exit(result ? 0 : 1);
     }
 
-    static class Map extends Mapper<Object, Consume, StudentTCSKey, StudentTCSValue> {
+    static class Map extends Mapper<Object, Consume, StudentDayTCSKey, StudentDayTCSValue> {
         @Override
         protected void map(Object key, Consume value, Context context) throws IOException, InterruptedException {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(value.getExecution_time());
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            int month = calendar.get(Calendar.MONTH) + 1;
+            int year = calendar.get(Calendar.YEAR);
             ThreeMeals meal = null;
             if (hour >= 5 && hour <= 9) {
                 meal = ThreeMeals.BREAKFAST;
@@ -62,21 +63,22 @@ public class StudentTCSStatisticsToDB {
             } else if (hour < 23) {
                 meal = ThreeMeals.DINNER;
             }
-            context.write(new StudentTCSKey(value.getSid(), meal), new StudentTCSValue(value.getMoney()));
+            context.write(new StudentDayTCSKey(value.getSid(), year, month, day, meal), new StudentDayTCSValue(value.getMoney()));
         }
     }
 
-    static class Reduce extends Reducer<StudentTCSKey, StudentTCSValue, StudentTCS, StudentTCS> {
+    static class Reduce extends Reducer<StudentDayTCSKey, StudentDayTCSValue, StudentDayTCS, StudentDayTCS> {
         @Override
-        protected void reduce(StudentTCSKey key, Iterable<StudentTCSValue> values, Context context) throws IOException, InterruptedException {
+        protected void reduce(StudentDayTCSKey key, Iterable<StudentDayTCSValue> values, Context context) throws IOException, InterruptedException {
             int count = 0;
-            float totalMoney = 0, averageMoney = 0;
-            for (StudentTCSValue value : values) {
+            float totalMoney = 0;
+            for (StudentDayTCSValue value : values) {
                 count += 1;
                 totalMoney += value.getMoney();
             }
-            averageMoney = totalMoney / count;
-            context.write(new StudentTCS(key.getSid(), key.getMeal(), count, totalMoney, averageMoney), new StudentTCS(key.getSid(), key.getMeal(), count, totalMoney, averageMoney));
+            float average = totalMoney / count;
+            String date = key.getYear() + "-" + key.getMonth() + "-" + key.getDay();
+            context.write(new StudentDayTCS(key.getSid(), Date.valueOf(date), key.getMeal(), count, totalMoney, average), new StudentDayTCS(key.getSid(), Date.valueOf(date), key.getMeal(), count, totalMoney, average));
         }
     }
 }

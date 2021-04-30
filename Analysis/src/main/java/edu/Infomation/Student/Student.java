@@ -1,5 +1,6 @@
 package edu.Infomation.Student;
 
+import edu.Infomation.enumObject.Sex;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapreduce.lib.db.DBWritable;
 
@@ -16,12 +17,12 @@ public class Student implements Writable, DBWritable {
     private int className;
     private int major;
     private int college;
-    private String sex;
+    private Sex sex;
 
     public Student() {
     }
 
-    public Student(String id, String name, int className, int major, int college, String sex) {
+    public Student(String id, String name, int className, int major, int college, Sex sex) {
         this.id = id;
         this.name = name;
         this.className = className;
@@ -82,11 +83,11 @@ public class Student implements Writable, DBWritable {
         this.college = college;
     }
 
-    public String getSex() {
+    public Sex getSex() {
         return sex;
     }
 
-    public void setSex(String sex) {
+    public void setSex(Sex sex) {
         this.sex = sex;
     }
 
@@ -97,7 +98,7 @@ public class Student implements Writable, DBWritable {
         dataOutput.writeInt(this.className);
         dataOutput.writeInt(this.major);
         dataOutput.writeInt(this.college);
-        dataOutput.writeUTF(this.sex);
+        dataOutput.writeUTF(this.sex.getSex());
     }
 
     @Override
@@ -107,7 +108,7 @@ public class Student implements Writable, DBWritable {
         this.className = dataInput.readInt();
         this.major = dataInput.readInt();
         this.college = dataInput.readInt();
-        this.sex = dataInput.readUTF();
+        this.sex = Sex.valueOf(dataInput.readUTF());
     }
 
     @Override
@@ -117,7 +118,7 @@ public class Student implements Writable, DBWritable {
         preparedStatement.setInt(3, this.className);
         preparedStatement.setInt(4, this.major);
         preparedStatement.setInt(5, this.college);
-        preparedStatement.setString(6, this.sex);
+        preparedStatement.setString(6, this.sex.getSex());
     }
 
     @Override
@@ -127,6 +128,6 @@ public class Student implements Writable, DBWritable {
         this.className = resultSet.getInt(3);
         this.major = resultSet.getInt(4);
         this.college = resultSet.getInt(5);
-        this.sex = resultSet.getString(6);
+        this.sex = Sex.valueOf(resultSet.getString(6));
     }
 }

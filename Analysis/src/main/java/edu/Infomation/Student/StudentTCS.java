@@ -13,20 +13,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class StudentDayTCS implements Writable, DBWritable {
+public class StudentTCS implements DBWritable, Writable {
     private String sid;
-    private Date day;
     private ThreeMeals consumption_category;
     private int count;
     private float totalMoney;
     private float averageMoney;
 
-    public StudentDayTCS() {
+    public StudentTCS() {
     }
 
-    public StudentDayTCS(String sid, Date day, ThreeMeals consumption_category, int count, float totalMoney, float averageMoney) {
+    public StudentTCS(String sid, ThreeMeals consumption_category, int count, float totalMoney, float averageMoney) {
         this.sid = sid;
-        this.day = day;
         this.consumption_category = consumption_category;
         this.count = count;
         this.totalMoney = totalMoney;
@@ -35,9 +33,8 @@ public class StudentDayTCS implements Writable, DBWritable {
 
     @Override
     public String toString() {
-        return "StudentDayTCS{" +
+        return "StudentTCS{" +
                 "sid='" + sid + '\'' +
-                ", day=" + day +
                 ", consumption_category='" + consumption_category + '\'' +
                 ", count=" + count +
                 ", totalMoney=" + totalMoney +
@@ -51,14 +48,6 @@ public class StudentDayTCS implements Writable, DBWritable {
 
     public void setSid(String sid) {
         this.sid = sid;
-    }
-
-    public Date getDay() {
-        return day;
-    }
-
-    public void setDay(Date day) {
-        this.day = day;
     }
 
     public ThreeMeals getConsumption_category() {
@@ -96,7 +85,6 @@ public class StudentDayTCS implements Writable, DBWritable {
     @Override
     public void write(DataOutput dataOutput) throws IOException {
         dataOutput.writeUTF(this.sid);
-        Text.writeString(dataOutput, this.day.toString());
         dataOutput.writeUTF(this.consumption_category.getMeal());
         dataOutput.writeInt(this.count);
         dataOutput.writeFloat(this.totalMoney);
@@ -106,7 +94,6 @@ public class StudentDayTCS implements Writable, DBWritable {
     @Override
     public void readFields(DataInput dataInput) throws IOException {
         this.sid = dataInput.readUTF();
-        this.day = Date.valueOf(Text.readString(dataInput));
         this.consumption_category = ThreeMeals.valueOf(dataInput.readUTF());
         this.count = dataInput.readInt();
         this.totalMoney = dataInput.readFloat();
@@ -116,20 +103,18 @@ public class StudentDayTCS implements Writable, DBWritable {
     @Override
     public void write(PreparedStatement preparedStatement) throws SQLException {
         preparedStatement.setString(1, this.sid);
-        preparedStatement.setDate(2, this.day);
-        preparedStatement.setString(3,this.consumption_category.getMeal());
-        preparedStatement.setInt(4, this.count);
-        preparedStatement.setFloat(5, this.totalMoney);
-        preparedStatement.setFloat(6, this.averageMoney);
+        preparedStatement.setString(2,this.consumption_category.getMeal());
+        preparedStatement.setInt(3, this.count);
+        preparedStatement.setFloat(4, this.totalMoney);
+        preparedStatement.setFloat(5, this.averageMoney);
     }
 
     @Override
     public void readFields(ResultSet resultSet) throws SQLException {
         this.sid = resultSet.getString(1);
-        this.day = resultSet.getDate(2);
-        this.consumption_category = ThreeMeals.valueOf(resultSet.getString(3));
-        this.count = resultSet.getInt(4);
-        this.totalMoney = resultSet.getFloat(5);
-        this.averageMoney = resultSet.getFloat(6);
+        this.consumption_category = ThreeMeals.valueOf(resultSet.getString(2));
+        this.count = resultSet.getInt(3);
+        this.totalMoney = resultSet.getFloat(4);
+        this.averageMoney = resultSet.getFloat(5);
     }
 }
