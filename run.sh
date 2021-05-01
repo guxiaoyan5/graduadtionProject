@@ -16,3 +16,15 @@ hadoop jar ./Analysis-1.0-SNAPSHOT.jar edu.run.studentStore.StudentStoreMonthCSS
 hadoop jar ./Analysis-1.0-SNAPSHOT.jar edu.run.store.StoreCSStatisticsToDB
 hadoop jar ./Analysis-1.0-SNAPSHOT.jar edu.run.store.StoreDayCSStatisticsToDB
 hadoop jar ./Analysis-1.0-SNAPSHOT.jar edu.run.store.StoreMonthCSStatisticsToDB
+hadoop jar ./Analysis-1.0-SNAPSHOT.jar edu.run.student.StudentTCSStatisticsToDB
+hadoop jar ./Analysis-1.0-SNAPSHOT.jar edu.run.student.StudentDayTCSStatisticsToDB
+hadoop jar ./Analysis-1.0-SNAPSHOT.jar edu.run.student.StudentMonthTCSStatisticsToDB
+hadoop jar ./Analysis-1.0-SNAPSHOT.jar edu.run.classCS.ClassTCSStatisticsToDB
+hadoop jar ./Analysis-1.0-SNAPSHOT.jar edu.run.classCS.ClassDayTCSStatisticsToDB
+hadoop jar ./Analysis-1.0-SNAPSHOT.jar edu.run.classCS.ClassMonthTCSStatisticsToDB
+hadoop jar ./Analysis-1.0-SNAPSHOT.jar edu.run.major.MajorTCSStatisticsToDB
+hadoop jar ./Analysis-1.0-SNAPSHOT.jar edu.run.major.MajorDayTCSStatisticsToDB
+hadoop jar ./Analysis-1.0-SNAPSHOT.jar edu.run.major.MajorMonthTCSStatisticsToDB
+hadoop jar ./Analysis-1.0-SNAPSHOT.jar edu.run.college.CollegeTCSStatisticsToDB
+hadoop jar ./Analysis-1.0-SNAPSHOT.jar edu.run.college.CollegeDayTCSStatisticsToDB
+hadoop jar ./Analysis-1.0-SNAPSHOT.jar edu.run.college.CollegeMonthTCSStatisticsToDB

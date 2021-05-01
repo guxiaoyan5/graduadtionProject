@@ -49,7 +49,7 @@ public class MajorMonthTCSStatisticsToDB {
                 "consumption_low_count", "consumption_high_count", "student_low_count", "student_high_count"
         );
         DBInputFormat.setInput(job, MajorMonthTCSInputValue.class,
-                "select student.id,major_id,day,consumption_category,money,consumption_total_money" +
+                "select student.id,major_id,execution_time,consumption_category,money,consumption_total_money" +
                         " from student,consume,student_month_three_meals_statistics " +
                         "where student.id=consume.sid and student.id=student_month_three_meals_statistics.sid and year(execution_time) = year and month(execution_time) = month",
                 "select count(1) from consume");

@@ -13,7 +13,7 @@ import java.sql.SQLException;
 
 public class MajorTCS implements Writable, DBWritable {
     private int major_id;
-    private ThreeMeals meal;
+    private String meal;
     private int consumption_count;
     private float consumption_total_money;
     private float consumption_average_money;
@@ -27,7 +27,7 @@ public class MajorTCS implements Writable, DBWritable {
     public MajorTCS() {
     }
 
-    public MajorTCS(int major_id, ThreeMeals meal, int consumption_count, float consumption_total_money, float consumption_average_money, float consumption_student_average_money, int student_count, int consumption_low_count, int consumption_high_count, int student_low_count, int student_high_count) {
+    public MajorTCS(int major_id, String meal, int consumption_count, float consumption_total_money, float consumption_average_money, float consumption_student_average_money, int student_count, int consumption_low_count, int consumption_high_count, int student_low_count, int student_high_count) {
         this.major_id = major_id;
         this.meal = meal;
         this.consumption_count = consumption_count;
@@ -66,11 +66,11 @@ public class MajorTCS implements Writable, DBWritable {
         this.major_id = major_id;
     }
 
-    public ThreeMeals getMeal() {
+    public String getMeal() {
         return meal;
     }
 
-    public void setMeal(ThreeMeals meal) {
+    public void setMeal(String meal) {
         this.meal = meal;
     }
 
@@ -149,7 +149,7 @@ public class MajorTCS implements Writable, DBWritable {
     @Override
     public void write(DataOutput dataOutput) throws IOException {
         dataOutput.writeInt(this.major_id);
-        dataOutput.writeUTF(this.meal.getMeal());
+        dataOutput.writeUTF(this.meal);
         dataOutput.writeInt(this.consumption_count);
         dataOutput.writeFloat(this.consumption_total_money);
         dataOutput.writeFloat(this.consumption_average_money);
@@ -164,7 +164,7 @@ public class MajorTCS implements Writable, DBWritable {
     @Override
     public void readFields(DataInput dataInput) throws IOException {
         this.major_id = dataInput.readInt();
-        this.meal = ThreeMeals.valueOf(dataInput.readUTF());
+        this.meal = dataInput.readUTF();
         this.consumption_count = dataInput.readInt();
         this.consumption_total_money = dataInput.readFloat();
         this.consumption_average_money = dataInput.readFloat();
@@ -179,7 +179,7 @@ public class MajorTCS implements Writable, DBWritable {
     @Override
     public void write(PreparedStatement preparedStatement) throws SQLException {
         preparedStatement.setInt(1, this.major_id);
-        preparedStatement.setString(2, this.meal.getMeal());
+        preparedStatement.setString(2, this.meal);
         preparedStatement.setInt(3, this.consumption_count);
         preparedStatement.setFloat(4, this.consumption_total_money);
         preparedStatement.setFloat(5, this.consumption_average_money);
@@ -194,7 +194,7 @@ public class MajorTCS implements Writable, DBWritable {
     @Override
     public void readFields(ResultSet resultSet) throws SQLException {
         this.major_id = resultSet.getInt(1);
-        this.meal = ThreeMeals.valueOf(resultSet.getString(2));
+        this.meal = resultSet.getString(2);
         this.consumption_count = resultSet.getInt(3);
         this.consumption_total_money = resultSet.getFloat(4);
         this.consumption_average_money = resultSet.getFloat(5);

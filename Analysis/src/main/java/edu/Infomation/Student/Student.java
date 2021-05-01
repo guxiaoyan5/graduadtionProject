@@ -17,12 +17,12 @@ public class Student implements Writable, DBWritable {
     private int className;
     private int major;
     private int college;
-    private Sex sex;
+    private String sex;
 
     public Student() {
     }
 
-    public Student(String id, String name, int className, int major, int college, Sex sex) {
+    public Student(String id, String name, int className, int major, int college, String sex) {
         this.id = id;
         this.name = name;
         this.className = className;
@@ -83,11 +83,11 @@ public class Student implements Writable, DBWritable {
         this.college = college;
     }
 
-    public Sex getSex() {
+    public String getSex() {
         return sex;
     }
 
-    public void setSex(Sex sex) {
+    public void setSex(String sex) {
         this.sex = sex;
     }
 
@@ -98,7 +98,7 @@ public class Student implements Writable, DBWritable {
         dataOutput.writeInt(this.className);
         dataOutput.writeInt(this.major);
         dataOutput.writeInt(this.college);
-        dataOutput.writeUTF(this.sex.getSex());
+        dataOutput.writeUTF(this.sex);
     }
 
     @Override
@@ -108,7 +108,7 @@ public class Student implements Writable, DBWritable {
         this.className = dataInput.readInt();
         this.major = dataInput.readInt();
         this.college = dataInput.readInt();
-        this.sex = Sex.valueOf(dataInput.readUTF());
+        this.sex = dataInput.readUTF();
     }
 
     @Override
@@ -118,7 +118,7 @@ public class Student implements Writable, DBWritable {
         preparedStatement.setInt(3, this.className);
         preparedStatement.setInt(4, this.major);
         preparedStatement.setInt(5, this.college);
-        preparedStatement.setString(6, this.sex.getSex());
+        preparedStatement.setString(6, this.sex);
     }
 
     @Override
@@ -128,6 +128,6 @@ public class Student implements Writable, DBWritable {
         this.className = resultSet.getInt(3);
         this.major = resultSet.getInt(4);
         this.college = resultSet.getInt(5);
-        this.sex = Sex.valueOf(resultSet.getString(6));
+        this.sex = resultSet.getString(6);
     }
 }

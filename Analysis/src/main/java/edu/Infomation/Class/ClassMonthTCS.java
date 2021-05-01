@@ -13,7 +13,7 @@ import java.sql.SQLException;
 
 public class ClassMonthTCS implements DBWritable, Writable {
     private int class_id;
-    private ThreeMeals meal;
+    private String meal;
     private int month;
     private int year;
     private int consumption_count;
@@ -29,7 +29,7 @@ public class ClassMonthTCS implements DBWritable, Writable {
     public ClassMonthTCS() {
     }
 
-    public ClassMonthTCS(int class_id, ThreeMeals meal, int month, int year, int consumption_count, float consumption_total_money, float consumption_average_money, float consumption_student_average_money, int student_count, int consumption_low_count, int consumption_high_count, int student_low_count, int student_high_count) {
+    public ClassMonthTCS(int class_id, String meal, int month, int year, int consumption_count, float consumption_total_money, float consumption_average_money, float consumption_student_average_money, int student_count, int consumption_low_count, int consumption_high_count, int student_low_count, int student_high_count) {
         this.class_id = class_id;
         this.meal = meal;
         this.month = month;
@@ -72,11 +72,11 @@ public class ClassMonthTCS implements DBWritable, Writable {
         this.class_id = class_id;
     }
 
-    public ThreeMeals getMeal() {
+    public String getMeal() {
         return meal;
     }
 
-    public void setMeal(ThreeMeals meal) {
+    public void setMeal(String meal) {
         this.meal = meal;
     }
 
@@ -171,7 +171,7 @@ public class ClassMonthTCS implements DBWritable, Writable {
     @Override
     public void write(DataOutput dataOutput) throws IOException {
         dataOutput.writeInt(this.class_id);
-        dataOutput.writeUTF(this.meal.getMeal());
+        dataOutput.writeUTF(this.meal);
         dataOutput.writeInt(this.month);
         dataOutput.writeInt(this.year);
         dataOutput.writeInt(this.consumption_count);
@@ -188,7 +188,7 @@ public class ClassMonthTCS implements DBWritable, Writable {
     @Override
     public void readFields(DataInput dataInput) throws IOException {
         this.class_id = dataInput.readInt();
-        this.meal = ThreeMeals.valueOf(dataInput.readUTF());
+        this.meal = dataInput.readUTF();
         this.month = dataInput.readInt();
         this.year = dataInput.readInt();
         this.consumption_count = dataInput.readInt();
@@ -205,7 +205,7 @@ public class ClassMonthTCS implements DBWritable, Writable {
     @Override
     public void write(PreparedStatement preparedStatement) throws SQLException {
         preparedStatement.setInt(1, this.class_id);
-        preparedStatement.setString(2,this.meal.getMeal());
+        preparedStatement.setString(2,this.meal);
         preparedStatement.setInt(3, this.month);
         preparedStatement.setInt(4, this.year);
         preparedStatement.setInt(5, this.consumption_count);
@@ -222,7 +222,7 @@ public class ClassMonthTCS implements DBWritable, Writable {
     @Override
     public void readFields(ResultSet resultSet) throws SQLException {
         this.class_id = resultSet.getInt(1);
-        this.meal = ThreeMeals.valueOf(resultSet.getString(2));
+        this.meal = resultSet.getString(2);
         this.month = resultSet.getInt(3);
         this.year = resultSet.getInt(4);
         this.consumption_count = resultSet.getInt(5);

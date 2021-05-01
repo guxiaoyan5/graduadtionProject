@@ -7,7 +7,7 @@ import org.apache.hadoop.mapreduce.lib.db.DBWritable;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,7 +15,7 @@ import java.sql.SQLException;
 
 public class Consume implements Writable, DBWritable {
     private String sid;
-    private Date execution_time;
+    private Timestamp execution_time;
     private float money;
     private int store_id;
     private String mode;
@@ -23,7 +23,7 @@ public class Consume implements Writable, DBWritable {
     public Consume() {
     }
 
-    public Consume(String sid, Date execution_time, float money, int store_id,String mode) {
+    public Consume(String sid, Timestamp execution_time, float money, int store_id,String mode) {
         this.sid = sid;
         this.execution_time = execution_time;
         this.money = money;
@@ -58,11 +58,11 @@ public class Consume implements Writable, DBWritable {
         this.sid = sid;
     }
 
-    public Date getExecution_time() {
+    public Timestamp getExecution_time() {
         return execution_time;
     }
 
-    public void setExecution_time(Date execution_time) {
+    public void setExecution_time(Timestamp execution_time) {
         this.execution_time = execution_time;
     }
 
@@ -94,7 +94,7 @@ public class Consume implements Writable, DBWritable {
     @Override
     public void readFields(DataInput dataInput) throws IOException {
         this.sid = dataInput.readUTF();
-        this.execution_time = Date.valueOf(Text.readString(dataInput));
+        this.execution_time = Timestamp.valueOf(Text.readString(dataInput));
         this.money = dataInput.readFloat();
         this.store_id = dataInput.readInt();
         this.mode = dataInput.readUTF();
@@ -103,7 +103,7 @@ public class Consume implements Writable, DBWritable {
     @Override
     public void write(PreparedStatement preparedStatement) throws SQLException {
         preparedStatement.setString(1, this.sid);
-        preparedStatement.setDate(2, this.execution_time);
+        preparedStatement.setTimestamp(2, this.execution_time);
         preparedStatement.setFloat(3, this.money);
         preparedStatement.setInt(4, this.store_id);
         preparedStatement.setString(5,this.mode);
@@ -112,7 +112,7 @@ public class Consume implements Writable, DBWritable {
     @Override
     public void readFields(ResultSet resultSet) throws SQLException {
         this.sid = resultSet.getString(1);
-        this.execution_time = resultSet.getDate(2);
+        this.execution_time = resultSet.getTimestamp(2);
         this.money = resultSet.getFloat(3);
         this.store_id = resultSet.getInt(4);
         this.mode = resultSet.getString(5);

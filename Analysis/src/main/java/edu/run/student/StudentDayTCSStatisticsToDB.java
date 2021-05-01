@@ -55,12 +55,12 @@ public class StudentDayTCSStatisticsToDB {
             int day = calendar.get(Calendar.DAY_OF_MONTH);
             int month = calendar.get(Calendar.MONTH) + 1;
             int year = calendar.get(Calendar.YEAR);
-            ThreeMeals meal = null;
-            if (hour >= 5 && hour <= 9) {
+            String meal ;
+            if (hour <= 9) {
                 meal = ThreeMeals.BREAKFAST;
             } else if (hour <= 15) {
                 meal = ThreeMeals.LUNCH;
-            } else if (hour < 23) {
+            } else {
                 meal = ThreeMeals.DINNER;
             }
             context.write(new StudentDayTCSKey(value.getSid(), year, month, day, meal), new StudentDayTCSValue(value.getMoney()));

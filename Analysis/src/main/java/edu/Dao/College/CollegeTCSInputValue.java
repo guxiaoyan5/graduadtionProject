@@ -17,14 +17,14 @@ public class CollegeTCSInputValue implements Writable, DBWritable {
     private String sid;
     private int college_id;
     private Date day;
-    private ThreeMeals meal;
+    private String meal;
     private float money;
     private float studentTotalMoney;
 
     public CollegeTCSInputValue() {
     }
 
-    public CollegeTCSInputValue(String sid, int college_id, Date day, ThreeMeals meal, float money, float studentTotalMoney) {
+    public CollegeTCSInputValue(String sid, int college_id, Date day, String meal, float money, float studentTotalMoney) {
         this.sid = sid;
         this.college_id = college_id;
         this.day = day;
@@ -69,11 +69,11 @@ public class CollegeTCSInputValue implements Writable, DBWritable {
         this.day = day;
     }
 
-    public ThreeMeals getMeal() {
+    public String getMeal() {
         return meal;
     }
 
-    public void setMeal(ThreeMeals meal) {
+    public void setMeal(String meal) {
         this.meal = meal;
     }
 
@@ -98,7 +98,7 @@ public class CollegeTCSInputValue implements Writable, DBWritable {
         dataOutput.writeUTF(this.sid);
         dataOutput.writeInt(this.college_id);
         Text.writeString(dataOutput, String.valueOf(day));
-        dataOutput.writeUTF(this.meal.getMeal());
+        dataOutput.writeUTF(this.meal);
         dataOutput.writeFloat(this.money);
         dataOutput.writeFloat(this.studentTotalMoney);
     }
@@ -108,7 +108,7 @@ public class CollegeTCSInputValue implements Writable, DBWritable {
         this.sid = dataInput.readUTF();
         this.college_id = dataInput.readInt();
         this.day = Date.valueOf(Text.readString(dataInput));
-        this.meal = ThreeMeals.valueOf(dataInput.readUTF());
+        this.meal = dataInput.readUTF();
         this.money = dataInput.readFloat();
         this.studentTotalMoney = dataInput.readFloat();
     }
@@ -118,7 +118,7 @@ public class CollegeTCSInputValue implements Writable, DBWritable {
         preparedStatement.setString(1, this.sid);
         preparedStatement.setInt(2, this.college_id);
         preparedStatement.setDate(3, this.day);
-        preparedStatement.setString(4, this.meal.getMeal());
+        preparedStatement.setString(4, this.meal);
         preparedStatement.setFloat(5, this.money);
         preparedStatement.setFloat(6, this.studentTotalMoney);
     }
@@ -128,7 +128,7 @@ public class CollegeTCSInputValue implements Writable, DBWritable {
         this.sid = resultSet.getString(1);
         this.college_id = resultSet.getInt(2);
         this.day = resultSet.getDate(3);
-        this.meal = ThreeMeals.valueOf(resultSet.getString(4));
+        this.meal = resultSet.getString(4);
         this.money = resultSet.getFloat(5);
         this.studentTotalMoney = resultSet.getFloat(6);
     }

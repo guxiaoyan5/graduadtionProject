@@ -15,7 +15,7 @@ public class StudentMonthTCS implements Writable, DBWritable {
     private String sid;
     private int month;
     private int year;
-    private ThreeMeals meal;
+    private String meal;
     private int consumption_count;
     private float consumption_total_money;
     private float consumption_average_money;
@@ -23,7 +23,7 @@ public class StudentMonthTCS implements Writable, DBWritable {
     public StudentMonthTCS() {
     }
 
-    public StudentMonthTCS(String sid, int month, int year, ThreeMeals meal, int consumption_count, float consumption_total_money, float consumption_average_money) {
+    public StudentMonthTCS(String sid, int month, int year, String meal, int consumption_count, float consumption_total_money, float consumption_average_money) {
         this.sid = sid;
         this.month = month;
         this.year = year;
@@ -32,6 +32,8 @@ public class StudentMonthTCS implements Writable, DBWritable {
         this.consumption_total_money = consumption_total_money;
         this.consumption_average_money = consumption_average_money;
     }
+
+
 
     @Override
     public String toString() {
@@ -70,11 +72,11 @@ public class StudentMonthTCS implements Writable, DBWritable {
         this.year = year;
     }
 
-    public ThreeMeals getMeal() {
+    public String getMeal() {
         return meal;
     }
 
-    public void setMeal(ThreeMeals meal) {
+    public void setMeal(String meal) {
         this.meal = meal;
     }
 
@@ -107,7 +109,7 @@ public class StudentMonthTCS implements Writable, DBWritable {
         dataOutput.writeUTF(this.sid);
         dataOutput.writeInt(this.month);
         dataOutput.writeInt(this.year);
-        dataOutput.writeUTF(this.meal.getMeal());
+        dataOutput.writeUTF(this.meal);
         dataOutput.writeInt(this.consumption_count);
         dataOutput.writeFloat(this.consumption_total_money);
         dataOutput.writeFloat(this.consumption_average_money);
@@ -118,7 +120,7 @@ public class StudentMonthTCS implements Writable, DBWritable {
         this.sid = dataInput.readUTF();
         this.month = dataInput.readInt();
         this.year = dataInput.readInt();
-        this.meal = ThreeMeals.valueOf(dataInput.readUTF());
+        this.meal = dataInput.readUTF();
         this.consumption_count = dataInput.readInt();
         this.consumption_total_money = dataInput.readFloat();
         this.consumption_average_money = dataInput.readFloat();
@@ -129,7 +131,7 @@ public class StudentMonthTCS implements Writable, DBWritable {
         preparedStatement.setString(1, this.sid);
         preparedStatement.setInt(2, this.month);
         preparedStatement.setInt(3, this.year);
-        preparedStatement.setString(4, this.meal.getMeal());
+        preparedStatement.setString(4, this.meal);
         preparedStatement.setInt(5, this.consumption_count);
         preparedStatement.setFloat(6, this.consumption_total_money);
         preparedStatement.setFloat(7, this.consumption_average_money);
@@ -140,7 +142,7 @@ public class StudentMonthTCS implements Writable, DBWritable {
         this.sid = resultSet.getString(1);
         this.month = resultSet.getInt(2);
         this.year = resultSet.getInt(3);
-        this.meal = ThreeMeals.valueOf(resultSet.getString(4));
+        this.meal = resultSet.getString(4);
         this.consumption_count = resultSet.getInt(5);
         this.consumption_total_money = resultSet.getFloat(6);
         this.consumption_average_money = resultSet.getFloat(7);

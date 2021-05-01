@@ -1,7 +1,6 @@
 package edu.run.student;
 
-import edu.Dao.Student.StudentCSKey;
-import edu.Dao.Student.StudentCSValue;
+
 import edu.Dao.Student.StudentTCSKey;
 import edu.Dao.Student.StudentTCSValue;
 import edu.Infomation.Consume;
@@ -31,7 +30,7 @@ public class StudentTCSStatisticsToDB {
         job.setReducerClass(Reduce.class);
 
         job.setMapOutputKeyClass(StudentTCSKey.class);
-        job.setMapOutputValueClass(StudentCSValue.class);
+        job.setMapOutputValueClass(StudentTCSValue.class);
 
         job.setOutputKeyClass(StudentTCS.class);
         job.setOutputValueClass(StudentTCS.class);
@@ -54,12 +53,12 @@ public class StudentTCSStatisticsToDB {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(value.getExecution_time());
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
-            ThreeMeals meal = null;
-            if (hour >= 5 && hour <= 9) {
+            String meal ;
+            if (hour <= 9) {
                 meal = ThreeMeals.BREAKFAST;
             } else if (hour <= 15) {
                 meal = ThreeMeals.LUNCH;
-            } else if (hour < 23) {
+            } else  {
                 meal = ThreeMeals.DINNER;
             }
             context.write(new StudentTCSKey(value.getSid(), meal), new StudentTCSValue(value.getMoney()));

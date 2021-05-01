@@ -13,12 +13,12 @@ public class MajorDayTCSKey implements WritableComparable<MajorDayTCSKey> {
     private int month;
     private int year;
     private int day;
-    private ThreeMeals meal;
+    private String meal;
 
     public MajorDayTCSKey() {
     }
 
-    public MajorDayTCSKey(int major_id, int month, int year, int day, ThreeMeals meal) {
+    public MajorDayTCSKey(int major_id, int month, int year, int day, String meal) {
         this.major_id = major_id;
         this.month = month;
         this.year = year;
@@ -69,11 +69,11 @@ public class MajorDayTCSKey implements WritableComparable<MajorDayTCSKey> {
         this.day = day;
     }
 
-    public ThreeMeals getMeal() {
+    public String getMeal() {
         return meal;
     }
 
-    public void setMeal(ThreeMeals meal) {
+    public void setMeal(String meal) {
         this.meal = meal;
     }
 
@@ -112,7 +112,7 @@ public class MajorDayTCSKey implements WritableComparable<MajorDayTCSKey> {
         dataOutput.writeInt(this.month);
         dataOutput.writeInt(this.year);
         dataOutput.writeInt(this.day);
-        dataOutput.writeUTF(this.meal.getMeal());
+        dataOutput.writeUTF(this.meal);
     }
 
     @Override
@@ -121,6 +121,6 @@ public class MajorDayTCSKey implements WritableComparable<MajorDayTCSKey> {
         this.month = dataInput.readInt();
         this.year = dataInput.readInt();
         this.day = dataInput.readInt();
-        this.meal = ThreeMeals.valueOf(dataInput.readUTF());
+        this.meal = dataInput.readUTF();
     }
 }

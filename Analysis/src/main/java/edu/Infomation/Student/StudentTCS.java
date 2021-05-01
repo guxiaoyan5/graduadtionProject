@@ -15,7 +15,7 @@ import java.sql.SQLException;
 
 public class StudentTCS implements DBWritable, Writable {
     private String sid;
-    private ThreeMeals consumption_category;
+    private String consumption_category;
     private int count;
     private float totalMoney;
     private float averageMoney;
@@ -23,13 +23,14 @@ public class StudentTCS implements DBWritable, Writable {
     public StudentTCS() {
     }
 
-    public StudentTCS(String sid, ThreeMeals consumption_category, int count, float totalMoney, float averageMoney) {
+    public StudentTCS(String sid, String consumption_category, int count, float totalMoney, float averageMoney) {
         this.sid = sid;
         this.consumption_category = consumption_category;
         this.count = count;
         this.totalMoney = totalMoney;
         this.averageMoney = averageMoney;
     }
+
 
     @Override
     public String toString() {
@@ -50,11 +51,11 @@ public class StudentTCS implements DBWritable, Writable {
         this.sid = sid;
     }
 
-    public ThreeMeals getConsumption_category() {
+    public String getConsumption_category() {
         return consumption_category;
     }
 
-    public void setConsumption_category(ThreeMeals consumption_category) {
+    public void setConsumption_category(String consumption_category) {
         this.consumption_category = consumption_category;
     }
 
@@ -85,7 +86,7 @@ public class StudentTCS implements DBWritable, Writable {
     @Override
     public void write(DataOutput dataOutput) throws IOException {
         dataOutput.writeUTF(this.sid);
-        dataOutput.writeUTF(this.consumption_category.getMeal());
+        dataOutput.writeUTF(this.consumption_category);
         dataOutput.writeInt(this.count);
         dataOutput.writeFloat(this.totalMoney);
         dataOutput.writeFloat(this.averageMoney);
@@ -94,7 +95,7 @@ public class StudentTCS implements DBWritable, Writable {
     @Override
     public void readFields(DataInput dataInput) throws IOException {
         this.sid = dataInput.readUTF();
-        this.consumption_category = ThreeMeals.valueOf(dataInput.readUTF());
+        this.consumption_category = dataInput.readUTF();
         this.count = dataInput.readInt();
         this.totalMoney = dataInput.readFloat();
         this.averageMoney = dataInput.readFloat();
@@ -103,7 +104,7 @@ public class StudentTCS implements DBWritable, Writable {
     @Override
     public void write(PreparedStatement preparedStatement) throws SQLException {
         preparedStatement.setString(1, this.sid);
-        preparedStatement.setString(2,this.consumption_category.getMeal());
+        preparedStatement.setString(2,this.consumption_category);
         preparedStatement.setInt(3, this.count);
         preparedStatement.setFloat(4, this.totalMoney);
         preparedStatement.setFloat(5, this.averageMoney);
@@ -112,7 +113,7 @@ public class StudentTCS implements DBWritable, Writable {
     @Override
     public void readFields(ResultSet resultSet) throws SQLException {
         this.sid = resultSet.getString(1);
-        this.consumption_category = ThreeMeals.valueOf(resultSet.getString(2));
+        this.consumption_category = resultSet.getString(2);
         this.count = resultSet.getInt(3);
         this.totalMoney = resultSet.getFloat(4);
         this.averageMoney = resultSet.getFloat(5);

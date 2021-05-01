@@ -9,12 +9,12 @@ import java.io.IOException;
 
 public class ClassTCSKey implements WritableComparable<ClassTCSKey> {
     private int class_id;
-    private ThreeMeals meal;
+    private String meal;
 
     public ClassTCSKey() {
     }
 
-    public ClassTCSKey(int class_id, ThreeMeals meal) {
+    public ClassTCSKey(int class_id, String meal) {
         this.class_id = class_id;
         this.meal = meal;
     }
@@ -35,11 +35,11 @@ public class ClassTCSKey implements WritableComparable<ClassTCSKey> {
         this.class_id = class_id;
     }
 
-    public ThreeMeals getMeal() {
+    public String getMeal() {
         return meal;
     }
 
-    public void setMeal(ThreeMeals meal) {
+    public void setMeal(String meal) {
         this.meal = meal;
     }
 
@@ -57,12 +57,12 @@ public class ClassTCSKey implements WritableComparable<ClassTCSKey> {
     @Override
     public void write(DataOutput dataOutput) throws IOException {
         dataOutput.writeInt(this.class_id);
-        dataOutput.writeUTF(this.meal.getMeal());
+        dataOutput.writeUTF(this.meal);
     }
 
     @Override
     public void readFields(DataInput dataInput) throws IOException {
         this.class_id = dataInput.readInt();
-        this.meal = ThreeMeals.valueOf(dataInput.readUTF());
+        this.meal = dataInput.readUTF();
     }
 }
