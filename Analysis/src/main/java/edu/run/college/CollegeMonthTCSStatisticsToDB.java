@@ -50,7 +50,7 @@ public class CollegeMonthTCSStatisticsToDB {
         DBInputFormat.setInput(job, CollegeMonthTCSInputValue.class,
                 "select student.id,college_id,execution_time,consumption_category,money,consumption_total_money" +
                         " from student,consume,student_month_three_meals_statistics " +
-                        "where student.id=consume.sid and student.id=student_month_three_meals_statistics.sid and year(execution_time) = year and month(execution_time) = month",
+                        "where student.id=consume.sid and student.id=student_month_three_meals_statistics.sid and year(execution_time) = year and month(execution_time) = month and (((hour(execution_time) between 0 and 9) and consumption_category = '早') or ((hour(execution_time) between 10 and 15) and consumption_category = '午') or ((hour(execution_time) between 16 and 24) and consumption_category = '晚'))",
                 "select count(1) from consume");
         boolean result = job.waitForCompletion(true);
         System.exit(result ? 0 : 1);

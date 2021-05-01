@@ -52,7 +52,7 @@ public class MajorDayTCSStatisticsToDB {
         DBInputFormat.setInput(job, MajorDayTCSInputValue.class,
                 "select student.id,major_id,day,consumption_category,money,consumption_total_money" +
                         " from student,consume,student_day_three_meals_statistics where student.id=consume.sid " +
-                        "and student.id=student_day_three_meals_statistics.sid and to_days(execution_time)=to_days(day)",
+                        "and student.id=student_day_three_meals_statistics.sid and to_days(execution_time)=to_days(day) and (((hour(execution_time) between 0 and 9) and consumption_category = '早') or ((hour(execution_time) between 10 and 15) and consumption_category = '午') or ((hour(execution_time) between 16 and 24) and consumption_category = '晚'))",
                 "select count(1) from consume");
         boolean result = job.waitForCompletion(true);
         System.exit(result ? 0 : 1);
