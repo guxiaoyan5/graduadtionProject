@@ -54,7 +54,7 @@ const router = new Router({
         component: AdminSchool,
       }, {
         path: '/adminChangePassword',
-        name: '修改密码',
+        name: '管理员修改密码',
         component: AdminChangePassword,
       }, {
         path: '/adminBaseInformation',

@@ -78,47 +78,7 @@
       <el-col :span="12" style="height: 300px;">
         <el-card style="height:100%;width: 100%;padding: 20px"
                  body-style="height:100%;width: 100%;padding:0px">
-          <el-table
-            :data="tableData"
-            height="300px"
-            border
-            style="width: 100%;text-align: center">
-            <el-table-column
-              label="序号"
-              type="index"
-              width="100px">
-            </el-table-column>
-            <el-table-column
-              prop="name"
-              label="级别"
-              width="100px">
-            </el-table-column>
-            <el-table-column
-              prop="date"
-              label="日期"
-              width="100px">
-            </el-table-column>
-            <el-table-column
-              prop="consumption_low_count"
-              label="低于平均人次消费次数"
-              width="100px">
-            </el-table-column>
-            <el-table-column
-              prop="consumption_high_count"
-              label="高于平均人次消费次数"
-              width="100px">
-            </el-table-column>
-            <el-table-column
-              prop="student_low_count"
-              label="低于人均消费人数"
-              width="100px">
-            </el-table-column>
-            <el-table-column
-              prop="student_high_count"
-              label="高于人均消费人数"
-              width="100px">
-            </el-table-column>
-          </el-table>
+          <div id="chart2" ref="chart2" style="height: 100%;width: 100%"></div>
         </el-card>
       </el-col>
     </el-row>
@@ -139,6 +99,7 @@ require('echarts/lib/component/markLine')
 require('echarts/lib/component/markPoint')
 require('echarts/lib/component/dataZoom');
 require('echarts/lib/chart/bar');
+require('echarts/lib/chart/pie');
 export default {
   name: "OneDay",
   data() {
@@ -225,6 +186,7 @@ export default {
       myChart: '',
       myChart1: '',
       myChart3: '',
+      myChart2: '',
       tableData: [],
       // myChart1: ''
     };
@@ -233,6 +195,7 @@ export default {
     this.initChart();
     this.initChart1();
     this.initChart3();
+    this.initChart2();
   },
   methods: {
     onSubmit(formName) {
@@ -254,6 +217,7 @@ export default {
             date: _this.formInline.date
           }).then(function (response) {
             _this.monthData = response.data.data;
+            console.log(_this.monthData)
           }).catch(function (error) {
             console.log('error!!');
             console.log(error)
@@ -269,7 +233,7 @@ export default {
       this.myChart = echarts.init(document.getElementById('chart'));
       let option = {
         title: {
-          text: '消费数据统计图'
+          text: '消费平均次统计图'
         },
         tooltip: {
           trigger: 'axis'
@@ -341,33 +305,78 @@ export default {
       let option = {
         title: {
           text: '消费总和',
+          left: 'center'
         },
-        xAxis: {
-          data: [],
+        tooltip: {
+          trigger: 'item'
         },
-        yAxis: {
-          axisLine: {
-            show: false
-          },
-          axisTick: {
-            show: false
-          },
-          axisLabel: {
-            textStyle: {
-              color: '#999'
+        legend: {
+          orient: 'vertical',
+          left: 'left',
+        },
+        series: [
+          {
+            name: '消费总和',
+            type: 'pie',
+            radius: '50%',
+            data: [],
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
             }
           }
-        },
-        series: []
+        ]
       };
       this.myChart3.setOption(option);
       this.myChart3.hideLoading()
+    },
+    initChart2() {
+      this.myChart2 = echarts.init(document.getElementById('chart2'));
+      let option = {
+        title: {
+          text: '人均消费次数',
+          left: 'center'
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+          }
+        },
+        legend: {
+          data: []
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: [
+          {
+            type: 'category',
+            data: []
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value'
+          }
+        ],
+        series: []
+      };
+      this.myChart2.setOption(option);
+      this.myChart2.hideLoading()
     },
     fetchData() {
       this.tableData = [];
       this.myChart.showLoading();
       this.myChart1.showLoading();
       this.myChart3.showLoading();
+      this.myChart2.showLoading();
       let name = [];
       this.monthData.forEach(item => (
         name.push(item.name)
@@ -389,7 +398,11 @@ export default {
       date = Array.from(date).sort();
       let dataResult = [];
       let dataResult1 = [];
-      let dataResult3 = Array.from({length: name.length}).map(item => (0));
+      let dataResult2 = [];
+      let dataResult3 = Array.from({length: name.length}).map(item => ({
+        "value": 0,
+        "name": ''
+      }))
       for (let i = 0; i < this.monthData.length; i++) {
         let temp = {
           name: this.monthData[i].name,
@@ -402,7 +415,30 @@ export default {
           type: 'line',
           data: Array.from({length: date.length}).map(item => (0)),
         };
+        let temp2_1 = {
+          name: '',
+          type: 'bar',
+          stack: '',
+          emphasis: {
+            focus: 'series'
+          },
+          data: []
+        };
+        let temp2_2 = {
+          name: '',
+          type: 'bar',
+          stack: '',
+          emphasis: {
+            focus: 'series'
+          },
+          data: []
+        }
         if (this.formInline.choice) {
+          dataResult3[i].name = this.monthData[i].name;
+          temp2_1.name = this.monthData[i].name + '低于人均次数';
+          temp2_2.name = this.monthData[i].name +'高于人均次数';
+          temp2_1.stack = this.monthData[i].name;
+          temp2_2.stack = this.monthData[i].name;
           for (let j = 0; j < this.monthData[i].consumeMonthData.length; j++) {
             let tempDate = this.monthData[i].consumeMonthData[j].year + '-' + this.monthData[i].consumeMonthData[j].month
             for (let k = 0; k < date.length; k++) {
@@ -412,18 +448,19 @@ export default {
                 break;
               }
             }
-            dataResult3[i] += this.monthData[i].consumeMonthData[j].consumption_total_money;
-            this.tableData.push({
-              name: this.monthData[i].name,
-              date: tempDate,
-              consumption_low_count: this.monthData[i].consumeMonthData[j].consumption_low_count,
-              consumption_high_count: this.monthData[i].consumeMonthData[j].consumption_high_count,
-              student_low_count: this.monthData[i].consumeMonthData[j].student_low_count,
-              student_high_count: this.monthData[i].consumeMonthData[j].student_high_count,
-            })
+            dataResult3[i].value += this.monthData[i].consumeMonthData[j].consumption_total_money;
+            temp2_1.data.push(this.monthData[i].consumeMonthData[j].student_low_count);
+            temp2_2.data.push(this.monthData[i].consumeMonthData[j].student_high_count);
           }
         } else {
+          dataResult3[i].name = this.monthData[i].name;
+          temp2_1.name = this.monthData[i].name + '低于人均次数';
+          temp2_2.name = this.monthData[i].name +'高于人均次数';
+          temp2_1.stack = this.monthData[i].name;
+          temp2_2.stack = this.monthData[i].name;
           for (let j = 0; j < this.monthData[i].consumeDayData.length; j++) {
+            temp2_1.data.push(this.monthData[i].consumeDayData[j].student_low_count);
+            temp2_2.data.push(this.monthData[i].consumeDayData[j].student_high_count);
             let tempDate = this.monthData[i].consumeDayData[j].date + ''
             for (let k = 0; k < date.length; k++) {
               if (tempDate === date[k]) {
@@ -432,19 +469,13 @@ export default {
                 break;
               }
             }
-            dataResult3[i] += this.monthData[i].consumeDayData[j].consumption_total_money;
-            this.tableData.push({
-              name: this.monthData[i].name,
-              date: tempDate,
-              consumption_low_count: this.monthData[i].consumeDayData[j].consumption_low_count,
-              consumption_high_count: this.monthData[i].consumeDayData[j].consumption_high_count,
-              student_low_count: this.monthData[i].consumeDayData[j].student_low_count,
-              student_high_count: this.monthData[i].consumeDayData[j].student_high_count,
-            })
+            dataResult3[i].value += this.monthData[i].consumeDayData[j].consumption_total_money;
           }
         }
         dataResult.push(temp);
         dataResult1.push(temp1);
+        dataResult2.push(temp2_1);
+        dataResult2.push(temp2_2);
       }
       this.myChart.setOption({
         legend: {
@@ -465,40 +496,27 @@ export default {
         series: dataResult1,
       })
       this.myChart3.setOption({
-        xAxis: {
-          data: name,
+        series: [
+          {
+            data: dataResult3,
+          }
+        ]
+      });
+      this.myChart2.setOption({
+        legend: {
+          data: name
         },
-        series: [{
-          type: 'bar',
-          showBackground: true,
-          itemStyle: {
-            color: new echarts.graphic.LinearGradient(
-              0, 0, 0, 1,
-              [
-                {offset: 0, color: '#83bff6'},
-                {offset: 0.5, color: '#188df0'},
-                {offset: 1, color: '#188df0'}
-              ]
-            )
-          },
-          emphasis: {
-            itemStyle: {
-              color: new echarts.graphic.LinearGradient(
-                0, 0, 0, 1,
-                [
-                  {offset: 0, color: '#2378f7'},
-                  {offset: 0.7, color: '#2378f7'},
-                  {offset: 1, color: '#83bff6'}
-                ]
-              )
-            }
-          },
-          data: dataResult3
-        }],
+        xAxis: [
+          {
+            data: date
+          }
+        ],
+        series: dataResult2
       })
       this.myChart.hideLoading();
       this.myChart1.hideLoading();
       this.myChart3.hideLoading();
+      this.myChart2.hideLoading();
     },
   }
 }

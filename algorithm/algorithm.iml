@@ -36,11 +36,9 @@
     <orderEntry type="library" name="Maven: commons-collections:commons-collections:3.2.2" level="project" />
     <orderEntry type="library" name="Maven: org.mortbay.jetty:jetty-sslengine:6.1.26" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: javax.servlet.jsp:jsp-api:2.1" level="project" />
-    <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.6" level="project" />
     <orderEntry type="library" name="Maven: commons-configuration:commons-configuration:1.6" level="project" />
     <orderEntry type="library" name="Maven: commons-digester:commons-digester:1.8" level="project" />
     <orderEntry type="library" name="Maven: commons-beanutils:commons-beanutils:1.7.0" level="project" />
-    <orderEntry type="library" name="Maven: com.google.protobuf:protobuf-java:2.5.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.2.4" level="project" />
     <orderEntry type="library" name="Maven: org.apache.hadoop:hadoop-auth:2.7.4" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.2.5" level="project" />
@@ -144,29 +142,6 @@
     <orderEntry type="library" name="Maven: org.apache.spark:spark-mllib_2.12:3.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.scala-lang.modules:scala-parser-combinators_2.12:1.1.2" level="project" />
     <orderEntry type="library" name="Maven: org.apache.spark:spark-streaming_2.12:3.0.1" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.spark:spark-sql_2.12:3.0.1" level="project" />
-    <orderEntry type="library" name="Maven: com.univocity:univocity-parsers:2.9.0" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.spark:spark-sketch_2.12:3.0.1" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.spark:spark-catalyst_2.12:3.0.1" level="project" />
-    <orderEntry type="library" name="Maven: org.codehaus.janino:janino:3.0.16" level="project" />
-    <orderEntry type="library" name="Maven: org.codehaus.janino:commons-compiler:3.0.16" level="project" />
-    <orderEntry type="library" name="Maven: org.antlr:antlr4-runtime:4.7.1" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.arrow:arrow-vector:0.15.1" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.arrow:arrow-format:0.15.1" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.arrow:arrow-memory:0.15.1" level="project" />
-    <orderEntry type="library" name="Maven: com.google.flatbuffers:flatbuffers-java:1.9.0" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.orc:orc-core:1.5.10" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.orc:orc-shims:1.5.10" level="project" />
-    <orderEntry type="library" name="Maven: io.airlift:aircompressor:0.10" level="project" />
-    <orderEntry type="library" name="Maven: org.threeten:threeten-extra:1.5.0" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.orc:orc-mapreduce:1.5.10" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.hive:hive-storage-api:2.7.1" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.parquet:parquet-column:1.10.1" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.parquet:parquet-common:1.10.1" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.parquet:parquet-encoding:1.10.1" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.parquet:parquet-hadoop:1.10.1" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.parquet:parquet-format:2.4.0" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.parquet:parquet-jackson:1.10.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.spark:spark-graphx_2.12:3.0.1" level="project" />
     <orderEntry type="library" name="Maven: com.github.fommil.netlib:core:1.1.2" level="project" />
     <orderEntry type="library" name="Maven: net.sourceforge.f2j:arpack_combined_all:0.1" level="project" />
@@ -190,5 +165,30 @@
     <orderEntry type="library" name="Maven: jakarta.xml.bind:jakarta.xml.bind-api:2.3.2" level="project" />
     <orderEntry type="library" name="Maven: com.sun.istack:istack-commons-runtime:3.0.8" level="project" />
     <orderEntry type="library" name="Maven: mysql:mysql-connector-java:5.1.49" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.spark:spark-sql_2.12:3.0.1" level="project" />
+    <orderEntry type="library" name="Maven: com.univocity:univocity-parsers:2.9.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.spark:spark-sketch_2.12:3.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.spark:spark-catalyst_2.12:3.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.janino:janino:3.0.16" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.janino:commons-compiler:3.0.16" level="project" />
+    <orderEntry type="library" name="Maven: org.antlr:antlr4-runtime:4.7.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.arrow:arrow-vector:0.15.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.arrow:arrow-format:0.15.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.arrow:arrow-memory:0.15.1" level="project" />
+    <orderEntry type="library" name="Maven: com.google.flatbuffers:flatbuffers-java:1.9.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.orc:orc-core:1.5.10" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.orc:orc-shims:1.5.10" level="project" />
+    <orderEntry type="library" name="Maven: com.google.protobuf:protobuf-java:2.5.0" level="project" />
+    <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.6" level="project" />
+    <orderEntry type="library" name="Maven: io.airlift:aircompressor:0.10" level="project" />
+    <orderEntry type="library" name="Maven: org.threeten:threeten-extra:1.5.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.orc:orc-mapreduce:1.5.10" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.hive:hive-storage-api:2.7.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.parquet:parquet-column:1.10.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.parquet:parquet-common:1.10.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.parquet:parquet-encoding:1.10.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.parquet:parquet-hadoop:1.10.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.parquet:parquet-format:2.4.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.parquet:parquet-jackson:1.10.1" level="project" />
   </component>
 </module>

@@ -56,7 +56,7 @@ public class SchoolUserController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "updatePassword", method = RequestMethod.POST)
+    @RequestMapping(value = "/updatePassword", method = RequestMethod.POST)
     public Result updatePassword(@RequestBody SchoolUserEntity schoolUserEntity) {
         int result = schoolUserServer.updatePassword(schoolUserEntity);
         if (result == 1) {
@@ -66,7 +66,7 @@ public class SchoolUserController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "updateName", method = RequestMethod.POST)
+    @RequestMapping(value = "/updateName", method = RequestMethod.POST)
     public Result updateName(@RequestBody SchoolUserEntity schoolUserEntity) {
         int result = schoolUserServer.updateName(schoolUserEntity);
         if (result == 1) {

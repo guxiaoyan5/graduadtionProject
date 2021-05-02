@@ -8,9 +8,11 @@
         <outputRelativeToContentRoot value="true" />
         <module name="Analysis" />
         <module name="backend" />
+        <module name="algorithm" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="algorithm" target="8" />
       <module name="Analysis" target="8" />
       <module name="backend" target="1.8" />
       <module name="graduadtionProject" target="8" />
