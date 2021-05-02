@@ -422,4 +422,9 @@ public class SchoolUserController {
             return new Result(1,"加载成功",consumeDayResults);
         }
     }
+    @ResponseBody
+    @RequestMapping(value = "/getThreeMeals",method = RequestMethod.POST)
+    public Result getThreeMeals(@RequestBody QueryDataInput queryDataInput){
+        return null;
+    }
 }

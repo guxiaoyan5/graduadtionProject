@@ -10,6 +10,8 @@ import AdminSchool from "../components/AdminSchool";
 import AdminChangePassword from "../components/AdminChangePassword";
 import AdminBaseInformation from "../components/AdminBaseInformation";
 import OneDay from "../components/OneDay";
+import StudentOneDay from "../components/StudentOneDay";
+import ThreeMeals from "../components/ThreeMeals";
 
 Vue.use(Router)
 const router = new Router({
@@ -38,6 +40,14 @@ const router = new Router({
           path: '/oneDay',
           component: OneDay,
           name: "一日消费分析"
+        },{
+          path: '/studentOneDay',
+          component: StudentOneDay,
+          name: "学生日(月)消费分析"
+        },{
+        path: '/threeMeals',
+          component: ThreeMeals,
+          name:'三餐消费分析'
         }
       ]
     }, {

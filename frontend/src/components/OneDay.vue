@@ -187,7 +187,6 @@ export default {
       myChart1: '',
       myChart3: '',
       myChart2: '',
-      tableData: [],
       // myChart1: ''
     };
   },
