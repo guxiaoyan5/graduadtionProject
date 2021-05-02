@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.gyj.backend.mapper.student.StudentMonthTCSMapper">
+    <resultMap id="BaseResultMap" type="edu.gyj.backend.entity.student.StudentMonthTCSEntity">
+        <result column="sid" property="sid"/>
+        <result column="name" property="name"/>
+        <result column="consumption_category" property="consumption_category"/>
+        <result column="month" property="month"/>
+        <result column="year" property="year"/>
+        <result column="consumption_count" property="consumption_count"/>
+        <result column="consumption_total_money" property="consumption_total_money"/>
+        <result column="consumption_average_money" property="consumption_average_money"/>
+    </resultMap>
+    <select id="findAll" resultMap="BaseResultMap">
+        select sid,
+               name,
+               consumption_category,
+               month,
+               year,
+               consumption_count,
+               consumption_total_money,
+               consumption_average_money
+        from student_month_three_meals_statistics,
+             graduate.student
+        where sid = student.id
+    </select>
+    <select id="findBySid" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select sid,
+               name,
+               consumption_category,
+               month,
+               year,
+               consumption_count,
+               consumption_total_money,
+               consumption_average_money
+        from student_month_three_meals_statistics,
+             graduate.student
+        where sid = student.id
+          and student.id = #{id}
+    </select>
+    <select id="findByMonth" resultMap="BaseResultMap">
+        select sid,
+               name,
+               consumption_category,
+               month,
+               year,
+               consumption_count,
+               consumption_total_money,
+               consumption_average_money
+        from student_month_three_meals_statistics,
+             graduate.student
+        where sid = student.id
+          and month = #{month}
+          and year = #{year}
+    </select>
+    <select id="findByYear" resultMap="BaseResultMap">
+        select sid,
+               name,
+               consumption_category,
+               month,
+               year,
+               consumption_count,
+               consumption_total_money,
+               consumption_average_money
+        from student_month_three_meals_statistics,
+             graduate.student
+        where sid = student.id
+          and year = #{year}
+    </select>
+</mapper>
