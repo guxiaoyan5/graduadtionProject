@@ -29,8 +29,8 @@
                student_low_count,
                student_high_count
         from college,
-             college_day_consumption_statistics
-        where college.id = college_day_consumption_statistics.college_id
+             college_consumption_statistics
+        where college.id = college_consumption_statistics.college_id
     </select>
     <select id="findByCollegeId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select college_id,
@@ -45,8 +45,8 @@
                student_low_count,
                student_high_count
         from college,
-             college_day_consumption_statistics
-        where college.id = college_day_consumption_statistics.college_id
+             college_consumption_statistics
+        where college.id = college_consumption_statistics.college_id
           and college.id = #{id};
     </select>
 </mapper>

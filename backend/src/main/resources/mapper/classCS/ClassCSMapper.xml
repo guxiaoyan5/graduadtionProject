@@ -29,8 +29,8 @@
                student_low_count,
                student_high_count
         from class,
-             class_day_consumption_statistics
-        where class.id = class_day_consumption_statistics.class_id
+             class_consumption_statistics
+        where class.id = class_consumption_statistics.class_id
     </select>
     <select id="findByClassId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select class_id,
@@ -45,8 +45,8 @@
                student_low_count,
                student_high_count
         from class,
-             class_day_consumption_statistics
-        where class.id = class_day_consumption_statistics.class_id
+             class_consumption_statistics
+        where class.id = class_consumption_statistics.class_id
           and class.id = #{id};
     </select>
 </mapper>

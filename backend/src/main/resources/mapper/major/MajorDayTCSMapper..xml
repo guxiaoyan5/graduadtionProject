@@ -2,10 +2,12 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="edu.gyj.backend.mapper.major.MajorCSMapper">
-    <resultMap id="BaseResultMap" type="edu.gyj.backend.entity.major.MajorCSEntity">
+<mapper namespace="edu.gyj.backend.mapper.major.MajorDayTCSMapper">
+    <resultMap id="BaseResultMap" type="edu.gyj.backend.entity.major.MajorDayTCSEntity">
         <result column="major_id" property="major_id"/>
         <result column="major" property="name"/>
+        <result column="day" property="day"/>
+        <result column="consumption_category" property="consumption_category"/>
         <result column="consumption_count" property="consumption_count"/>
         <result column="consumption_total_money" property="consumption_total_money"/>
         <result column="consumption_average_money" property="consumption_average_money"/>
@@ -19,6 +21,8 @@
     <select id="findAll" resultMap="BaseResultMap">
         select major_id,
                major,
+               day,
+               consumption_category,
                consumption_count,
                consumption_total_money,
                consumption_average_money,
@@ -29,12 +33,14 @@
                student_low_count,
                student_high_count
         from major,
-             major_consumption_statistics
-        where major.id = major_consumption_statistics.major_id
+             major_day_three_meals_statistics
+        where major.id = major_day_three_meals_statistics.major_id
     </select>
     <select id="findByMajorId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select major_id,
                major,
+               day,
+               consumption_category,
                consumption_count,
                consumption_total_money,
                consumption_average_money,
@@ -45,8 +51,47 @@
                student_low_count,
                student_high_count
         from major,
-             major_consumption_statistics
-        where major.id = major_consumption_statistics.major_id
+             major_day_three_meals_statistics
+        where major.id = major_day_three_meals_statistics.major_id
           and major.id = #{id};
+    </select>
+    <select id="findByDate" resultMap="BaseResultMap" parameterType="java.sql.Date">
+        select major_id,
+               major,
+               day,
+               consumption_category,
+               consumption_count,
+               consumption_total_money,
+               consumption_average_money,
+               consumption_student_average_money,
+               student_count,
+               consumption_low_count,
+               consumption_high_count,
+               student_low_count,
+               student_high_count
+        from major,
+             major_day_three_meals_statistics
+        where major.id = major_day_three_meals_statistics.major_id
+          and day = #{date}
+    </select>
+    <select id="findByDates" resultMap="BaseResultMap">
+        select major_id,
+               major,
+               day,
+               consumption_category,
+               consumption_count,
+               consumption_total_money,
+               consumption_average_money,
+               consumption_student_average_money,
+               student_count,
+               consumption_low_count,
+               consumption_high_count,
+               student_low_count,
+               student_high_count
+        from major,
+             major_day_three_meals_statistics
+        where major.id = major_day_three_meals_statistics.major_id
+          and day between #{start} and #{end}
+          and major.id = #{id}
     </select>
 </mapper>
