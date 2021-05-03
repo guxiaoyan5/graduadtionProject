@@ -31,6 +31,10 @@ public class ClassServiceImpl implements ClassService {
     ClassDayTCSMapper classDayTCSMapper;
     @Autowired
     ClassMonthTCSMapper classMonthTCSMapper;
+    @Autowired
+    ClassTCSMapper classTCSMapper;
+    @Autowired
+    ClassCSMapper classCSMapper;
     @Override
     public List<ClassResult> getAll() {
         List<ClassResult> classResults = new ArrayList<>();
@@ -57,6 +61,7 @@ public class ClassServiceImpl implements ClassService {
         for (ClassEntity c : classEntities) {
             if (c.getName().compareTo(classEntity.getName()) == 0 && c.getMajorId() == classEntity.getMajorId()) {
                 tag = true;
+                break;
             }
         }
         if (tag) {
@@ -103,6 +108,16 @@ public class ClassServiceImpl implements ClassService {
     @Override
     public List<ClassDayTCSEntity> findThreeByClassIdAndDates(int classId, Date start, Date end) {
         return classDayTCSMapper.findByDates(classId,new java.sql.Date(start.getTime()),new java.sql.Date(end.getTime()));
+    }
+
+    @Override
+    public List<ClassCSEntity> findByClassId(int classId) {
+        return classCSMapper.findByClassId(classId);
+    }
+
+    @Override
+    public List<ClassTCSEntity> findThreeByClassId(int classId) {
+        return classTCSMapper.findByClassId(classId);
     }
 
 }

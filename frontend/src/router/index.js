@@ -12,6 +12,8 @@ import AdminBaseInformation from "../components/AdminBaseInformation";
 import OneDay from "../components/OneDay";
 import StudentOneDay from "../components/StudentOneDay";
 import ThreeMeals from "../components/ThreeMeals";
+import ThreeMealsTotal from "../components/ThreeMealsTotal";
+import OneDayTotal from "../components/OneDayTotal";
 
 Vue.use(Router)
 const router = new Router({
@@ -40,14 +42,22 @@ const router = new Router({
           path: '/oneDay',
           component: OneDay,
           name: "一日消费分析"
-        },{
+        }, {
           path: '/studentOneDay',
           component: StudentOneDay,
           name: "学生日(月)消费分析"
-        },{
-        path: '/threeMeals',
+        }, {
+          path: '/threeMeals',
           component: ThreeMeals,
-          name:'三餐消费分析'
+          name: '三餐消费分析'
+        }, {
+          path: '/threeMealsTotal',
+          component: ThreeMealsTotal,
+          name: '三餐消费总和统计分析'
+        }, {
+          path: '/oneDayTotal',
+          component: OneDayTotal,
+          name: '消费总和统计分析'
         }
       ]
     }, {

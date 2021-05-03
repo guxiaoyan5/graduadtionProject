@@ -27,12 +27,14 @@
             </template>
             <el-submenu index="1-1">
               <template slot="title">一日消费</template>
-              <el-menu-item index="/oneDay">数据统计图</el-menu-item>
-              <el-menu-item index="/studentOneDay">学生数据统计图</el-menu-item>
+              <el-menu-item index="/oneDay">日(月)消费统计图</el-menu-item>
+              <el-menu-item index="/oneDayTotal">消费总和统计图</el-menu-item>
+<!--              <el-menu-item index="/studentOneDay">学生数据统计图</el-menu-item>-->
             </el-submenu>
             <el-submenu index="1-2">
               <template slot="title">一日三餐</template>
-              <el-menu-item index="/threeMeals">数据统计图</el-menu-item>
+              <el-menu-item index="/threeMeals">日(月)消费统计图</el-menu-item>
+              <el-menu-item index="/threeMealsTotal">消费总和统计图</el-menu-item>
             </el-submenu>
           </el-submenu>
           <el-submenu index="2">

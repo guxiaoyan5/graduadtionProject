@@ -12,6 +12,10 @@ public class QueryDataInput implements Serializable {
     public QueryDataInput() {
     }
 
+    public QueryDataInput(List<Node> id) {
+        this.id = id;
+    }
+
     public QueryDataInput(List<Node> id, boolean choice, List<Date> date) {
         this.id = id;
         this.choice = choice;

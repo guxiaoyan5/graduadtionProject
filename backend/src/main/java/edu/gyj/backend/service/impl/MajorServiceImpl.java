@@ -27,6 +27,10 @@ public class MajorServiceImpl implements MajorService {
     MajorDayTCSMapper majorDayTCSMapper;
     @Autowired
     MajorMonthTCSMapper majorMonthTCSMapper;
+    @Autowired
+    MajorTCSMapper majorTCSMapper;
+    @Autowired
+    MajorCSMapper majorCSMapper;
 
     @Override
     public List<MajorResult> getAll() {
@@ -79,16 +83,26 @@ public class MajorServiceImpl implements MajorService {
 
     @Override
     public List<MajorMonthTCSEntity> findThreeByMajorIdAndYearAndMonth(int majorId, int year, int month) {
-        return majorMonthTCSMapper.findByMajorIdAndYearAndMonth(majorId,year,month);
+        return majorMonthTCSMapper.findByMajorIdAndYearAndMonth(majorId, year, month);
     }
 
     @Override
     public List<MajorMonthTCSEntity> findThreeByMajorIdAndYear(int majorId, int year) {
-        return majorMonthTCSMapper.findByMajorIdAndYear(majorId,year);
+        return majorMonthTCSMapper.findByMajorIdAndYear(majorId, year);
     }
 
     @Override
     public List<MajorDayTCSEntity> findThreeByMajorIdAndDates(int majorId, Date start, Date end) {
-        return majorDayTCSMapper.findByDates(majorId,new java.sql.Date(start.getTime()), new java.sql.Date(end.getTime()));
+        return majorDayTCSMapper.findByDates(majorId, new java.sql.Date(start.getTime()), new java.sql.Date(end.getTime()));
+    }
+
+    @Override
+    public List<MajorCSEntity> findByMajorId(int majorId) {
+        return majorCSMapper.findByMajorId(majorId);
+    }
+
+    @Override
+    public List<MajorTCSEntity> findThreeByMajorId(int majorId) {
+        return majorTCSMapper.findByMajorId(majorId);
     }
 }

@@ -21,6 +21,10 @@ public class CollegeServiceImpl implements CollegeService {
     CollegeDayTCSMapper collegeDayTCSMapper;
     @Autowired
     CollegeMonthTCSMapper collegeMonthTCSMapper;
+    @Autowired
+    CollegeCSMapper collegeCSMapper;
+    @Autowired
+    CollegeTCSMapper collegeTCSMapper;
 
     @Override
     public List<CollegeEntity> findAll() {
@@ -80,5 +84,15 @@ public class CollegeServiceImpl implements CollegeService {
     @Override
     public List<CollegeDayTCSEntity> findThreeByCollegeIdAndDates(int collegeId, Date start, Date end) {
         return collegeDayTCSMapper.findByDates(collegeId, new java.sql.Date(start.getTime()), new java.sql.Date(end.getTime()));
+    }
+
+    @Override
+    public List<CollegeTCSEntity> findThreeByCollegeId(int collegeId) {
+        return collegeTCSMapper.findByCollegeId(collegeId);
+    }
+
+    @Override
+    public List<CollegeCSEntity> findByCollegeId(int collegeId) {
+        return collegeCSMapper.findByCollegeId(collegeId);
     }
 }
