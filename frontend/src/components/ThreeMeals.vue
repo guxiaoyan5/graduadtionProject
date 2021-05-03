@@ -68,18 +68,25 @@
         </el-card>
       </el-col>
     </el-row>
-    <el-row :gutter="20" style="margin-top: 10px;height: 350px">
-      <el-col :span="13" style="height: 300px">
+    <el-row :gutter="20" style="margin-top: 10px;height:500px">
+      <el-col :span="24" style="height: 450px">
         <el-card style="height:inherit;width: content-box;padding: 20px"
-                 body-style="height:100%;width: 100%;padding:0px">
+                 body-style="height:90%;width: 100%;padding:0px">
+          <div slot="header" class="clearfix">
+            <span>人均消费统计图</span>
+            <el-select v-model="nameData" filterable placeholder="请选择" @change="fetchData3" style="float: right;"size="mini">
+              <el-option
+                v-for="item in nameDataS"
+                :key="item"
+                :label="item"
+                :value="item">
+              </el-option>
+            </el-select>
+          </div>
+          <div id="chart3" ref="chart3" style="height:100%;width: 100%;"></div>
+        </el-card>
+      </el-col>
 
-        </el-card>
-      </el-col>
-      <el-col :span="10" style="height: 300px">
-        <el-card style="height:100%;width: 100%;padding: 20px"
-                 body-style="height:100%;width: 100%;padding:0px">
-        </el-card>
-      </el-col>
     </el-row>
   </div>
 </template>
@@ -182,12 +189,17 @@ export default {
       echarts1: '',
       echarts2: '',
       echarts3: '',
-      echarts4: ''
+      echarts4: '',
+      echartsData3: [],
+      nameData: '',
+      nameDataS: [],
+      dataResult3:[],
     };
   },
   mounted() {
     this.initChart1();
     this.initChart2();
+    this.initChart3();
   },
   methods: {
     onSubmit(formName) {
@@ -348,7 +360,68 @@ export default {
       this.echarts2.setOption(option);
       this.echarts2.hideLoading();
     },
-
+    initChart3() {
+      this.echarts3 = echarts.init(document.getElementById('chart3'));
+      let option = {
+        legend: {},
+        tooltip: {
+          trigger: 'axis',
+          showContent: true
+        },
+        dataset: {
+          source: [
+            // ['product', '2015', '2016', '2017', '2018', '2019', '2020'],
+            // ['Milk Tea', 56.5, 82.1, 88.7, 70.1, 53.4, 85.1],
+            // ['Matcha Latte', 51.1, 51.4, 55.1, 53.3, 73.8, 68.7],
+            // ['Cheese Cocoa', 40.1, 62.2, 69.5, 36.4, 45.2, 32.5],
+          ]
+        },
+        xAxis: {type: 'category'},
+        yAxis: {gridIndex: 0},
+        grid: {left: '45%'},
+        series: [
+          {type: 'line', smooth: true, seriesLayoutBy: 'row', emphasis: {focus: 'series'}},
+          {type: 'line', smooth: true, seriesLayoutBy: 'row', emphasis: {focus: 'series'}},
+          {type: 'line', smooth: true, seriesLayoutBy: 'row', emphasis: {focus: 'series'}},
+          {
+            type: 'pie',
+            id: 'pie',
+            radius: '30%',
+            center: ['25%', '50%'],
+            emphasis: {focus: 'data'},
+            // label: {
+            //     formatter: '{b}: {@2012} ({d}%)'
+            // },
+            // encode: {
+            //     itemName: 'product',
+            //     value: '2012',
+            //     tooltip: '2012'
+            // }
+          }
+        ]
+      };
+      let _this = this;
+      this.echarts3.on('updateAxisPointer', function (event) {
+        let xAxisInfo = event.axesInfo[0];
+        if (xAxisInfo) {
+          let dimension = xAxisInfo.value + 1;
+          _this.echarts3.setOption({
+            series: {
+              id: 'pie',
+              label: {
+                formatter: '{b}: {@[' + dimension + ']} ({d}%)'
+              },
+              encode: {
+                value: dimension,
+                tooltip: dimension
+              }
+            }
+          });
+        }
+      });
+      this.echarts3.setOption(option);
+      this.echarts3.hideLoading();
+    },
     fetchData() {
       this.echarts1.showLoading();
       this.echarts2.showLoading();
@@ -356,6 +429,7 @@ export default {
       this.Data.forEach(item => (
         name.push(item.name)
       ));
+      this.nameDataS = name;
       let date = new Set();
       if (this.formInline.choice) {
         this.Data.forEach(item => (
@@ -373,6 +447,7 @@ export default {
       date = Array.from(date).sort();
       let dataResult2 = [];
       let dataResult1 = [];
+      let dataResult3 = Array.from({length: name.length});
       let dataTempB = Array.from({length: date.length})
       let dataTempL = Array.from({length: date.length})
       let dataTempD = Array.from({length: date.length})
@@ -380,6 +455,22 @@ export default {
         dataTempB[i] = {value: Array.from({length: name.length}).map(item => (0)), time: date[i]}
         dataTempL[i] = {value: Array.from({length: name.length}).map(item => (0)), time: date[i]}
         dataTempD[i] = {value: Array.from({length: name.length}).map(item => (0)), time: date[i]}
+        dataResult3[i] = {
+          name: name[i],
+          source: [
+            Array.from({length: date.length + 1}),
+            Array.from({length: date.length + 1}).map(item => (0)),
+            Array.from({length: date.length + 1}).map(item => (0)),
+            Array.from({length: date.length + 1}).map(item => (0)),
+          ]
+        }
+        for (let j = 0; j < date.length; j++) {
+          dataResult3[i].source[0][j+1] = date[j];
+        }
+        dataResult3[i].source[0][0] = "product";
+        dataResult3[i].source[1][0] = "早餐";
+        dataResult3[i].source[2][0] = "午餐";
+        dataResult3[i].source[3][0] = "晚餐";
       }
       for (let i = 0; i < this.Data.length; i++) {
         let temp2 = {
@@ -414,6 +505,15 @@ export default {
               if (timeTemp === dataTempD[k].time && l === '晚') {
                 dataTempD[k].value[i] = this.Data[i].consumeThreeMonthData[j].consumption_average_money
               }
+              if (timeTemp === dataResult3[i].source[0][k+1] && l === '早') {
+                dataResult3[i].source[1][k+1] = this.Data[i].consumeThreeMonthData[j].consumption_student_average_money
+              }
+              if (timeTemp === dataResult3[i].source[0][k+1] && l === '午') {
+                dataResult3[i].source[2][k+1] = this.Data[i].consumeThreeMonthData[j].consumption_student_average_money
+              }
+              if (timeTemp === dataResult3[i].source[0][k+1] && l === '晚') {
+                dataResult3[i].source[3][k+1] = this.Data[i].consumeThreeMonthData[j].consumption_student_average_money
+              }
             }
           }
         } else {
@@ -436,6 +536,15 @@ export default {
               }
               if (timeTemp === dataTempD[k].time && l === '晚') {
                 dataTempD[k].value[i] = this.Data[i].consumeThreeDayData[j].consumption_average_money
+              }
+              if (timeTemp === dataResult3[i].source[0][k+1] && l === '早') {
+                dataResult3[i].source[1][k+1] = this.Data[i].consumeThreeDayData[j].consumption_student_average_money
+              }
+              if (timeTemp === dataResult3[i].source[0][k+1] && l === '午') {
+                dataResult3[i].source[2][k+1] = this.Data[i].consumeThreeDayData[j].consumption_student_average_money
+              }
+              if (timeTemp === dataResult3[i].source[0][k+1] && l === '晚') {
+                dataResult3[i].source[3][k+1] = this.Data[i].consumeThreeDayData[j].consumption_student_average_money
               }
             }
 
@@ -511,9 +620,24 @@ export default {
           },
         ]
       });
+      this.dataResult3 = dataResult3;
       this.echarts1.hideLoading();
       this.echarts2.hideLoading();
     },
+    fetchData3(){
+      let data = [];
+      for (let i = 0; i < this.dataResult3.length; i++) {
+        if (this.dataResult3[i].name === this.nameData) {
+          data = this.dataResult3[i].source;
+          break;
+        }
+      }
+      this.echarts3.setOption({
+        dataset: {
+          source: data
+        },
+      })
+    }
   }
 }
 </script>
