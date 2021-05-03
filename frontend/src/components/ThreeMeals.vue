@@ -10,7 +10,7 @@
               <el-cascader
                 style="width: 300px"
                 placeholder="请选择学院或专业或班级"
-                :props="props"
+                :props="props" rmI
                 :model="formInline.id"
                 collapse-tags
                 ref="id"
@@ -54,31 +54,30 @@
         </el-card>
       </el-col>
     </el-row>
-    <el-row :gutter="20" style="margin-top: 10px;height: 350px">
-      <el-col :span="12" style="height: 300px">
+    <el-row :gutter="20" style="margin-top: 10px;height: 440px">
+      <el-col :span="13" style="height: 400px">
         <el-card style="height:inherit;width: content-box;padding: 20px"
                  body-style="height:100%;width: 100%;padding:0px">
-
+          <div id="chart1" ref="chart1" style="height:100%;width: 100%"></div>
         </el-card>
       </el-col>
-      <el-col :span="12" style="height: 300px">
-        <el-card style="height:inherit;width: content-box;padding: 20px"
+      <el-col :span="10" style="height: 400px;">
+        <el-card style="height:100%;width: 100%;padding: 20px"
                  body-style="height:100%;width: 100%;padding:0px">
-
+          <div id="chart2" ref="chart2" style="height:100%;width: 130%;"></div>
         </el-card>
       </el-col>
     </el-row>
     <el-row :gutter="20" style="margin-top: 10px;height: 350px">
-      <el-col :span="10" style="height: 300px">
+      <el-col :span="13" style="height: 300px">
         <el-card style="height:inherit;width: content-box;padding: 20px"
                  body-style="height:100%;width: 100%;padding:0px">
 
         </el-card>
       </el-col>
-      <el-col :span="12" style="height: 300px;">
+      <el-col :span="10" style="height: 300px">
         <el-card style="height:100%;width: 100%;padding: 20px"
                  body-style="height:100%;width: 100%;padding:0px">
-
         </el-card>
       </el-col>
     </el-row>
@@ -88,6 +87,15 @@
 <script>
 import axios from "axios";
 
+const echarts = require('echarts/lib/echarts');
+require('echarts/lib/component/title');
+require('echarts/lib/component/legend');
+require('echarts/lib/chart/radar');
+require('echarts/lib/component/timeline');
+require('echarts/lib/component/tooltip');
+require('echarts/lib/component/grid');
+require('echarts/lib/chart/bar');
+require('echarts/lib/chart/pie');
 export default {
   name: "ThreeMeals",
   data() {
@@ -170,9 +178,16 @@ export default {
           }
         }]
       },
-      monthData: [],
-      // myChart1: ''
+      Data: [],
+      echarts1: '',
+      echarts2: '',
+      echarts3: '',
+      echarts4: ''
     };
+  },
+  mounted() {
+    this.initChart1();
+    this.initChart2();
   },
   methods: {
     onSubmit(formName) {
@@ -193,8 +208,7 @@ export default {
             choice: _this.formInline.choice,
             date: _this.formInline.date
           }).then(function (response) {
-            _this.monthData = response.data.data;
-            console.log(_this.monthData)
+            _this.Data = response.data.data;
           }).catch(function (error) {
             console.log('error!!');
             console.log(error)
@@ -205,6 +219,300 @@ export default {
           return false;
         }
       });
+    },
+    initChart1() {
+      this.echarts1 = echarts.init(document.getElementById('chart1'));
+      let option = {
+        baseOption: {
+          timeline: {
+            axisType: 'category',
+            // realtime: false,
+            // loop: false,
+            autoPlay: true,
+            // currentIndex: 2,
+            playInterval: 1000,
+            // controlStyle: {
+            //     position: 'left'
+            // },
+            data: [],
+            label: {
+              formatter: function (s) {
+                return (new Date(s)).getFullYear();
+              }
+            }
+          },
+          title: {
+            subtext: '平均每人次消费统计图'
+          },
+          tooltip: {},
+          legend: {
+            left: 'right',
+            data: ['早餐', '午餐', '晚餐'],
+            // selected: {
+            //   'GDP': false, '金融': false, '房地产': false
+            // }
+          },
+          calculable: true,
+          grid: {
+            top: 80,
+            bottom: 100,
+            tooltip: {
+              trigger: 'axis',
+              axisPointer: {
+                type: 'shadow',
+                label: {
+                  show: true,
+                  formatter: function (params) {
+                    return params.value.replace('\n', '');
+                  }
+                }
+              }
+            }
+          },
+          xAxis: [{
+            'type': 'category',
+            'axisLabel': {'interval': 0},
+            'data': [],
+            splitLine: {show: false}
+          }],
+          yAxis: [{
+            type: 'value',
+            name: '消费（元）'
+          }],
+          series: [
+            {name: '早餐', type: 'bar'},
+            {name: '午餐', type: 'bar'},
+            {name: '晚餐', type: 'bar'},
+            // {
+            //   name: '消费占比',
+            //   type: 'pie',
+            //   center: ['75%', '35%'],
+            //   radius: '28%',
+            //   z: 100
+            // }
+          ]
+        },
+        options: [],
+      };
+      this.echarts1.setOption(option);
+      this.echarts1.hideLoading();
+    },
+    initChart2() {
+      this.echarts2 = echarts.init(document.getElementById('chart2'));
+      let option = {
+        color: ['#67F9D8', '#FFE434', '#56A3F1', '#FF917C'],
+        title: {
+          text: '三餐消费总和'
+        },
+        legend: {
+          data: []
+        },
+        radar:
+          {
+            indicator: [
+              {text: '早餐'},
+              {text: '午餐'},
+              {text: '晚餐'},
+            ],
+            center: ['25%', '50%'],
+            radius: 120,
+            startAngle: 90,
+            splitNumber: 4,
+            shape: 'circle',
+            name: {
+              formatter: '【{value}】',
+              textStyle: {
+                color: '#428BD4'
+              }
+            },
+            splitArea: {
+              areaStyle: {
+                color: ['#77EADF', '#26C3BE', '#64AFE9', '#428BD4'],
+                shadowColor: 'rgba(0, 0, 0, 0.2)',
+                shadowBlur: 10
+              }
+            },
+            axisLine: {
+              lineStyle: {
+                color: 'rgba(211, 253, 250, 0.8)'
+              }
+            },
+            splitLine: {
+              lineStyle: {
+                color: 'rgba(211, 253, 250, 0.8)'
+              }
+            }
+          },
+        series: []
+      };
+      this.echarts2.setOption(option);
+      this.echarts2.hideLoading();
+    },
+
+    fetchData() {
+      this.echarts1.showLoading();
+      this.echarts2.showLoading();
+      let name = [];
+      this.Data.forEach(item => (
+        name.push(item.name)
+      ));
+      let date = new Set();
+      if (this.formInline.choice) {
+        this.Data.forEach(item => (
+          item.consumeThreeMonthData.forEach(item1 => (
+            date.add(item1.year + "-" + item1.month)
+          ))
+        ));
+      } else {
+        this.Data.forEach(item => (
+          item.consumeThreeDayData.forEach(item1 => (
+            date.add(item1.date + "")
+          ))
+        ));
+      }
+      date = Array.from(date).sort();
+      let dataResult2 = [];
+      let dataResult1 = [];
+      let dataTempB = Array.from({length: date.length})
+      let dataTempL = Array.from({length: date.length})
+      let dataTempD = Array.from({length: date.length})
+      for (let i = 0; i < date.length; i++) {
+        dataTempB[i] = {value: Array.from({length: name.length}).map(item => (0)), time: date[i]}
+        dataTempL[i] = {value: Array.from({length: name.length}).map(item => (0)), time: date[i]}
+        dataTempD[i] = {value: Array.from({length: name.length}).map(item => (0)), time: date[i]}
+      }
+      for (let i = 0; i < this.Data.length; i++) {
+        let temp2 = {
+          value: [],
+          name: this.Data[i].name,
+          label: {
+            show: true,
+            formatter: function (params) {
+              return params.value;
+            }
+          }
+        };
+        let breakfast = 0, lunch = 0, dinner = 0;
+        if (this.formInline.choice) {
+          for (let j = 0; j < this.Data[i].consumeThreeMonthData.length; j++) {
+            let l = this.Data[i].consumeThreeMonthData[j].consumption_category
+            if (l === '早') {
+              breakfast += this.Data[i].consumeThreeMonthData[j].consumption_total_money;
+            } else if (l === '午') {
+              lunch += this.Data[i].consumeThreeMonthData[j].consumption_total_money;
+            } else {
+              dinner += this.Data[i].consumeThreeMonthData[j].consumption_total_money;
+            }
+            for (let k = 0; k < date.length; k++) {
+              let timeTemp = this.Data[i].consumeThreeMonthData[j].year + '-' + this.Data[i].consumeThreeMonthData[j].month
+              if (timeTemp === dataTempB[k].time && l === '早') {
+                dataTempB[k].value[i] = this.Data[i].consumeThreeMonthData[j].consumption_average_money
+              }
+              if (timeTemp === dataTempL[k].time && l === '午') {
+                dataTempL[k].value[i] = this.Data[i].consumeThreeMonthData[j].consumption_average_money
+              }
+              if (timeTemp === dataTempD[k].time && l === '晚') {
+                dataTempD[k].value[i] = this.Data[i].consumeThreeMonthData[j].consumption_average_money
+              }
+            }
+          }
+        } else {
+          for (let j = 0; j < this.Data[i].consumeThreeDayData.length; j++) {
+            let l = this.Data[i].consumeThreeDayData[j].consumption_category
+            if (l === '早') {
+              breakfast += this.Data[i].consumeThreeDayData[j].consumption_total_money;
+            } else if (l === '午') {
+              lunch += this.Data[i].consumeThreeDayData[j].consumption_total_money;
+            } else {
+              dinner += this.Data[i].consumeThreeDayData[j].consumption_total_money;
+            }
+            for (let k = 0; k < date.length; k++) {
+              let timeTemp = this.Data[i].consumeThreeDayData[j].year + '-' + this.Data[i].consumeThreeDayData[j].month
+              if (timeTemp === dataTempB[k].time && l === '早') {
+                dataTempB[k].value[i] = this.Data[i].consumeThreeDayData[j].consumption_average_money
+              }
+              if (timeTemp === dataTempL[k].time && l === '午') {
+                dataTempL[k].value[i] = this.Data[i].consumeThreeDayData[j].consumption_average_money
+              }
+              if (timeTemp === dataTempD[k].time && l === '晚') {
+                dataTempD[k].value[i] = this.Data[i].consumeThreeDayData[j].consumption_average_money
+              }
+            }
+
+          }
+        }
+        temp2.value.push(breakfast, lunch, dinner);
+        dataResult2.push(temp2)
+      }
+
+      function dataFormatter(obj, nameData) {
+        let temp;
+        let result = []
+        for (let i = 0; i < obj.length; i++) {
+          let max = 0;
+          let sum = 0;
+          temp = obj[i];
+          let resultTemp = []
+          for (let j = 0; j < temp.value.length; j++) {
+            sum += temp.value[i];
+            resultTemp.push({name: nameData[j], value: temp.value[j]})
+          }
+          result[temp.time] = {value: resultTemp, sum: sum};
+        }
+        return result;
+      }
+
+      dataTempB = dataFormatter(dataTempB, name)
+      dataTempL = dataFormatter(dataTempL, name)
+      dataTempD = dataFormatter(dataTempD, name)
+      for (let i in dataTempB) {
+        dataResult1.push({
+          title: {text: i + "三餐消费"},
+          series: [
+            {data: dataTempB[i].value},
+            {data: dataTempL[i].value},
+            {data: dataTempD[i].value},
+            // {
+            //   data: [
+            //     {name: '早餐', value: dataTempB[i].sum},
+            //     {name: '午餐', value: dataTempL[i].sum},
+            //     {name: '晚餐', value: dataTempD[i].sum},
+            //   ]
+            // }
+          ]
+        })
+      }
+      console.log(dataResult1)
+      this.echarts1.setOption({
+        baseOption: {
+          timeline: {
+            data: date,
+          },
+          xAxis: [{
+            'data': name,
+          }]
+        },
+        options: dataResult1
+      });
+      this.echarts2.setOption({
+        legend: {
+          data: name
+        },
+        series: [
+          {
+            name: '雷达图',
+            type: 'radar',
+            emphasis: {
+              lineStyle: {
+                width: 4
+              }
+            },
+            data: dataResult2
+          },
+        ]
+      });
+      this.echarts1.hideLoading();
+      this.echarts2.hideLoading();
     },
   }
 }

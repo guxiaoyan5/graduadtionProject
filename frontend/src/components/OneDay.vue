@@ -54,31 +54,31 @@
         </el-card>
       </el-col>
     </el-row>
-    <el-row :gutter="20" style="margin-top: 10px;height: 350px">
-      <el-col :span="12" style="height: 300px">
+    <el-row :gutter="20" style="margin-top: 10px;height: 450px">
+      <el-col :span="12" style="height: 400px">
         <el-card style="height:inherit;width: content-box;padding: 20px"
                  body-style="height:100%;width: 100%;padding:0px">
           <div id="chart" ref="chart" style="height:100%;width: 100%"></div>
         </el-card>
       </el-col>
-      <el-col :span="12" style="height: 300px">
-        <el-card style="height:inherit;width: content-box;padding: 20px"
-                 body-style="height:100%;width: 100%;padding:0px">
-          <div id="chart3" ref="chart3" style="height:100%;width: 100%"></div>
-        </el-card>
-      </el-col>
-    </el-row>
-    <el-row :gutter="20" style="margin-top: 10px;height: 350px">
-      <el-col :span="10" style="height: 300px">
+      <el-col :span="12" style="height: 400px">
         <el-card style="height:inherit;width: content-box;padding: 20px"
                  body-style="height:100%;width: 100%;padding:0px">
           <div id="chart1" ref="chart1" style="height: 100%;width: 100%"></div>
         </el-card>
       </el-col>
-      <el-col :span="12" style="height: 300px;">
-        <el-card style="height:100%;width: 100%;padding: 20px"
+    </el-row>
+    <el-row :gutter="20" style="margin-top: 10px;height: 350px">
+      <el-col :span="13" style="height: 300px;">
+        <el-card style="height:inherit;width: content-box;padding: 20px"
                  body-style="height:100%;width: 100%;padding:0px">
-          <div id="chart2" ref="chart2" style="height: 100%;width: 100%"></div>
+          <div id="chart2" ref="chart2" style="height: 100%;width: 100%;margin-left: 10px"></div>
+        </el-card>
+      </el-col>
+      <el-col :span="10" style="height: 300px">
+        <el-card style="height:inherit;width: content-box;padding: 20px"
+                 body-style="height:100%;width: 100%;padding:0px">
+          <div id="chart3" ref="chart3" style="height:100%;width: 100%"></div>
         </el-card>
       </el-col>
     </el-row>
@@ -216,7 +216,6 @@ export default {
             date: _this.formInline.date
           }).then(function (response) {
             _this.monthData = response.data.data;
-            console.log(_this.monthData)
           }).catch(function (error) {
             console.log('error!!');
             console.log(error)

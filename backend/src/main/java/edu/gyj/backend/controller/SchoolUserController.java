@@ -672,6 +672,7 @@ public class SchoolUserController {
                         }
                     }
                 }
+                consumeMonthResults.add(consumeMonthResult);
             }
             return new Result(1, "加载成功", consumeMonthResults);
         }else {
