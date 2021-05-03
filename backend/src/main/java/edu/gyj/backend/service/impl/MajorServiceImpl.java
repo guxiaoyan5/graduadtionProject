@@ -1,14 +1,9 @@
 package edu.gyj.backend.service.impl;
 
 import edu.gyj.backend.entity.college.CollegeEntity;
-import edu.gyj.backend.entity.major.MajorDayCSEntity;
-import edu.gyj.backend.entity.major.MajorEntity;
-import edu.gyj.backend.entity.major.MajorMonthCSEntity;
+import edu.gyj.backend.entity.major.*;
 import edu.gyj.backend.mapper.college.CollegeMapper;
-import edu.gyj.backend.mapper.major.MajorCSMapper;
-import edu.gyj.backend.mapper.major.MajorDayCSMapper;
-import edu.gyj.backend.mapper.major.MajorMapper;
-import edu.gyj.backend.mapper.major.MajorMonthCSMapper;
+import edu.gyj.backend.mapper.major.*;
 import edu.gyj.backend.result.MajorResult;
 import edu.gyj.backend.service.MajorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +23,10 @@ public class MajorServiceImpl implements MajorService {
     MajorMonthCSMapper majorMonthCSMapper;
     @Autowired
     MajorDayCSMapper majorDayCSMapper;
+    @Autowired
+    MajorDayTCSMapper majorDayTCSMapper;
+    @Autowired
+    MajorMonthTCSMapper majorMonthTCSMapper;
 
     @Override
     public List<MajorResult> getAll() {
@@ -75,6 +74,21 @@ public class MajorServiceImpl implements MajorService {
 
     @Override
     public List<MajorDayCSEntity> findByMajorIdAndDates(int majorId, Date start, Date end) {
-        return majorDayCSMapper.findByDates(majorId,new java.sql.Date(start.getTime()),new java.sql.Date(end.getTime()));
+        return majorDayCSMapper.findByDates(majorId, new java.sql.Date(start.getTime()), new java.sql.Date(end.getTime()));
+    }
+
+    @Override
+    public List<MajorMonthTCSEntity> findThreeByMajorIdAndYearAndMonth(int majorId, int year, int month) {
+        return majorMonthTCSMapper.findByMajorIdAndYearAndMonth(majorId,year,month);
+    }
+
+    @Override
+    public List<MajorMonthTCSEntity> findThreeByMajorIdAndYear(int majorId, int year) {
+        return majorMonthTCSMapper.findByMajorIdAndYear(majorId,year);
+    }
+
+    @Override
+    public List<MajorDayTCSEntity> findThreeByMajorIdAndDates(int majorId, Date start, Date end) {
+        return majorDayTCSMapper.findByDates(majorId,new java.sql.Date(start.getTime()), new java.sql.Date(end.getTime()));
     }
 }

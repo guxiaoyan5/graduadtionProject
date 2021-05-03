@@ -6,15 +6,9 @@ import edu.gyj.backend.Input.DataInput;
 import edu.gyj.backend.Input.Node;
 import edu.gyj.backend.Input.QueryDataInput;
 import edu.gyj.backend.entity.SchoolUserEntity;
-import edu.gyj.backend.entity.classCS.ClassDayCSEntity;
-import edu.gyj.backend.entity.classCS.ClassEntity;
-import edu.gyj.backend.entity.classCS.ClassMonthCSEntity;
-import edu.gyj.backend.entity.college.CollegeDayCSEntity;
-import edu.gyj.backend.entity.college.CollegeEntity;
-import edu.gyj.backend.entity.college.CollegeMonthCSEntity;
-import edu.gyj.backend.entity.major.MajorDayCSEntity;
-import edu.gyj.backend.entity.major.MajorEntity;
-import edu.gyj.backend.entity.major.MajorMonthCSEntity;
+import edu.gyj.backend.entity.classCS.*;
+import edu.gyj.backend.entity.college.*;
+import edu.gyj.backend.entity.major.*;
 import edu.gyj.backend.result.*;
 import edu.gyj.backend.service.ClassService;
 import edu.gyj.backend.service.CollegeService;
@@ -363,11 +357,11 @@ public class SchoolUserController {
             List<ConsumeDayResult> consumeDayResults = new ArrayList<>();
             Date startDate = queryDataInput.getDate().get(0);
             Date endDate = queryDataInput.getDate().get(1);
-            for(Node node:queryDataInput.getId()){
-                ConsumeDayResult consumeDayResult = new ConsumeDayResult(node.getValue(),node.getLabel());
-                if(node.getLevel()==1){
+            for (Node node : queryDataInput.getId()) {
+                ConsumeDayResult consumeDayResult = new ConsumeDayResult(node.getValue(), node.getLabel());
+                if (node.getLevel() == 1) {
                     List<CollegeDayCSEntity> collegeDayCSEntities = collegeService.findByCollegeIdAndDates(node.getValue(),
-                            startDate,endDate);
+                            startDate, endDate);
                     List<ConsumeDayData> consumeDayData = new ArrayList<>();
                     collegeDayCSEntities.forEach(collegeDayCSEntity -> consumeDayData.add(new ConsumeDayData(
                             collegeDayCSEntity.getDay(),
@@ -382,9 +376,9 @@ public class SchoolUserController {
                             collegeDayCSEntity.getStudent_low_count()
                     )));
                     consumeDayResult.getConsumeDayData().addAll(consumeDayData);
-                }else if(node.getLevel() == 2){
+                } else if (node.getLevel() == 2) {
                     List<MajorDayCSEntity> majorDayCSEntities = majorService.findByMajorIdAndDates(node.getValue(),
-                            startDate,endDate);
+                            startDate, endDate);
                     List<ConsumeDayData> consumeDayData = new ArrayList<>();
                     majorDayCSEntities.forEach(classDayCSEntity -> consumeDayData.add(new ConsumeDayData(
                             classDayCSEntity.getDay(),
@@ -399,9 +393,9 @@ public class SchoolUserController {
                             classDayCSEntity.getStudent_low_count()
                     )));
                     consumeDayResult.getConsumeDayData().addAll(consumeDayData);
-                }else if(node.getLevel() == 3){
+                } else if (node.getLevel() == 3) {
                     List<ClassDayCSEntity> classDayCSEntities = classService.findByClassIdAndDates(node.getValue(),
-                            startDate,endDate);
+                            startDate, endDate);
                     List<ConsumeDayData> consumeDayData = new ArrayList<>();
                     classDayCSEntities.forEach(classDayCSEntity -> consumeDayData.add(new ConsumeDayData(
                             classDayCSEntity.getDay(),
@@ -419,12 +413,331 @@ public class SchoolUserController {
                 }
                 consumeDayResults.add(consumeDayResult);
             }
-            return new Result(1,"加载成功",consumeDayResults);
+            return new Result(1, "加载成功", consumeDayResults);
         }
     }
+
     @ResponseBody
-    @RequestMapping(value = "/getThreeMeals",method = RequestMethod.POST)
-    public Result getThreeMeals(@RequestBody QueryDataInput queryDataInput){
-        return null;
+    @RequestMapping(value = "/getThreeMeals", method = RequestMethod.POST)
+    public Result getThreeMeals(@RequestBody QueryDataInput queryDataInput) {
+        Calendar calendar = Calendar.getInstance();
+        if(queryDataInput.isChoice()){
+            calendar.setTime(queryDataInput.getDate().get(0));
+            int startYear = calendar.get(Calendar.YEAR);
+            int startMonth = calendar.get(Calendar.MONTH) + 1;
+            calendar.setTime(queryDataInput.getDate().get(1));
+            int endYear = calendar.get(Calendar.YEAR);
+            int endMonth = calendar.get(Calendar.MONTH) + 1;
+            List<ConsumeMonthResult> consumeMonthResults = new ArrayList<>();
+            for(Node node: queryDataInput.getId()){
+                ConsumeMonthResult consumeMonthResult = new ConsumeMonthResult(node.getValue(), node.getLabel());
+                if (node.getLevel() == 1) {
+                    if (startYear != endYear) {
+                        for (int i = startMonth; i <= 12; i++) {
+                            List<CollegeMonthTCSEntity> collegeMonthTCSEntities = collegeService.findThreeByCollegeIdAndYearAndMonth(node.getValue(), startYear, i);
+                            List<ConsumeThreeMonthData> consumeThreeMonthData = new ArrayList<>();
+                            collegeMonthTCSEntities.forEach(collegeMonthTCSEntity -> consumeThreeMonthData.add(new ConsumeThreeMonthData(
+                                    collegeMonthTCSEntity.getConsumption_category(),
+                                    collegeMonthTCSEntity.getMonth(),
+                                    collegeMonthTCSEntity.getYear(),
+                                    collegeMonthTCSEntity.getConsumption_count(),
+                                    collegeMonthTCSEntity.getConsumption_total_money(),
+                                    collegeMonthTCSEntity.getConsumption_average_money(),
+                                    collegeMonthTCSEntity.getConsumption_student_average_money(),
+                                    collegeMonthTCSEntity.getStudent_count(),
+                                    collegeMonthTCSEntity.getConsumption_low_count(),
+                                    collegeMonthTCSEntity.getConsumption_high_count(),
+                                    collegeMonthTCSEntity.getStudent_low_count(),
+                                    collegeMonthTCSEntity.getStudent_low_count()
+                            )));
+                            consumeMonthResult.getConsumeThreeMonthData().addAll(consumeThreeMonthData);
+                        }
+                        for (int i = startYear + 1; i < endYear; i++) {
+                            List<CollegeMonthTCSEntity> collegeMonthTCSEntities = collegeService.findThreeByCollegeIdAndYear(node.getValue(), i);
+                            List<ConsumeThreeMonthData> consumeThreeMonthData = new ArrayList<>();
+                            collegeMonthTCSEntities.forEach(collegeMonthTCSEntity -> consumeThreeMonthData.add(new ConsumeThreeMonthData(
+                                    collegeMonthTCSEntity.getConsumption_category(),
+                                    collegeMonthTCSEntity.getMonth(),
+                                    collegeMonthTCSEntity.getYear(),
+                                    collegeMonthTCSEntity.getConsumption_count(),
+                                    collegeMonthTCSEntity.getConsumption_total_money(),
+                                    collegeMonthTCSEntity.getConsumption_average_money(),
+                                    collegeMonthTCSEntity.getConsumption_student_average_money(),
+                                    collegeMonthTCSEntity.getStudent_count(),
+                                    collegeMonthTCSEntity.getConsumption_low_count(),
+                                    collegeMonthTCSEntity.getConsumption_high_count(),
+                                    collegeMonthTCSEntity.getStudent_low_count(),
+                                    collegeMonthTCSEntity.getStudent_low_count()
+                            )));
+                            consumeMonthResult.getConsumeThreeMonthData().addAll(consumeThreeMonthData);
+                        }
+                        for (int i = endMonth; i > 0; i--) {
+                            List<CollegeMonthTCSEntity> collegeMonthTCSEntities = collegeService.findThreeByCollegeIdAndYearAndMonth(node.getValue(), startYear, i);
+                            List<ConsumeThreeMonthData> consumeThreeMonthData = new ArrayList<>();
+                            collegeMonthTCSEntities.forEach(collegeMonthTCSEntity -> consumeThreeMonthData.add(new ConsumeThreeMonthData(
+                                    collegeMonthTCSEntity.getConsumption_category(),
+                                    collegeMonthTCSEntity.getMonth(),
+                                    collegeMonthTCSEntity.getYear(),
+                                    collegeMonthTCSEntity.getConsumption_count(),
+                                    collegeMonthTCSEntity.getConsumption_total_money(),
+                                    collegeMonthTCSEntity.getConsumption_average_money(),
+                                    collegeMonthTCSEntity.getConsumption_student_average_money(),
+                                    collegeMonthTCSEntity.getStudent_count(),
+                                    collegeMonthTCSEntity.getConsumption_low_count(),
+                                    collegeMonthTCSEntity.getConsumption_high_count(),
+                                    collegeMonthTCSEntity.getStudent_low_count(),
+                                    collegeMonthTCSEntity.getStudent_low_count()
+                            )));
+                            consumeMonthResult.getConsumeThreeMonthData().addAll(consumeThreeMonthData);
+                        }
+                    } else {
+                        for (int i = startMonth; i <= endMonth; i++) {
+                            List<CollegeMonthTCSEntity> collegeMonthTCSEntities = collegeService.findThreeByCollegeIdAndYearAndMonth(node.getValue(), startYear, i);
+                            List<ConsumeThreeMonthData> consumeThreeMonthData = new ArrayList<>();
+                            collegeMonthTCSEntities.forEach(collegeMonthTCSEntity -> consumeThreeMonthData.add(new ConsumeThreeMonthData(
+                                    collegeMonthTCSEntity.getConsumption_category(),
+                                    collegeMonthTCSEntity.getMonth(),
+                                    collegeMonthTCSEntity.getYear(),
+                                    collegeMonthTCSEntity.getConsumption_count(),
+                                    collegeMonthTCSEntity.getConsumption_total_money(),
+                                    collegeMonthTCSEntity.getConsumption_average_money(),
+                                    collegeMonthTCSEntity.getConsumption_student_average_money(),
+                                    collegeMonthTCSEntity.getStudent_count(),
+                                    collegeMonthTCSEntity.getConsumption_low_count(),
+                                    collegeMonthTCSEntity.getConsumption_high_count(),
+                                    collegeMonthTCSEntity.getStudent_low_count(),
+                                    collegeMonthTCSEntity.getStudent_low_count()
+                            )));
+                            consumeMonthResult.getConsumeThreeMonthData().addAll(consumeThreeMonthData);
+                        }
+                    }
+                } else if (node.getLevel() == 2) {
+                    if (startYear != endYear) {
+                        for (int i = startMonth; i <= 12; i++) {
+                            List<MajorMonthTCSEntity> majorMonthTCSEntities = majorService.findThreeByMajorIdAndYearAndMonth(node.getValue(), startYear, i);
+                            List<ConsumeThreeMonthData> consumeThreeMonthData = new ArrayList<>();
+                            majorMonthTCSEntities.forEach(majorMonthTCSEntity -> consumeThreeMonthData.add(new ConsumeThreeMonthData(
+                                    majorMonthTCSEntity.getConsumption_category(),
+                                    majorMonthTCSEntity.getMonth(),
+                                    majorMonthTCSEntity.getYear(),
+                                    majorMonthTCSEntity.getConsumption_count(),
+                                    majorMonthTCSEntity.getConsumption_total_money(),
+                                    majorMonthTCSEntity.getConsumption_average_money(),
+                                    majorMonthTCSEntity.getConsumption_student_average_money(),
+                                    majorMonthTCSEntity.getStudent_count(),
+                                    majorMonthTCSEntity.getConsumption_low_count(),
+                                    majorMonthTCSEntity.getConsumption_high_count(),
+                                    majorMonthTCSEntity.getStudent_low_count(),
+                                    majorMonthTCSEntity.getStudent_low_count()
+                            )));
+                            consumeMonthResult.getConsumeThreeMonthData().addAll(consumeThreeMonthData);
+                        }
+                        for (int i = startYear + 1; i < endYear; i++) {
+                            List<MajorMonthTCSEntity> majorMonthTCSEntities = majorService.findThreeByMajorIdAndYear(node.getValue(), i);
+                            List<ConsumeThreeMonthData> consumeThreeMonthData = new ArrayList<>();
+                            majorMonthTCSEntities.forEach(majorMonthTCSEntity -> consumeThreeMonthData.add(new ConsumeThreeMonthData(
+                                    majorMonthTCSEntity.getConsumption_category(),
+                                    majorMonthTCSEntity.getMonth(),
+                                    majorMonthTCSEntity.getYear(),
+                                    majorMonthTCSEntity.getConsumption_count(),
+                                    majorMonthTCSEntity.getConsumption_total_money(),
+                                    majorMonthTCSEntity.getConsumption_average_money(),
+                                    majorMonthTCSEntity.getConsumption_student_average_money(),
+                                    majorMonthTCSEntity.getStudent_count(),
+                                    majorMonthTCSEntity.getConsumption_low_count(),
+                                    majorMonthTCSEntity.getConsumption_high_count(),
+                                    majorMonthTCSEntity.getStudent_low_count(),
+                                    majorMonthTCSEntity.getStudent_low_count()
+                            )));
+                            consumeMonthResult.getConsumeThreeMonthData().addAll(consumeThreeMonthData);
+                        }
+                        for (int i = endMonth; i > 0; i--) {
+                            List<MajorMonthTCSEntity> majorMonthTCSEntities = majorService.findThreeByMajorIdAndYearAndMonth(node.getValue(), startYear, i);
+                            List<ConsumeThreeMonthData> consumeThreeMonthData = new ArrayList<>();
+                            majorMonthTCSEntities.forEach(majorMonthTCSEntity -> consumeThreeMonthData.add(new ConsumeThreeMonthData(
+                                    majorMonthTCSEntity.getConsumption_category(),
+                                    majorMonthTCSEntity.getMonth(),
+                                    majorMonthTCSEntity.getYear(),
+                                    majorMonthTCSEntity.getConsumption_count(),
+                                    majorMonthTCSEntity.getConsumption_total_money(),
+                                    majorMonthTCSEntity.getConsumption_average_money(),
+                                    majorMonthTCSEntity.getConsumption_student_average_money(),
+                                    majorMonthTCSEntity.getStudent_count(),
+                                    majorMonthTCSEntity.getConsumption_low_count(),
+                                    majorMonthTCSEntity.getConsumption_high_count(),
+                                    majorMonthTCSEntity.getStudent_low_count(),
+                                    majorMonthTCSEntity.getStudent_low_count()
+                            )));
+                            consumeMonthResult.getConsumeThreeMonthData().addAll(consumeThreeMonthData);
+                        }
+                    } else {
+                        for (int i = startMonth; i <= endMonth; i++) {
+                            List<MajorMonthTCSEntity> majorMonthTCSEntities = majorService.findThreeByMajorIdAndYearAndMonth(node.getValue(), startYear, i);
+                            List<ConsumeThreeMonthData> consumeThreeMonthData = new ArrayList<>();
+                            majorMonthTCSEntities.forEach(majorMonthTCSEntity -> consumeThreeMonthData.add(new ConsumeThreeMonthData(
+                                    majorMonthTCSEntity.getConsumption_category(),
+                                    majorMonthTCSEntity.getMonth(),
+                                    majorMonthTCSEntity.getYear(),
+                                    majorMonthTCSEntity.getConsumption_count(),
+                                    majorMonthTCSEntity.getConsumption_total_money(),
+                                    majorMonthTCSEntity.getConsumption_average_money(),
+                                    majorMonthTCSEntity.getConsumption_student_average_money(),
+                                    majorMonthTCSEntity.getStudent_count(),
+                                    majorMonthTCSEntity.getConsumption_low_count(),
+                                    majorMonthTCSEntity.getConsumption_high_count(),
+                                    majorMonthTCSEntity.getStudent_low_count(),
+                                    majorMonthTCSEntity.getStudent_low_count()
+                            )));
+                            consumeMonthResult.getConsumeThreeMonthData().addAll(consumeThreeMonthData);
+                        }
+                    }
+                } else if (node.getLevel() == 3) {
+                    if (startYear != endYear) {
+                        for (int i = startMonth; i <= 12; i++) {
+                            List<ClassMonthTCSEntity> classMonthTCSEntities = classService.findThreeByClassIdAndYearAndMonth(node.getValue(), startYear, i);
+                            List<ConsumeThreeMonthData> consumeThreeMonthData = new ArrayList<>();
+                            classMonthTCSEntities.forEach(classMonthTCSEntity -> consumeThreeMonthData.add(new ConsumeThreeMonthData(
+                                    classMonthTCSEntity.getConsumption_category(),
+                                    classMonthTCSEntity.getMonth(),
+                                    classMonthTCSEntity.getYear(),
+                                    classMonthTCSEntity.getConsumption_count(),
+                                    classMonthTCSEntity.getConsumption_total_money(),
+                                    classMonthTCSEntity.getConsumption_average_money(),
+                                    classMonthTCSEntity.getConsumption_student_average_money(),
+                                    classMonthTCSEntity.getStudent_count(),
+                                    classMonthTCSEntity.getConsumption_low_count(),
+                                    classMonthTCSEntity.getConsumption_high_count(),
+                                    classMonthTCSEntity.getStudent_low_count(),
+                                    classMonthTCSEntity.getStudent_low_count()
+                            )));
+                            consumeMonthResult.getConsumeThreeMonthData().addAll(consumeThreeMonthData);
+                        }
+                        for (int i = startYear + 1; i < endYear; i++) {
+                            List<ClassMonthTCSEntity> classMonthTCSEntities = classService.findThreeByClassIdAndYear(node.getValue(), i);
+                            List<ConsumeThreeMonthData> consumeThreeMonthData = new ArrayList<>();
+                            classMonthTCSEntities.forEach(classMonthTCSEntity -> consumeThreeMonthData.add(new ConsumeThreeMonthData(
+                                    classMonthTCSEntity.getConsumption_category(),
+                                    classMonthTCSEntity.getMonth(),
+                                    classMonthTCSEntity.getYear(),
+                                    classMonthTCSEntity.getConsumption_count(),
+                                    classMonthTCSEntity.getConsumption_total_money(),
+                                    classMonthTCSEntity.getConsumption_average_money(),
+                                    classMonthTCSEntity.getConsumption_student_average_money(),
+                                    classMonthTCSEntity.getStudent_count(),
+                                    classMonthTCSEntity.getConsumption_low_count(),
+                                    classMonthTCSEntity.getConsumption_high_count(),
+                                    classMonthTCSEntity.getStudent_low_count(),
+                                    classMonthTCSEntity.getStudent_low_count()
+                            )));
+                            consumeMonthResult.getConsumeThreeMonthData().addAll(consumeThreeMonthData);
+                        }
+                        for (int i = endMonth; i > 0; i--) {
+                            List<ClassMonthTCSEntity> classMonthTCSEntities = classService.findThreeByClassIdAndYearAndMonth(node.getValue(), startYear, i);
+                            List<ConsumeThreeMonthData> consumeThreeMonthData = new ArrayList<>();
+                            classMonthTCSEntities.forEach(classMonthTCSEntity -> consumeThreeMonthData.add(new ConsumeThreeMonthData(
+                                    classMonthTCSEntity.getConsumption_category(),
+                                    classMonthTCSEntity.getMonth(),
+                                    classMonthTCSEntity.getYear(),
+                                    classMonthTCSEntity.getConsumption_count(),
+                                    classMonthTCSEntity.getConsumption_total_money(),
+                                    classMonthTCSEntity.getConsumption_average_money(),
+                                    classMonthTCSEntity.getConsumption_student_average_money(),
+                                    classMonthTCSEntity.getStudent_count(),
+                                    classMonthTCSEntity.getConsumption_low_count(),
+                                    classMonthTCSEntity.getConsumption_high_count(),
+                                    classMonthTCSEntity.getStudent_low_count(),
+                                    classMonthTCSEntity.getStudent_low_count()
+                            )));
+                            consumeMonthResult.getConsumeThreeMonthData().addAll(consumeThreeMonthData);
+                        }
+                    } else {
+                        for (int i = startMonth; i <= endMonth; i++) {
+                            List<ClassMonthTCSEntity> classMonthTCSEntities = classService.findThreeByClassIdAndYearAndMonth(node.getValue(), startYear, i);
+                            List<ConsumeThreeMonthData> consumeThreeMonthData = new ArrayList<>();
+                            classMonthTCSEntities.forEach(classMonthTCSEntity -> consumeThreeMonthData.add(new ConsumeThreeMonthData(
+                                    classMonthTCSEntity.getConsumption_category(),
+                                    classMonthTCSEntity.getMonth(),
+                                    classMonthTCSEntity.getYear(),
+                                    classMonthTCSEntity.getConsumption_count(),
+                                    classMonthTCSEntity.getConsumption_total_money(),
+                                    classMonthTCSEntity.getConsumption_average_money(),
+                                    classMonthTCSEntity.getConsumption_student_average_money(),
+                                    classMonthTCSEntity.getStudent_count(),
+                                    classMonthTCSEntity.getConsumption_low_count(),
+                                    classMonthTCSEntity.getConsumption_high_count(),
+                                    classMonthTCSEntity.getStudent_low_count(),
+                                    classMonthTCSEntity.getStudent_low_count()
+                            )));
+                            consumeMonthResult.getConsumeThreeMonthData().addAll(consumeThreeMonthData);
+                        }
+                    }
+                }
+            }
+            return new Result(1, "加载成功", consumeMonthResults);
+        }else {
+            List<ConsumeDayResult> consumeDayResults = new ArrayList<>();
+            Date startDate = queryDataInput.getDate().get(0);
+            Date endDate = queryDataInput.getDate().get(1);
+            for (Node node : queryDataInput.getId()) {
+                ConsumeDayResult consumeDayResult = new ConsumeDayResult(node.getValue(), node.getLabel());
+                if (node.getLevel() == 1) {
+                    List<CollegeDayTCSEntity> collegeDayTCSEntities = collegeService.findThreeByCollegeIdAndDates(node.getValue(),
+                            startDate, endDate);
+                    List<ConsumeThreeDayData> consumeThreeDayData = new ArrayList<>();
+                    collegeDayTCSEntities.forEach(collegeDayTCSEntity -> consumeThreeDayData.add(new ConsumeThreeDayData(
+                            collegeDayTCSEntity.getConsumption_category(),
+                            collegeDayTCSEntity.getDay(),
+                            collegeDayTCSEntity.getConsumption_count(),
+                            collegeDayTCSEntity.getConsumption_total_money(),
+                            collegeDayTCSEntity.getConsumption_average_money(),
+                            collegeDayTCSEntity.getConsumption_student_average_money(),
+                            collegeDayTCSEntity.getStudent_count(),
+                            collegeDayTCSEntity.getConsumption_low_count(),
+                            collegeDayTCSEntity.getConsumption_high_count(),
+                            collegeDayTCSEntity.getStudent_low_count(),
+                            collegeDayTCSEntity.getStudent_low_count()
+                    )));
+                    consumeDayResult.getConsumeThreeDayData().addAll(consumeThreeDayData);
+                } else if (node.getLevel() == 2) {
+                    List<MajorDayTCSEntity> majorDayTCSEntities = majorService.findThreeByMajorIdAndDates(node.getValue(),
+                            startDate, endDate);
+                    List<ConsumeThreeDayData> consumeThreeDayData = new ArrayList<>();
+                    majorDayTCSEntities.forEach(majorDayTCSEntity -> consumeThreeDayData.add(new ConsumeThreeDayData(
+                            majorDayTCSEntity.getConsumption_category(),
+                            majorDayTCSEntity.getDay(),
+                            majorDayTCSEntity.getConsumption_count(),
+                            majorDayTCSEntity.getConsumption_total_money(),
+                            majorDayTCSEntity.getConsumption_average_money(),
+                            majorDayTCSEntity.getConsumption_student_average_money(),
+                            majorDayTCSEntity.getStudent_count(),
+                            majorDayTCSEntity.getConsumption_low_count(),
+                            majorDayTCSEntity.getConsumption_high_count(),
+                            majorDayTCSEntity.getStudent_low_count(),
+                            majorDayTCSEntity.getStudent_low_count()
+                    )));
+                    consumeDayResult.getConsumeThreeDayData().addAll(consumeThreeDayData);
+                } else if (node.getLevel() == 3) {
+                    List<ClassDayTCSEntity> classDayTCSEntities = classService.findThreeByClassIdAndDates(node.getValue(),
+                            startDate, endDate);
+                    List<ConsumeThreeDayData> consumeThreeDayData = new ArrayList<>();
+                    classDayTCSEntities.forEach(classDayTCSEntity -> consumeThreeDayData.add(new ConsumeThreeDayData(
+                            classDayTCSEntity.getConsumption_category(),
+                            classDayTCSEntity.getDay(),
+                            classDayTCSEntity.getConsumption_count(),
+                            classDayTCSEntity.getConsumption_total_money(),
+                            classDayTCSEntity.getConsumption_average_money(),
+                            classDayTCSEntity.getConsumption_student_average_money(),
+                            classDayTCSEntity.getStudent_count(),
+                            classDayTCSEntity.getConsumption_low_count(),
+                            classDayTCSEntity.getConsumption_high_count(),
+                            classDayTCSEntity.getStudent_low_count(),
+                            classDayTCSEntity.getStudent_low_count()
+                    )));
+                    consumeDayResult.getConsumeThreeDayData().addAll(consumeThreeDayData);
+                }
+                consumeDayResults.add(consumeDayResult);
+            }
+            return new Result(1, "加载成功", consumeDayResults);
+        }
     }
 }

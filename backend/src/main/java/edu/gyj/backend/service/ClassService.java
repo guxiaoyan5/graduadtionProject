@@ -1,8 +1,6 @@
 package edu.gyj.backend.service;
 
-import edu.gyj.backend.entity.classCS.ClassDayCSEntity;
-import edu.gyj.backend.entity.classCS.ClassEntity;
-import edu.gyj.backend.entity.classCS.ClassMonthCSEntity;
+import edu.gyj.backend.entity.classCS.*;
 import edu.gyj.backend.result.ClassResult;
 
 import java.util.Date;
@@ -17,4 +15,7 @@ public interface ClassService {
     public List<ClassMonthCSEntity> findByClassIdAndYearAndMonth(int classId,int year,int month);
     public List<ClassMonthCSEntity> findByClassIdAndYear(int classId,int year);
     public List<ClassDayCSEntity> findByClassIdAndDates(int classId, Date start,Date end);
+    public List<ClassMonthTCSEntity> findThreeByClassIdAndYearAndMonth(int classId,int year,int month);
+    public List<ClassMonthTCSEntity> findThreeByClassIdAndYear(int classId, int year);
+    public List<ClassDayTCSEntity> findThreeByClassIdAndDates(int classId, Date start, Date end);
 }

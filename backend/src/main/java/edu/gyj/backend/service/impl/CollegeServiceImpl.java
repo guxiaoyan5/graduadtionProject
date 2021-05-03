@@ -1,11 +1,7 @@
 package edu.gyj.backend.service.impl;
 
-import edu.gyj.backend.entity.college.CollegeDayCSEntity;
-import edu.gyj.backend.entity.college.CollegeEntity;
-import edu.gyj.backend.entity.college.CollegeMonthCSEntity;
-import edu.gyj.backend.mapper.college.CollegeDayCSMapper;
-import edu.gyj.backend.mapper.college.CollegeMapper;
-import edu.gyj.backend.mapper.college.CollegeMonthCSMapper;
+import edu.gyj.backend.entity.college.*;
+import edu.gyj.backend.mapper.college.*;
 import edu.gyj.backend.service.CollegeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +17,10 @@ public class CollegeServiceImpl implements CollegeService {
     CollegeMonthCSMapper collegeMonthCSMapper;
     @Autowired
     CollegeDayCSMapper collegeDayCSMapper;
+    @Autowired
+    CollegeDayTCSMapper collegeDayTCSMapper;
+    @Autowired
+    CollegeMonthTCSMapper collegeMonthTCSMapper;
 
     @Override
     public List<CollegeEntity> findAll() {
@@ -64,6 +64,21 @@ public class CollegeServiceImpl implements CollegeService {
 
     @Override
     public List<CollegeDayCSEntity> findByCollegeIdAndDates(int collegeId, Date start, Date end) {
-        return collegeDayCSMapper.findByDates(collegeId, new java.sql.Date(start.getTime()),new java.sql.Date(end.getTime()));
+        return collegeDayCSMapper.findByDates(collegeId, new java.sql.Date(start.getTime()), new java.sql.Date(end.getTime()));
+    }
+
+    @Override
+    public List<CollegeMonthTCSEntity> findThreeByCollegeIdAndYear(int collegeId, int year) {
+        return collegeMonthTCSMapper.findByCollegeIdAndYear(collegeId, year);
+    }
+
+    @Override
+    public List<CollegeMonthTCSEntity> findThreeByCollegeIdAndYearAndMonth(int collegeId, int year, int month) {
+        return collegeMonthTCSMapper.findByCollegeIdAndYearAndMonth(collegeId, year, month);
+    }
+
+    @Override
+    public List<CollegeDayTCSEntity> findThreeByCollegeIdAndDates(int collegeId, Date start, Date end) {
+        return collegeDayTCSMapper.findByDates(collegeId, new java.sql.Date(start.getTime()), new java.sql.Date(end.getTime()));
     }
 }

@@ -8,6 +8,7 @@ public class ConsumeDayResult implements Serializable {
     private int id;
     private String name;
     private List<ConsumeDayData> consumeDayData;
+    private List<ConsumeThreeDayData> consumeThreeDayData;
 
     public ConsumeDayResult() {
     }
@@ -16,6 +17,7 @@ public class ConsumeDayResult implements Serializable {
         this.id = id;
         this.name = name;
         this.consumeDayData = new ArrayList<>();
+        this.consumeThreeDayData = new ArrayList<>();
     }
 
     public ConsumeDayResult(int id, String name, List<ConsumeDayData> consumeDayData) {
@@ -30,6 +32,7 @@ public class ConsumeDayResult implements Serializable {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", consumeDayData=" + consumeDayData +
+                ", consumeThreeDayData=" + consumeThreeDayData +
                 '}';
     }
 
@@ -43,6 +46,14 @@ public class ConsumeDayResult implements Serializable {
 
     public String getName() {
         return name;
+    }
+
+    public List<ConsumeThreeDayData> getConsumeThreeDayData() {
+        return consumeThreeDayData;
+    }
+
+    public void setConsumeThreeDayData(List<ConsumeThreeDayData> consumeThreeDayData) {
+        this.consumeThreeDayData = consumeThreeDayData;
     }
 
     public void setName(String name) {

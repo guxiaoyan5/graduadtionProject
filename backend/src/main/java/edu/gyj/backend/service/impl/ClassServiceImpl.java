@@ -1,13 +1,9 @@
 package edu.gyj.backend.service.impl;
 
-import edu.gyj.backend.entity.classCS.ClassDayCSEntity;
-import edu.gyj.backend.entity.classCS.ClassEntity;
-import edu.gyj.backend.entity.classCS.ClassMonthCSEntity;
+import edu.gyj.backend.entity.classCS.*;
 import edu.gyj.backend.entity.college.CollegeEntity;
 import edu.gyj.backend.entity.major.MajorEntity;
-import edu.gyj.backend.mapper.classCS.ClassDayCSMapper;
-import edu.gyj.backend.mapper.classCS.ClassMapper;
-import edu.gyj.backend.mapper.classCS.ClassMonthCSMapper;
+import edu.gyj.backend.mapper.classCS.*;
 import edu.gyj.backend.mapper.college.CollegeMapper;
 import edu.gyj.backend.mapper.major.MajorMapper;
 import edu.gyj.backend.result.ClassResult;
@@ -31,7 +27,10 @@ public class ClassServiceImpl implements ClassService {
     ClassMonthCSMapper classMonthCSMapper;
     @Autowired
     ClassDayCSMapper classDayCSMapper;
-
+    @Autowired
+    ClassDayTCSMapper classDayTCSMapper;
+    @Autowired
+    ClassMonthTCSMapper classMonthTCSMapper;
     @Override
     public List<ClassResult> getAll() {
         List<ClassResult> classResults = new ArrayList<>();
@@ -89,6 +88,21 @@ public class ClassServiceImpl implements ClassService {
     @Override
     public List<ClassDayCSEntity> findByClassIdAndDates(int classId, Date start, Date end) {
         return classDayCSMapper.findByDates(classId,new java.sql.Date(start.getTime()),new java.sql.Date(end.getTime()));
+    }
+
+    @Override
+    public List<ClassMonthTCSEntity> findThreeByClassIdAndYearAndMonth(int classId, int year, int month) {
+        return classMonthTCSMapper.findByClassIdAndYearAndMonth(classId,year,month);
+    }
+
+    @Override
+    public List<ClassMonthTCSEntity> findThreeByClassIdAndYear(int classId, int year) {
+        return classMonthTCSMapper.findByClassIdAndYear(classId,year);
+    }
+
+    @Override
+    public List<ClassDayTCSEntity> findThreeByClassIdAndDates(int classId, Date start, Date end) {
+        return classDayTCSMapper.findByDates(classId,new java.sql.Date(start.getTime()),new java.sql.Date(end.getTime()));
     }
 
 }

@@ -8,12 +8,14 @@ public class ConsumeMonthResult implements Serializable {
     private int id;
     private String name;
     private List<ConsumeMonthData> consumeMonthData;
-
+    private List<ConsumeThreeMonthData> consumeThreeMonthData;
     public ConsumeMonthResult(int id, String name) {
         this.id = id;
         this.name = name;
         this.consumeMonthData = new ArrayList<>();
+        this.consumeThreeMonthData = new ArrayList<>();
     }
+
 
     public ConsumeMonthResult() {
     }
@@ -24,7 +26,16 @@ public class ConsumeMonthResult implements Serializable {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", consumeMonthData=" + consumeMonthData +
+                ", consumeThreeMonthData=" + consumeThreeMonthData +
                 '}';
+    }
+
+    public List<ConsumeThreeMonthData> getConsumeThreeMonthData() {
+        return consumeThreeMonthData;
+    }
+
+    public void setConsumeThreeMonthData(List<ConsumeThreeMonthData> consumeThreeMonthData) {
+        this.consumeThreeMonthData = consumeThreeMonthData;
     }
 
     public int getId() {
