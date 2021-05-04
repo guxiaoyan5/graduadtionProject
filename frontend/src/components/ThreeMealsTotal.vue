@@ -27,32 +27,27 @@
       <el-col :span="13" style="height: 400px">
         <el-card style="height:inherit;width: content-box;padding: 20px"
                  body-style="height:100%;width: 100%;padding:0px">
-<!--          <div id="chart1" ref="chart1" style="height:100%;width: 100%"></div>-->
+          <div id="chart1" ref="chart1" style="height:100%;width: 100%"></div>
         </el-card>
       </el-col>
       <el-col :span="10" style="height: 400px;">
         <el-card style="height:100%;width: 100%;padding: 20px"
                  body-style="height:100%;width: 100%;padding:0px">
-<!--          <div id="chart2" ref="chart2" style="height:100%;width: 130%;"></div>-->
+          <div id="chart2" ref="chart2" style="height:100%;width: 130%;"></div>
         </el-card>
       </el-col>
     </el-row>
     <el-row :gutter="20" style="margin-top: 10px;height:500px">
-      <el-col :span="24" style="height: 450px">
+      <el-col :span="12" style="height: 450px">
         <el-card style="height:inherit;width: content-box;padding: 20px"
                  body-style="height:90%;width: 100%;padding:0px">
-<!--          <div slot="header" class="clearfix">-->
-<!--            <span>人均消费统计图</span>-->
-<!--            <el-select v-model="nameData" filterable placeholder="请选择" @change="fetchData3" style="float: right;"size="mini">-->
-<!--              <el-option-->
-<!--                v-for="item in nameDataS"-->
-<!--                :key="item"-->
-<!--                :label="item"-->
-<!--                :value="item">-->
-<!--              </el-option>-->
-<!--            </el-select>-->
-<!--          </div>-->
-<!--          <div id="chart3" ref="chart3" style="height:100%;width: 100%;"></div>-->
+          <div id="chart3" ref="chart3" style="height:100%;width: 100%;"></div>
+        </el-card>
+      </el-col>
+      <el-col :span="11" style="height: 450px">
+        <el-card style="height:inherit;width: content-box;padding: 20px"
+                 body-style="height:90%;width: 100%;padding:0px">
+          <div id="chart4" ref="chart4" style="height:100%;width: 100%;"></div>
         </el-card>
       </el-col>
     </el-row>

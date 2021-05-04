@@ -59,7 +59,7 @@ public class SchoolUserController2 {
                                 collegeCSEntity.getConsumption_low_count(),
                                 collegeCSEntity.getConsumption_high_count(),
                                 collegeCSEntity.getStudent_low_count(),
-                                collegeCSEntity.getStudent_low_count()
+                                collegeCSEntity.getStudent_high_count()
                         )
                 ));
                 consumeResult.getConsumeData().addAll(consumeData);
@@ -76,7 +76,7 @@ public class SchoolUserController2 {
                                 majorCSEntity.getConsumption_low_count(),
                                 majorCSEntity.getConsumption_high_count(),
                                 majorCSEntity.getStudent_low_count(),
-                                majorCSEntity.getStudent_low_count()
+                                majorCSEntity.getStudent_high_count()
                         )
                 ));
                 consumeResult.getConsumeData().addAll(consumeData);
@@ -93,7 +93,7 @@ public class SchoolUserController2 {
                                 classCSEntity.getConsumption_low_count(),
                                 classCSEntity.getConsumption_high_count(),
                                 classCSEntity.getStudent_low_count(),
-                                classCSEntity.getStudent_low_count()
+                                classCSEntity.getStudent_high_count()
                         )
                 ));
                 consumeResult.getConsumeData().addAll(consumeData);
@@ -124,7 +124,7 @@ public class SchoolUserController2 {
                                 collegeTCSEntity.getConsumption_low_count(),
                                 collegeTCSEntity.getConsumption_high_count(),
                                 collegeTCSEntity.getStudent_low_count(),
-                                collegeTCSEntity.getStudent_low_count()
+                                collegeTCSEntity.getStudent_high_count()
                         )
                 ));
                 consumeResult.getConsumeThreeData().addAll(consumeThreeData);
@@ -142,7 +142,7 @@ public class SchoolUserController2 {
                                 majorTCSEntity.getConsumption_low_count(),
                                 majorTCSEntity.getConsumption_high_count(),
                                 majorTCSEntity.getStudent_low_count(),
-                                majorTCSEntity.getStudent_low_count()
+                                majorTCSEntity.getStudent_high_count()
                         )
                 ));
                 consumeResult.getConsumeThreeData().addAll(consumeThreeData);
@@ -160,7 +160,7 @@ public class SchoolUserController2 {
                                 classTCSEntity.getConsumption_low_count(),
                                 classTCSEntity.getConsumption_high_count(),
                                 classTCSEntity.getStudent_low_count(),
-                                classTCSEntity.getStudent_low_count()
+                                classTCSEntity.getStudent_high_count()
                         )
                 ));
                 consumeResult.getConsumeThreeData().addAll(consumeThreeData);
