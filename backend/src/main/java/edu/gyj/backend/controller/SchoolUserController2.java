@@ -2,6 +2,7 @@ package edu.gyj.backend.controller;
 
 import edu.gyj.backend.Input.Node;
 import edu.gyj.backend.Input.QueryDataInput;
+import edu.gyj.backend.entity.MealsTime;
 import edu.gyj.backend.entity.classCS.ClassCSEntity;
 import edu.gyj.backend.entity.classCS.ClassDayCSEntity;
 import edu.gyj.backend.entity.classCS.ClassMonthCSEntity;
@@ -15,10 +16,7 @@ import edu.gyj.backend.entity.major.MajorDayCSEntity;
 import edu.gyj.backend.entity.major.MajorMonthCSEntity;
 import edu.gyj.backend.entity.major.MajorTCSEntity;
 import edu.gyj.backend.result.*;
-import edu.gyj.backend.service.ClassService;
-import edu.gyj.backend.service.CollegeService;
-import edu.gyj.backend.service.MajorService;
-import edu.gyj.backend.service.SchoolUserService;
+import edu.gyj.backend.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,6 +36,8 @@ public class SchoolUserController2 {
     MajorService majorService;
     @Autowired
     ClassService classService;
+    @Autowired
+    MealsTimeService mealsTimeService;
 
     @ResponseBody
     @RequestMapping(value = "/getConsume", method = RequestMethod.POST)
@@ -100,7 +100,7 @@ public class SchoolUserController2 {
             }
             consumeResults.add(consumeResult);
         }
-        return new Result(1, "加载成功",consumeResults);
+        return new Result(1, "加载成功", consumeResults);
     }
 
     @ResponseBody
@@ -167,6 +167,16 @@ public class SchoolUserController2 {
             }
             consumeResults.add(consumeResult);
         }
-        return new Result(1, "加载成功",consumeResults);
+        return new Result(1, "加载成功", consumeResults);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/getMealsTime", method = RequestMethod.GET)
+    public Result getMealsTime() {
+        List<MealsTime> mealsTimes = mealsTimeService.findAll();
+        if (mealsTimes != null) {
+            return new Result(1, "加载成功", mealsTimes);
+        }
+        return new Result(0, "加载失败");
     }
 }

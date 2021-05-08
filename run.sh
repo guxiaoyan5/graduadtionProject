@@ -28,3 +28,4 @@ hadoop jar ./Analysis-1.0-SNAPSHOT.jar edu.run.major.MajorMonthTCSStatisticsToDB
 hadoop jar ./Analysis-1.0-SNAPSHOT.jar edu.run.college.CollegeTCSStatisticsToDB
 hadoop jar ./Analysis-1.0-SNAPSHOT.jar edu.run.college.CollegeDayTCSStatisticsToDB
 hadoop jar ./Analysis-1.0-SNAPSHOT.jar edu.run.college.CollegeMonthTCSStatisticsToDB
+hadoop jar Analysis-1.0-SNAPSHOT.jar edu.run.mealsTime.MealsTimeCountStatisticsToDB
