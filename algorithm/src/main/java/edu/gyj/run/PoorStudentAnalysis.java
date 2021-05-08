@@ -1,6 +1,6 @@
 package edu.gyj.run;
 
-import edu.gyj.bean.Student;
+import edu.gyj.bean.student.Student;
 import edu.gyj.util.StaticConstant;
 import org.apache.spark.mllib.clustering.KMeans;
 import org.apache.spark.sql.Dataset;

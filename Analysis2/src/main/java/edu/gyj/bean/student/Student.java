@@ -1,4 +1,4 @@
-package edu.gyj.bean;
+package edu.gyj.bean.student;
 
 import java.io.Serializable;
 
@@ -11,6 +11,11 @@ public class Student implements Serializable {
     private String sex;
 
     public Student() {
+    }
+
+    public Student(String id, int class_id) {
+        this.id = id;
+        this.class_id = class_id;
     }
 
     public Student(String id, String name, int class_id, int major_id, int college_id, String sex) {
