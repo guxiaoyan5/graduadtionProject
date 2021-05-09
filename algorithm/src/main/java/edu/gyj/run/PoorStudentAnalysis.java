@@ -17,7 +17,7 @@ public class PoorStudentAnalysis {
         properties.put("user", StaticConstant.jdbcUser);
         properties.put("password", StaticConstant.jdbcPassword);
         properties.put("driver", StaticConstant.jdbcDriver);
-
+        
         Dataset<Row> studentRow = sparkSession.read().jdbc(StaticConstant.jdbcUrl, StaticConstant.studentTableName, properties).select("*");
         Dataset<Student> studentDataset = studentRow.as(Encoders.bean(Student.class));
         
