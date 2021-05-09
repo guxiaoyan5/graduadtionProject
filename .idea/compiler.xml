@@ -8,7 +8,6 @@
         <outputRelativeToContentRoot value="true" />
         <module name="backend" />
         <module name="Analysis" />
-        <module name="Analysis2" />
         <module name="algorithm" />
       </profile>
     </annotationProcessing>

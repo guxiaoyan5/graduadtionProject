@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.gyj.backend.mapper.analysis.AnalysisMapper">
+    <resultMap id="BaseResult" type="edu.gyj.backend.entity.analysis.AnalysisEntity">
+        <result property="sid" column="sid"/>
+        <result property="consumption_average_money" column="consumption_average_money"/>
+        <result property="consumption_count" column="consumption_count"/>
+        <result property="consumption_total_money" column="consumption_total_money"/>
+        <result property="name" column="name"/>
+        <result property="className" column="class"/>
+        <result property="college" column="college"/>
+        <result property="major" column="major"/>
+        <result property="sex" column="sex"/>
+    </resultMap>
+    <select id="findAll" resultMap="BaseResult">
+        select sid,
+               consumption_average_money,
+               consumption_count,
+               consumption_total_money,
+               student.name,
+               class.class,
+               college,
+               major,
+               sex
+        from analysisnorm,
+             student,
+             class,
+             college,
+             major
+        where analysisnorm.sid = student.id
+          and class.id = student.class_id
+          and college.id = student.college_id
+          and major.id = student.major_id
+          and analysisnorm.prediction = 3
+    </select>
+</mapper>

@@ -3,6 +3,7 @@ package edu.gyj.backend.controller;
 import edu.gyj.backend.Input.Node;
 import edu.gyj.backend.Input.QueryDataInput;
 import edu.gyj.backend.entity.MealsTime;
+import edu.gyj.backend.entity.analysis.AnalysisEntity;
 import edu.gyj.backend.entity.classCS.ClassCSEntity;
 import edu.gyj.backend.entity.classCS.ClassDayCSEntity;
 import edu.gyj.backend.entity.classCS.ClassMonthCSEntity;
@@ -38,6 +39,8 @@ public class SchoolUserController2 {
     ClassService classService;
     @Autowired
     MealsTimeService mealsTimeService;
+    @Autowired
+    AnalysisService analysisService;
 
     @ResponseBody
     @RequestMapping(value = "/getConsume", method = RequestMethod.POST)
@@ -176,6 +179,16 @@ public class SchoolUserController2 {
         List<MealsTime> mealsTimes = mealsTimeService.findAll();
         if (mealsTimes != null) {
             return new Result(1, "加载成功", mealsTimes);
+        }
+        return new Result(0, "加载失败");
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/getAnalysis", method = RequestMethod.GET)
+    public Result getAnalysis() {
+        List<AnalysisEntity> analysisEntities = analysisService.findall();
+        if (analysisEntities != null) {
+            return new Result(1, "加载成功", analysisEntities);
         }
         return new Result(0, "加载失败");
     }
