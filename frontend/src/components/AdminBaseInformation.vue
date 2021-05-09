@@ -177,9 +177,9 @@
           </el-table-column>
         </el-table>
       </el-tab-pane>
-<!--      <el-tab-pane label="消费管理" name="third">-->
-<!--        -->
-<!--      </el-tab-pane>-->
+      <!--      <el-tab-pane label="消费管理" name="third">-->
+      <!--        -->
+      <!--      </el-tab-pane>-->
       <el-tab-pane label="班级管理" name="fourth">
         <el-table
           :data="ClassData.filter(data => !search || data.college.toLowerCase().includes(search.toLowerCase())||data.major.toLowerCase().includes(search.toLowerCase())||data.className.toLowerCase().includes(search.toLowerCase()))"
@@ -636,8 +636,8 @@
       </div>
     </el-popover>
     <el-dialog title="修改学院信息" :visible.sync="updateCollegeFormVisible">
-      <el-form :model="form" :rules="rules">
-        <el-form-item label="活动名称" :label-width="'120px'" prop="college">
+      <el-form :model="form" ref="form" :rules="rules">
+        <el-form-item label="学院名" :label-width="'120px'" prop="college">
           <el-input v-model="form.college" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
@@ -834,8 +834,9 @@ export default {
         if (valid) {
           this.$axios.post("http://localhost:9090/college/update", {
             id: _this.row.id,
-            college: formName.college
+            college: _this.form.college
           }).then(function (response) {
+            let data = response.data
             if (data.code === 1) {
               alert(data.message);
               _this.$refs[formName].resetFields();

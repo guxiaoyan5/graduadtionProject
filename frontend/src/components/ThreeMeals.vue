@@ -249,7 +249,7 @@ export default {
             data: [],
             label: {
               formatter: function (s) {
-                return (new Date(s)).getFullYear();
+                return (new Date(s)).getFullYear()+'-'+((new Date(s)).getMonth()+1);
               }
             }
           },
