@@ -41,7 +41,7 @@ public class StudentMonthTCStatisticsToDB {
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(tuple3DoubleTuple2._1()._3());
                 int year = calendar.get(Calendar.YEAR);
-                int month = calendar.get(Calendar.MONTH);
+                int month = calendar.get(Calendar.MONTH)+1;
                 return new Tuple2<>(
                         new Tuple4<>(
                                 tuple3DoubleTuple2._1()._1(),
