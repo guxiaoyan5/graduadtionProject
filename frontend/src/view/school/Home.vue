@@ -46,7 +46,11 @@
               <el-menu-item index="/analysis">贫困生信息</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
-          <el-submenu index="3">
+          <el-menu-item index="/collegeMonthCS">
+            <i class="el-icon-setting"></i>
+            <span slot="title">学院每月统计</span>
+          </el-menu-item>
+          <el-submenu index="12">
             <template slot="title">
               <i class="el-icon-location"></i>
               <span>设置</span>

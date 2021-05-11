@@ -12,7 +12,7 @@
         <module>Analysis</module>
         <module>backend</module>
         <module>algorithm</module>
-        <module>Analysis2</module>
+        <module>Analysis1</module>
     </modules>
 
     <properties>

@@ -15,6 +15,7 @@ import ThreeMeals from "../components/ThreeMeals";
 import ThreeMealsTotal from "../components/ThreeMealsTotal";
 import OneDayTotal from "../components/OneDayTotal";
 import Analysis from "../components/Analysis";
+import CollegeMonthCS from "../components/CollegeMonthCS";
 
 Vue.use(Router)
 const router = new Router({
@@ -63,6 +64,10 @@ const router = new Router({
           path: '/analysis',
           component: Analysis,
           name: '贫困生分析'
+        }, {
+          path: '/collegeMonthCS',
+          component: CollegeMonthCS,
+          name: '学院每月分析'
         }
       ]
     }, {

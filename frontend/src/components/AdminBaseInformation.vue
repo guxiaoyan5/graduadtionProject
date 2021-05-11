@@ -130,6 +130,7 @@
         <el-table
           :data="StoreData.filter(data => !search || data.storeName.toLowerCase().includes(search.toLowerCase()))"
           highlight-current-row
+          height="560px"
           style="width: 90%;margin-left: 50px;">
           <el-table-column
             label="序号"
@@ -185,6 +186,7 @@
           :data="ClassData.filter(data => !search || data.college.toLowerCase().includes(search.toLowerCase())||data.major.toLowerCase().includes(search.toLowerCase())||data.className.toLowerCase().includes(search.toLowerCase()))"
           highlight-current-row
           v-loading="classLoading"
+          height="560px"
           style="width: 90%;margin-left: 50px;">
           <el-table-column
             label="序号"
@@ -246,6 +248,7 @@
         <el-table
           :data="MajorData.filter(data => !search || data.college.toLowerCase().includes(search.toLowerCase())||data.major.toLowerCase().includes(search.toLowerCase()))"
           highlight-current-row
+          height="560px"
           style="width: 90%;margin-left: 50px;">
           <el-table-column
             label="序号"
