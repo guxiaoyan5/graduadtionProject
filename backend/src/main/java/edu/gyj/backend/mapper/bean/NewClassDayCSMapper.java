@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository;
 import java.sql.Date;
 import java.util.List;
 
-@Mapper
 @Repository
+@Mapper
 public interface NewClassDayCSMapper {
     List<LevelDayCSBean> findAll();
 

@@ -1,6 +1,6 @@
 package edu.gyj.backend.mapper.bean;
 
-import edu.gyj.backend.bean.LevelDayCSBean;
+import edu.gyj.backend.bean.LevelDayTCSBean;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -9,8 +9,8 @@ import java.util.List;
 
 @Mapper
 @Repository
-public interface NewMajorDayCSMapper {
-    List<LevelDayCSBean> findAll();
+public interface NewMajorDayTCSMapper {
+    List<LevelDayTCSBean> findAll();
 
-    List<LevelDayCSBean> findByIdAndDay(int id, Date date);
+    List<LevelDayTCSBean> findByIdAndDay(int id, Date date);
 }
