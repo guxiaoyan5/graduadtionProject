@@ -50,6 +50,10 @@
             <i class="el-icon-setting"></i>
             <span slot="title">学院每月统计</span>
           </el-menu-item>
+          <el-menu-item index="/collegeDayCS">
+            <i class="el-icon-setting"></i>
+            <span slot="title">学院每日统计</span>
+          </el-menu-item>
           <el-submenu index="12">
             <template slot="title">
               <i class="el-icon-location"></i>
