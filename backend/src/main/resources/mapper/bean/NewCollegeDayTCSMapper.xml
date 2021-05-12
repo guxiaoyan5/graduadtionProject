@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.gyj.backend.mapper.bean.NewCollegeDayTCSMapper">
+    <resultMap id="BaseResultMap" type="edu.gyj.backend.bean.LevelDayTCSBean">
+        <result column="id" property="id"/>
+        <result column="day" property="day"/>
+        <result column="consumption_category" property="consumption_category"/>
+        <result column="consumption_total_money" property="consumption_total_money"/>
+        <result column="consumption_average_money" property="consumption_average_money"/>
+        <result column="max" property="max"/>
+        <result column="min" property="min"/>
+        <result column="count" property="count"/>
+        <result column="high" property="high"/>
+        <result column="low" property="low"/>
+        <result column="college" property="name"/>
+    </resultMap>
+    <select id="findAll" resultMap="BaseResultMap">
+        select college.id,
+               day,
+               consumption_category,
+               consumption_total_money,
+               consumption_average_money,
+               max,
+               min,
+               count,
+               high,
+               low,
+               college.college
+        from college_day_three_meals_statistics1,
+             college
+        where college.id = college_day_three_meals_statistics1.id
+    </select>
+    <select id="findByIdAndDay" resultMap="BaseResultMap">
+        select college.id,
+               day,
+               consumption_category,
+               consumption_total_money,
+               consumption_average_money,
+               max,
+               min,
+               count,
+               high,
+               low,
+               college.college
+        from college_day_three_meals_statistics1,
+             college
+        where college.id = college_day_three_meals_statistics1.id
+          and college.id = #{id}
+          and day = #{date}
+    </select>
+</mapper>
