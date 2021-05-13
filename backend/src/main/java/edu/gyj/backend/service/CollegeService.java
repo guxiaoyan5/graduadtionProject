@@ -1,5 +1,9 @@
 package edu.gyj.backend.service;
 
+import edu.gyj.backend.bean.LevelDayCSBean;
+import edu.gyj.backend.bean.LevelDayTCSBean;
+import edu.gyj.backend.bean.LevelMonthCSBean;
+import edu.gyj.backend.bean.LevelMonthTCSBean;
 import edu.gyj.backend.entity.college.*;
 
 import java.util.Date;
@@ -29,4 +33,12 @@ public interface CollegeService {
     public List<CollegeTCSEntity> findThreeByCollegeId(int collegeId);
 
     public List<CollegeCSEntity> findByCollegeId(int collegeId);
+
+    public List<LevelMonthCSBean> findByIdAndMonth(int id, int year, int month);
+
+    public List<LevelDayCSBean> findByIdAndDay(int id, int year, int month, int day);
+
+    public List<LevelMonthTCSBean> findTCSByIdAndMonth(int id, int year, int month);
+
+    public List<LevelDayTCSBean> findTCSByIdAndDay(int id, int year, int month, int day);
 }

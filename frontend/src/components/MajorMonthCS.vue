@@ -9,8 +9,6 @@
             <el-form-item label="学院" prop="id">
               <el-select
                 v-model="formInline.id"
-                multiple
-                collapse-tags
                 style="width: 200px;"
                 placeholder="请选择"
                 clearable>
@@ -53,7 +51,7 @@
       <el-col :span="24" style="border-radius: 4px;">
         <el-card shadow="always" style="width: content-box;height: content-box;text-align: left"
                  body-style="padding: 10px 5px 0px 20px;height:60px">
-          <span style="margin-right: 5px">学院</span>
+          <span style="margin-right: 5px">专业</span>
           <el-select
             v-model="college"
             style="width: 200px;"
@@ -63,7 +61,7 @@
             <el-option
               v-for="item in collegeName"
               :key="item.id"
-              :label="item.college"
+              :label="item.major"
               :value="item.id">
             </el-option>
           </el-select>
@@ -97,7 +95,7 @@ require('echarts/lib/component/dataset');
 require('echarts/lib/chart/line');
 require('echarts/lib/chart/pie');
 export default {
-  name: "CollegeMonthCS",
+  name: "MajorMonthCS",
   data() {
     let _this = this;
     axios.get('http://localhost:9090/schoolUser3/getColleges').then(function (response) {
@@ -132,8 +130,8 @@ export default {
       this.$refs[form].validate((valid) => {
         this.college = ''
         if (valid) {
-          axios.post('http://localhost:9090/schoolUser3/getCollegeData', {
-            ids: _this.formInline.id,
+          axios.post('http://localhost:9090/schoolUser3/getMajorMonthCS', {
+            id: _this.formInline.id,
             year: _this.formInline.year
           }).then(function (response) {
             _this.collegeData = response.data.data;
@@ -149,13 +147,6 @@ export default {
           ["product", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
         ];
         let name = new Set();
-        for (let i = 0; i < _this.colleges.length; i++) {
-          for (let j = 0; j < _this.formInline.id.length; j++) {
-            if (_this.colleges[i].id === _this.formInline.id[j]) {
-              _this.collegeName.push(_this.colleges[i]);
-            }
-          }
-        }
         // this.college = this.collegeName[0].id
         for (let i = 0; i < _this.collegeData.length; i++) {
           if (name.has(_this.collegeData[i].name)) {
@@ -166,6 +157,10 @@ export default {
             }
           } else {
             name.add(_this.collegeData[i].name);
+            _this.collegeName.push({
+              id:_this.collegeData[i].id,
+              major:_this.collegeData[i].name
+            });
             let temp = [_this.collegeData[i].name, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             temp[parseInt(_this.collegeData[i].month)] = Math.round(_this.collegeData[i].consumption_average_money * 100) / 100;
             source.push(temp)
@@ -339,13 +334,14 @@ export default {
       this.chart2.hideLoading()
     },
     collegeChange(college) {
+      console.log(this.college)
       let high = Array.from({length: 12}).map(item => (0));
       let low = Array.from({length: 12}).map(item => (0));
       for (let i = 0; i < this.collegeData.length; i++) {
         if (this.collegeData[i].id == this.college) {
           let month = this.collegeData[i].month
-          high[month - 1] = this.collegeData[i].high;
-          low[month - 1] = this.collegeData[i].low;
+          high[parseInt(month) - 1] = this.collegeData[i].high;
+          low[parseInt(month)  - 1] = this.collegeData[i].low;
         }
       }
       this.chart2.setOption({

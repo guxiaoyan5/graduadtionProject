@@ -1,6 +1,11 @@
 package edu.gyj.backend.service;
 
+import edu.gyj.backend.bean.LevelDayCSBean;
+import edu.gyj.backend.bean.LevelDayTCSBean;
+import edu.gyj.backend.bean.LevelMonthCSBean;
+import edu.gyj.backend.bean.LevelMonthTCSBean;
 import edu.gyj.backend.entity.major.*;
+import edu.gyj.backend.mapper.bean.NewMajorDayCSMapper;
 import edu.gyj.backend.result.MajorResult;
 
 import java.util.Date;
@@ -32,4 +37,12 @@ public interface MajorService {
     public List<MajorCSEntity> findByMajorId(int majorId);
 
     public List<MajorTCSEntity> findThreeByMajorId(int majorId);
+
+    public List<LevelMonthCSBean> findByIdAndMonth(int id, int year, int month);
+
+    public List<LevelDayCSBean> findByIdAndDay(int id, int year, int month, int day);
+
+    public List<LevelMonthTCSBean> findTCSByIdAndMonth(int id, int year, int month);
+
+    public List<LevelDayTCSBean> findTCSByIdAndDay(int id, int year, int month, int day);
 }

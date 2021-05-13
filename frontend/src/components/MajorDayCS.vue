@@ -9,8 +9,6 @@
             <el-form-item label="学院" prop="id">
               <el-select
                 v-model="formInline.id"
-                multiple
-                collapse-tags
                 style="width: 200px;"
                 placeholder="请选择"
                 clearable>
@@ -62,7 +60,6 @@
 
 <script>
 import axios from "axios";
-
 const echarts = require('echarts/lib/echarts');
 require('echarts/lib/component/title');
 require('echarts/lib/component/toolbox');
@@ -74,12 +71,11 @@ require('echarts/lib/component/markLine');
 require('echarts/lib/component/markPoint');
 require('echarts/lib/chart/bar');
 export default {
-  name: "CollegeDayCS",
+  name: "MajorDayCS",
   data() {
     let _this = this;
     axios.get('http://localhost:9090/schoolUser3/getColleges').then(function (response) {
       _this.colleges = response.data.data;
-      console.log(response.data)
     }).catch(function (error) {
       console.log(error)
     })
@@ -107,8 +103,8 @@ export default {
       let _this = this;
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          axios.post('http://localhost:9090/schoolUser3/getCollegeDayCS', {
-            ids: _this.formInline.id,
+          axios.post('http://localhost:9090/schoolUser3/getMajorDayCS', {
+            id: _this.formInline.id,
             day: _this.formInline.day
           }).then(function (response) {
             _this.collegeData = response.data.data;
@@ -140,7 +136,8 @@ export default {
         let low = Array.from({length: name.length}).map(item => (
           Array.from({length: 7}).map(item => (0))
         ))
-        for (let k = 0; k < this.collegeData.length; k++) {
+        for (let k = 0; k < _this.collegeData.length; k++) {
+          console.log(_this.collegeData[k].day)
           for (let i = 0; i < 7; i++) {
             for (let j = 0; j < name.length; j++) {
               if (_this.collegeData[k].name == name[j] && _this.collegeData[k].day == dates[i]) {
@@ -233,8 +230,7 @@ export default {
           ],
           series: series1
         })
-      });
-
+      })
     },
     initChart1() {
       this.chart1 = echarts.init(document.getElementById("chart1"));
@@ -312,7 +308,7 @@ export default {
       };
       this.chart2.setOption(option)
     }
-  },
+  }
 }
 </script>
 

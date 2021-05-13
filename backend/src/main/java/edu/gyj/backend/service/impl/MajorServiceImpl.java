@@ -1,7 +1,15 @@
 package edu.gyj.backend.service.impl;
 
+import edu.gyj.backend.bean.LevelDayCSBean;
+import edu.gyj.backend.bean.LevelDayTCSBean;
+import edu.gyj.backend.bean.LevelMonthCSBean;
+import edu.gyj.backend.bean.LevelMonthTCSBean;
 import edu.gyj.backend.entity.college.CollegeEntity;
 import edu.gyj.backend.entity.major.*;
+import edu.gyj.backend.mapper.bean.NewMajorDayCSMapper;
+import edu.gyj.backend.mapper.bean.NewMajorDayTCSMapper;
+import edu.gyj.backend.mapper.bean.NewMajorMonthCSMapper;
+import edu.gyj.backend.mapper.bean.NewMajorMonthTCSMapper;
 import edu.gyj.backend.mapper.college.CollegeMapper;
 import edu.gyj.backend.mapper.major.*;
 import edu.gyj.backend.result.MajorResult;
@@ -31,6 +39,14 @@ public class MajorServiceImpl implements MajorService {
     MajorTCSMapper majorTCSMapper;
     @Autowired
     MajorCSMapper majorCSMapper;
+    @Autowired
+    NewMajorDayCSMapper newMajorDayCSMapper;
+    @Autowired
+    NewMajorDayTCSMapper newMajorDayTCSMapper;
+    @Autowired
+    NewMajorMonthCSMapper newMajorMonthCSMapper;
+    @Autowired
+    NewMajorMonthTCSMapper newMajorMonthTCSMapper;
 
     @Override
     public List<MajorResult> getAll() {
@@ -104,5 +120,25 @@ public class MajorServiceImpl implements MajorService {
     @Override
     public List<MajorTCSEntity> findThreeByMajorId(int majorId) {
         return majorTCSMapper.findByMajorId(majorId);
+    }
+
+    @Override
+    public List<LevelMonthCSBean> findByIdAndMonth(int id, int year, int month) {
+        return newMajorMonthCSMapper.findByIdAndMonth(id, year, month);
+    }
+
+    @Override
+    public List<LevelDayCSBean> findByIdAndDay(int id, int year, int month, int day) {
+        return newMajorDayCSMapper.findByIdAndDay(id, java.sql.Date.valueOf(year + "-" + month + "-" + day));
+    }
+
+    @Override
+    public List<LevelMonthTCSBean> findTCSByIdAndMonth(int id, int year, int month) {
+        return newMajorMonthTCSMapper.findByIdAndMonth(id, year, month);
+    }
+
+    @Override
+    public List<LevelDayTCSBean> findTCSByIdAndDay(int id, int year, int month, int day) {
+        return newMajorDayTCSMapper.findByIdAndDay(id,java.sql.Date.valueOf(year + "-" + month + "-" + day));
     }
 }

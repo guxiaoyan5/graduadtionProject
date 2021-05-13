@@ -17,6 +17,12 @@ import OneDayTotal from "../components/OneDayTotal";
 import Analysis from "../components/Analysis";
 import CollegeMonthCS from "../components/CollegeMonthCS";
 import CollegeDayCS from "../components/CollegeDayCS";
+import CollegeDayTCS from "../components/CollegeDayTCS";
+import CollegeMonthTCS from "../components/CollegeMonthTCS";
+import MajorDayTCS from "../components/MajorDayTCS";
+import MajorDayCS from "../components/MajorDayCS";
+import MajorMonthTCS from "../components/MajorMonthTCS";
+import MajorMonthCS from "../components/MajorMonthCS";
 
 Vue.use(Router)
 const router = new Router({
@@ -69,10 +75,34 @@ const router = new Router({
           path: '/collegeMonthCS',
           component: CollegeMonthCS,
           name: '学院每月分析'
-        },{
-        path: '/collegeDayCS',
+        }, {
+          path: '/collegeDayCS',
           component: CollegeDayCS,
-          name:'学院每日分析'
+          name: '学院每日分析'
+        }, {
+          path: '/collegeDayTCS',
+          component: CollegeDayTCS,
+          name: '学院每日三餐分析'
+        },{
+          path: '/collegeMonthTCS',
+          component: CollegeMonthTCS,
+          name: '学院每月三餐分析'
+        }, {
+          path: '/majorMonthCS',
+          component: MajorMonthCS,
+          name: '专业每月分析'
+        }, {
+          path: '/majorDayCS',
+          component: MajorDayCS,
+          name: '专业每日分析'
+        }, {
+          path: '/majorDayTCS',
+          component: MajorDayTCS,
+          name: '专业每日三餐分析'
+        },{
+          path: '/majorMonthTCS',
+          component: MajorMonthTCS,
+          name: '专业每月三餐分析'
         }
       ]
     }, {

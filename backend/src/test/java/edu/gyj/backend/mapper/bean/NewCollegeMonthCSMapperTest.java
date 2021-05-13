@@ -18,6 +18,6 @@ class NewCollegeMonthCSMapperTest {
 
     @Test
     void findByIdAndMonth() {
-        newClassMonthCSMapper.findByIdAndMonth(1, 2021, 4).forEach(System.out::println);
+        System.out.println(newClassMonthCSMapper.findByIdAndMonth(1, 2021, 4));
     }
 }

@@ -1,6 +1,14 @@
 package edu.gyj.backend.service.impl;
 
+import edu.gyj.backend.bean.LevelDayCSBean;
+import edu.gyj.backend.bean.LevelDayTCSBean;
+import edu.gyj.backend.bean.LevelMonthCSBean;
+import edu.gyj.backend.bean.LevelMonthTCSBean;
 import edu.gyj.backend.entity.college.*;
+import edu.gyj.backend.mapper.bean.NewCollegeDayCSMapper;
+import edu.gyj.backend.mapper.bean.NewCollegeDayTCSMapper;
+import edu.gyj.backend.mapper.bean.NewCollegeMonthCSMapper;
+import edu.gyj.backend.mapper.bean.NewCollegeMonthTCSMapper;
 import edu.gyj.backend.mapper.college.*;
 import edu.gyj.backend.service.CollegeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +33,14 @@ public class CollegeServiceImpl implements CollegeService {
     CollegeCSMapper collegeCSMapper;
     @Autowired
     CollegeTCSMapper collegeTCSMapper;
+    @Autowired
+    NewCollegeMonthCSMapper newCollegeMonthCSMapper;
+    @Autowired
+    NewCollegeDayCSMapper newCollegeDayCSMapper;
+    @Autowired
+    NewCollegeMonthTCSMapper newCollegeMonthTCSMapper;
+    @Autowired
+    NewCollegeDayTCSMapper newCollegeDayTCSMapper;
 
     @Override
     public List<CollegeEntity> findAll() {
@@ -94,5 +110,25 @@ public class CollegeServiceImpl implements CollegeService {
     @Override
     public List<CollegeCSEntity> findByCollegeId(int collegeId) {
         return collegeCSMapper.findByCollegeId(collegeId);
+    }
+
+    @Override
+    public List<LevelMonthCSBean> findByIdAndMonth(int id, int year, int month) {
+        return newCollegeMonthCSMapper.findByIdAndMonth(id, year, month);
+    }
+
+    @Override
+    public List<LevelDayCSBean> findByIdAndDay(int id, int year, int month, int day) {
+        return newCollegeDayCSMapper.findByIdAndDay(id, java.sql.Date.valueOf(year + "-" + month + "-" + day));
+    }
+
+    @Override
+    public List<LevelMonthTCSBean> findTCSByIdAndMonth(int id, int year, int month) {
+        return newCollegeMonthTCSMapper.findByIdAndMonth(id,year,month);
+    }
+
+    @Override
+    public List<LevelDayTCSBean> findTCSByIdAndDay(int id, int year, int month, int day) {
+        return newCollegeDayTCSMapper.findByIdAndDay(id, java.sql.Date.valueOf(year + "-" + month + "-" + day));
     }
 }

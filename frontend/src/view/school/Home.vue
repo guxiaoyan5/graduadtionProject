@@ -54,6 +54,30 @@
             <i class="el-icon-setting"></i>
             <span slot="title">学院每日统计</span>
           </el-menu-item>
+          <el-menu-item index="/collegeDayTCS">
+            <i class="el-icon-setting"></i>
+            <span slot="title">学院每日三餐统计</span>
+          </el-menu-item>
+          <el-menu-item index="/collegeMonthTCS">
+            <i class="el-icon-setting"></i>
+            <span slot="title">学院每月三餐统计</span>
+          </el-menu-item>
+          <el-menu-item index="/majorMonthCS">
+            <i class="el-icon-setting"></i>
+            <span slot="title">专业每月统计</span>
+          </el-menu-item>
+          <el-menu-item index="/majorDayCS">
+            <i class="el-icon-setting"></i>
+            <span slot="title">专业每日统计</span>
+          </el-menu-item>
+          <el-menu-item index="/majorDayTCS">
+            <i class="el-icon-setting"></i>
+            <span slot="title">专业每日三餐统计</span>
+          </el-menu-item>
+          <el-menu-item index="/majorMonthTCS">
+            <i class="el-icon-setting"></i>
+            <span slot="title">专业每月三餐统计</span>
+          </el-menu-item>
           <el-submenu index="12">
             <template slot="title">
               <i class="el-icon-location"></i>
