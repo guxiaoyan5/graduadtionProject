@@ -32,7 +32,7 @@ public class LevelDayCStatisticsToDB {
                 .option("user", StaticConstant.jdbcUser)
                 .option("password", StaticConstant.jdbcPassword)
                 .option("driver", StaticConstant.jdbcDriver)
-                .option("query", "select sid," + name + "_id id,day,consumption_total_money from student_day_consumption_statistics,student where student.id=sid")
+                .option("query", "select sid," + name + "_id id,day,consumption_total_money from student_day_three_meals_statistics,student where student.id=sid")
                 .load().as(Encoders.bean(StudentLevelDayCSBean.class));
         JavaPairRDD<Tuple2<Integer, Date>, Tuple2<Double, Integer>> levelDayCSJavaPairRDD = studentDayCSBeanDataset.toJavaRDD().mapToPair(new PairFunction<StudentLevelDayCSBean, Tuple2<Integer, Date>, Tuple2<Double, Integer>>() {
             @Override
