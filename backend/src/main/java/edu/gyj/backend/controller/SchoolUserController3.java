@@ -6,8 +6,10 @@ import edu.gyj.backend.bean.LevelDayCSBean;
 import edu.gyj.backend.bean.LevelDayTCSBean;
 import edu.gyj.backend.bean.LevelMonthCSBean;
 import edu.gyj.backend.bean.LevelMonthTCSBean;
+import edu.gyj.backend.entity.classCS.ClassEntity;
 import edu.gyj.backend.entity.major.MajorEntity;
 import edu.gyj.backend.result.Result;
+import edu.gyj.backend.service.ClassService;
 import edu.gyj.backend.service.CollegeService;
 import edu.gyj.backend.service.MajorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +26,10 @@ public class SchoolUserController3 {
     CollegeService collegeService;
     @Autowired
     MajorService majorService;
-    private static class Id{
+    @Autowired
+    ClassService classService;
+
+    private static class Id {
         private int id;
 
         public Id() {
@@ -42,6 +47,7 @@ public class SchoolUserController3 {
             this.id = id;
         }
     }
+
     @ResponseBody
     @RequestMapping(value = "/getColleges", method = RequestMethod.GET)
     public Result getColleges() {
@@ -52,6 +58,12 @@ public class SchoolUserController3 {
     @RequestMapping(value = "/getMajors", method = RequestMethod.POST)
     public Result getMajors(@RequestBody Id id) {
         return new Result(1, "加载成功", majorService.getCollegeId(id.getId()));
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/getClass", method = RequestMethod.POST)
+    public Result getClass(@RequestBody Id id) {
+        return new Result(1, "加载成功", classService.getMajorId(id.getId()));
     }
 
     @ResponseBody
@@ -227,22 +239,22 @@ public class SchoolUserController3 {
         int year = calendar.get(Calendar.YEAR);
         if (nowYear == year) {
             for (MajorEntity majorEntity : majorEntities) {
-            for (int month = 1; month <= nowMonth; month++) {
-                temp = majorService.findTCSByIdAndMonth(majorEntity.getId(), year, month);
-                if (temp != null) {
-                    levelMonthCSBeanList.addAll(temp);
+                for (int month = 1; month <= nowMonth; month++) {
+                    temp = majorService.findTCSByIdAndMonth(majorEntity.getId(), year, month);
+                    if (temp != null) {
+                        levelMonthCSBeanList.addAll(temp);
+                    }
                 }
-            }
             }
         } else {
             for (MajorEntity majorEntity : majorEntities) {
-            for (int month = 1; month <= 12; month++) {
-                temp = majorService.findTCSByIdAndMonth(majorEntity.getId(), year, month);
-                if (temp != null) {
-                    levelMonthCSBeanList.addAll(temp);
+                for (int month = 1; month <= 12; month++) {
+                    temp = majorService.findTCSByIdAndMonth(majorEntity.getId(), year, month);
+                    if (temp != null) {
+                        levelMonthCSBeanList.addAll(temp);
+                    }
                 }
             }
-        }
         }
         return new Result(1, "加载成功", levelMonthCSBeanList);
     }
@@ -250,13 +262,11 @@ public class SchoolUserController3 {
     @ResponseBody
     @RequestMapping(value = "/getMajorDayTCS", method = RequestMethod.POST)
     public Result getMajorDayTCS(@RequestBody DayInput dayInput) {
-//        List<MajorEntity> majorEntities = majorService.getCollegeId(dayInput.getId());
         List<LevelDayTCSBean> levelDayTCSBeans = new ArrayList<>();
         List<LevelDayTCSBean> temp;
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(dayInput.getDay());
         int day = calendar.get(Calendar.DATE);
-//        for (MajorEntity majorEntity : majorEntities) {
         for (int i = -1; i < 6; i++) {
             calendar.set(Calendar.DATE, day + i);
             int day1 = calendar.get(Calendar.DAY_OF_MONTH);
@@ -265,7 +275,114 @@ public class SchoolUserController3 {
             temp = majorService.findTCSByIdAndDay(dayInput.getId(), year, month, day1);
             levelDayTCSBeans.addAll(temp);
         }
-//        }
         return new Result(1, "加载成功", levelDayTCSBeans);
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/getClassMonthCS", method = RequestMethod.POST)
+    public Result getClassMonthCS(@RequestBody MonthInput monthInput) {
+        List<ClassEntity> classEntities = classService.getMajorId(monthInput.getId());
+        List<LevelMonthCSBean> levelMonthCSBeanList = new ArrayList<>();
+        List<LevelMonthCSBean> temp;
+        Calendar calendar = Calendar.getInstance();
+        int nowYear = calendar.get(Calendar.YEAR);
+        int nowMonth = calendar.get(Calendar.MONTH) + 1;
+        calendar.setTime(monthInput.getYear());
+        int year = calendar.get(Calendar.YEAR);
+        if (nowYear == year) {
+            for (ClassEntity classEntity : classEntities) {
+                for (int month = 1; month <= nowMonth; month++) {
+                    temp = classService.findByIdAndMonth(classEntity.getId(), year, month);
+                    if (temp != null) {
+                        levelMonthCSBeanList.addAll(temp);
+                    }
+                }
+            }
+        } else {
+            for (ClassEntity classEntity : classEntities) {
+                for (int month = 1; month <= 12; month++) {
+                    temp = classService.findByIdAndMonth(classEntity.getId(), year, month);
+                    if (temp != null) {
+                        levelMonthCSBeanList.addAll(temp);
+                    }
+                }
+            }
+        }
+        return new Result(1, "加载成功", levelMonthCSBeanList);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/getClassDayCS", method = RequestMethod.POST)
+    public Result getClassDayCS(@RequestBody DayInput dayInput) {
+        List<ClassEntity> classEntities = classService.getMajorId(dayInput.getId());
+        List<LevelDayCSBean> levelDayTCSBeans = new ArrayList<>();
+        List<LevelDayCSBean> temp;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(dayInput.getDay());
+        int day = calendar.get(Calendar.DATE);
+        for (ClassEntity classEntity : classEntities) {
+            for (int i = -1; i < 6; i++) {
+                calendar.set(Calendar.DATE, day + i);
+                int day1 = calendar.get(Calendar.DAY_OF_MONTH);
+                int month = calendar.get(Calendar.MONTH) + 1;
+                int year = calendar.get(Calendar.YEAR);
+                temp = classService.findByIdAndDay(classEntity.getId(), year, month, day1);
+                levelDayTCSBeans.addAll(temp);
+            }
+        }
+        return new Result(1, "加载成功", levelDayTCSBeans);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/getClassMonthTCS", method = RequestMethod.POST)
+    public Result getClassMonthTCS(@RequestBody MonthInput monthInput) {
+        List<ClassEntity> classEntities = classService.getMajorId(monthInput.getId());
+        List<LevelMonthTCSBean> levelMonthCSBeanList = new ArrayList<>();
+        List<LevelMonthTCSBean> temp;
+        Calendar calendar = Calendar.getInstance();
+        int nowYear = calendar.get(Calendar.YEAR);
+        int nowMonth = calendar.get(Calendar.MONTH) + 1;
+        calendar.setTime(monthInput.getYear());
+        int year = calendar.get(Calendar.YEAR);
+        if (nowYear == year) {
+            for (ClassEntity classEntity : classEntities) {
+                for (int month = 1; month <= nowMonth; month++) {
+                    temp = classService.findTCSByIdAndMonth(classEntity.getId(), year, month);
+                    if (temp != null) {
+                        levelMonthCSBeanList.addAll(temp);
+                    }
+                }
+            }
+        } else {
+            for (ClassEntity classEntity : classEntities) {
+                for (int month = 1; month <= 12; month++) {
+                    temp = classService.findTCSByIdAndMonth(classEntity.getId(), year, month);
+                    if (temp != null) {
+                        levelMonthCSBeanList.addAll(temp);
+                    }
+                }
+            }
+        }
+        return new Result(1, "加载成功", levelMonthCSBeanList);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/getClassDayTCS", method = RequestMethod.POST)
+    public Result getClassDayTCS(@RequestBody DayInput dayInput) {
+        List<LevelDayTCSBean> levelDayTCSBeans = new ArrayList<>();
+        List<LevelDayTCSBean> temp;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(dayInput.getDay());
+        int day = calendar.get(Calendar.DATE);
+        for (int i = -1; i < 6; i++) {
+            calendar.set(Calendar.DATE, day + i);
+            int day1 = calendar.get(Calendar.DAY_OF_MONTH);
+            int month = calendar.get(Calendar.MONTH) + 1;
+            int year = calendar.get(Calendar.YEAR);
+            temp = classService.findTCSByIdAndDay(dayInput.getId(), year, month, day1);
+            levelDayTCSBeans.addAll(temp);
+        }
+        return new Result(1, "加载成功", levelDayTCSBeans);
+    }
+
 }

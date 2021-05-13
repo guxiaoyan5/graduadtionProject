@@ -11,7 +11,7 @@
         <div class="line"/>
         <el-menu
           router
-          default-active="3"
+          default-active="['/analysis']"
           :unique-opened="true"
           class="el-menu-vertical-demo"
           @open="handleOpen"
@@ -20,23 +20,23 @@
           text-color="#fff"
           active-text-color="#ffd04b">
 
-          <el-submenu index="1">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>数据展示图</span>
-            </template>
-            <el-submenu index="1-1">
-              <template slot="title">一日消费</template>
-              <el-menu-item index="/oneDay">日(月)消费统计图</el-menu-item>
-              <el-menu-item index="/oneDayTotal">消费总和统计图</el-menu-item>
-              <!--              <el-menu-item index="/studentOneDay">学生数据统计图</el-menu-item>-->
-            </el-submenu>
-            <el-submenu index="1-2">
-              <template slot="title">一日三餐</template>
-              <el-menu-item index="/threeMeals">日(月)消费统计图</el-menu-item>
-              <el-menu-item index="/threeMealsTotal">消费总和统计图</el-menu-item>
-            </el-submenu>
-          </el-submenu>
+<!--          <el-submenu index="1">-->
+<!--            <template slot="title">-->
+<!--              <i class="el-icon-location"></i>-->
+<!--              <span>数据展示图</span>-->
+<!--            </template>-->
+<!--            <el-submenu index="1-1">-->
+<!--              <template slot="title">一日消费</template>-->
+<!--              <el-menu-item index="/oneDay">日(月)消费统计图</el-menu-item>-->
+<!--              <el-menu-item index="/oneDayTotal">消费总和统计图</el-menu-item>-->
+<!--              &lt;!&ndash;              <el-menu-item index="/studentOneDay">学生数据统计图</el-menu-item>&ndash;&gt;-->
+<!--            </el-submenu>-->
+<!--            <el-submenu index="1-2">-->
+<!--              <template slot="title">一日三餐</template>-->
+<!--              <el-menu-item index="/threeMeals">日(月)消费统计图</el-menu-item>-->
+<!--              <el-menu-item index="/threeMealsTotal">消费总和统计图</el-menu-item>-->
+<!--            </el-submenu>-->
+<!--          </el-submenu>-->
           <el-submenu index="2">
             <template slot="title">
               <i class="el-icon-location"></i>
@@ -77,6 +77,22 @@
           <el-menu-item index="/majorMonthTCS">
             <i class="el-icon-setting"></i>
             <span slot="title">专业每月三餐统计</span>
+          </el-menu-item>
+          <el-menu-item index="/classMonthCS">
+            <i class="el-icon-setting"></i>
+            <span slot="title">班级每月统计</span>
+          </el-menu-item>
+          <el-menu-item index="/classDayCS">
+            <i class="el-icon-setting"></i>
+            <span slot="title">班级每日统计</span>
+          </el-menu-item>
+          <el-menu-item index="/classDayTCS">
+            <i class="el-icon-setting"></i>
+            <span slot="title">班级每日三餐统计</span>
+          </el-menu-item>
+          <el-menu-item index="/classMonthTCS">
+            <i class="el-icon-setting"></i>
+            <span slot="title">班级每月三餐统计</span>
           </el-menu-item>
           <el-submenu index="12">
             <template slot="title">

@@ -181,7 +181,7 @@ export default {
         let options = [];
         for (let i = 0; i < 12; i++) {
           options.push({
-            title: {text: i + '月人均三餐消费'},
+            title: {text: (i+1)  + '月人均三餐消费'},
             series: [
               {data: data[i][0]},
               {data: data[i][1]},

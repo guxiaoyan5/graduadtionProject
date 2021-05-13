@@ -23,6 +23,10 @@ import MajorDayTCS from "../components/MajorDayTCS";
 import MajorDayCS from "../components/MajorDayCS";
 import MajorMonthTCS from "../components/MajorMonthTCS";
 import MajorMonthCS from "../components/MajorMonthCS";
+import ClassMonthCS from "../components/ClassMonthCS";
+import ClassDayCS from "../components/ClassDayCS";
+import ClassDayTCS from "../components/ClassDayTCS";
+import ClassMonthTCS from "../components/ClassMonthTCS";
 
 Vue.use(Router)
 const router = new Router({
@@ -103,7 +107,23 @@ const router = new Router({
           path: '/majorMonthTCS',
           component: MajorMonthTCS,
           name: '专业每月三餐分析'
-        }
+        }, {
+          path: '/classMonthCS',
+          component: ClassMonthCS,
+          name: '班级每月分析'
+        }, {
+          path: '/classDayCS',
+          component: ClassDayCS,
+          name: '班级每日分析'
+        }, {
+          path: '/classDayTCS',
+          component: ClassDayTCS,
+          name: '班级每日三餐分析'
+        },{
+          path: '/classMonthTCS',
+          component: ClassMonthTCS,
+          name: '班级每月三餐分析'
+        },
       ]
     }, {
       path: '/adminLogin',

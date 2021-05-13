@@ -10,12 +10,27 @@
               <el-select
                 v-model="formInline.id"
                 style="width: 200px;"
+                @change="changeMajors()"
                 placeholder="请选择"
                 clearable>
                 <el-option
                   v-for="item in colleges"
                   :key="item.id"
                   :label="item.college"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="专业" prop="majorId">
+              <el-select
+                v-model="formInline.majorId"
+                style="width: 200px;"
+                placeholder="请选择"
+                clearable>
+                <el-option
+                  v-for="item in majors"
+                  :key="item.id"
+                  :label="item.major"
                   :value="item.id">
                 </el-option>
               </el-select>
@@ -51,7 +66,7 @@
       <el-col :span="24" style="border-radius: 4px;">
         <el-card shadow="always" style="width: content-box;height: content-box;text-align: left"
                  body-style="padding: 10px 5px 0px 20px;height:60px">
-          <span style="margin-right: 5px">专业</span>
+          <span style="margin-right: 5px">学院</span>
           <el-select
             v-model="college"
             style="width: 200px;"
@@ -96,7 +111,7 @@ require('echarts/lib/chart/bar');
 require('echarts/lib/component/markLine');
 require('echarts/lib/component/markPoint');
 export default {
-  name: "MajorMonthTCS",
+  name: "ClassMonthTCS",
   data() {
     let _this = this;
     axios.get('http://localhost:9090/schoolUser3/getColleges').then(function (response) {
@@ -107,13 +122,16 @@ export default {
     return {
       rules: {
         id: [{required: true, message: '请选择学院', trigger: 'change'}],
+        majorId:[{required: true, message: '请选择学院', trigger: 'change'}],
         year: [{required: true, message: '请选择日期', trigger: 'change'}]
       },
+      majors:[],
       college: '',
       colleges: _this.colleges,
       formInline: {
         id: '',
-        year: ''
+        year: '',
+        majorId:'',
       },
       collegeData: [],
       chart2: '',
@@ -131,8 +149,8 @@ export default {
       let _this = this;
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          axios.post('http://localhost:9090/schoolUser3/getMajorMonthTCS', {
-            id: _this.formInline.id,
+          axios.post('http://localhost:9090/schoolUser3/getClassMonthTCS', {
+            id: _this.formInline.majorId,
             year: _this.formInline.year
           }).then(function (response) {
             _this.collegeData = response.data.data;
@@ -153,10 +171,10 @@ export default {
         // }
         let name = new Set();
         for (let i = 0; i < this.collegeData.length; i++) {
-          if(!name.has(_this.collegeData[i].name)){
+          if (!name.has(_this.collegeData[i].name)) {
             _this.collegeName.push({
-              id:_this.collegeData[i].id,
-              college:_this.collegeData[i].name
+              id: _this.collegeData[i].id,
+              college: _this.collegeData[i].name
             });
           }
           name.add(_this.collegeData[i].name);
@@ -403,6 +421,16 @@ export default {
         ]
       })
 
+    },
+    changeMajors() {
+      let _this = this
+      axios.post('http://localhost:9090/schoolUser3/getMajors', {
+        id: _this.formInline.id
+      }).then(function (response) {
+        _this.majors = response.data.data;
+      }).catch(function (error) {
+        console.log(error)
+      })
     }
   }
 }

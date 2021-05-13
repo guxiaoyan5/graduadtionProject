@@ -25,12 +25,27 @@
               <el-select
                 v-model="formInline.majorId"
                 style="width: 200px;"
+                @change="changeClass()"
                 placeholder="请选择"
                 clearable>
                 <el-option
                   v-for="item in majors"
                   :key="item.id"
                   :label="item.major"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="班级" prop="classId">
+              <el-select
+                v-model="formInline.classId"
+                style="width: 200px;"
+                placeholder="请选择"
+                clearable>
+                <el-option
+                  v-for="item in classD"
+                  :key="item.id"
+                  :label="item.name"
                   :value="item.id">
                 </el-option>
               </el-select>
@@ -89,7 +104,7 @@ require('echarts/lib/chart/line');
 require('echarts/lib/component/markLine');
 require('echarts/lib/component/markPoint');
 export default {
-  name: "MajorDayTCS",
+  name: "ClassDayTCS",
   data() {
     let _this = this;
     axios.get('http://localhost:9090/schoolUser3/getColleges').then(function (response) {
@@ -101,14 +116,17 @@ export default {
       rules: {
         id: [{required: true, message: '请选择学院', trigger: 'change'}],
         day: [{required: true, message: '请选择日期', trigger: 'change'}],
-        majorId:[{required: true, message: '请选择学院', trigger: 'change'}]
+        majorId:[{required: true, message: '请选择学院', trigger: 'change'}],
+        classId: [{required: true, message: '请选择学院', trigger: 'change'}],
       },
       colleges: _this.colleges,
       formInline: {
         id: '',
         day: '',
-        majorId:''
+        majorId:'',
+        classId:'',
       },
+      classD:[],
       majors:[],
       collegeData: [],
       chart1: '',
@@ -124,8 +142,8 @@ export default {
       let _this = this
       this.$refs[formName].validate((valid) => {
           if (valid) {
-            axios.post('http://localhost:9090/schoolUser3/getMajorDayTCS', {
-              id: _this.formInline.majorId,
+            axios.post('http://localhost:9090/schoolUser3/getClassDayTCS', {
+              id: _this.formInline.classId,
               day: _this.formInline.day
             }).then(function (response) {
               _this.collegeData = response.data.data;
@@ -354,12 +372,22 @@ export default {
       };
       this.chart2.setOption(option);
     },
-    changeMajor(){
+    changeMajor() {
       let _this = this
-      axios.post('http://localhost:9090/schoolUser3/getMajors',{
-        id:_this.formInline.id
+      axios.post('http://localhost:9090/schoolUser3/getMajors', {
+        id: _this.formInline.id
       }).then(function (response) {
         _this.majors = response.data.data;
+      }).catch(function (error) {
+        console.log(error)
+      })
+    },
+    changeClass(){
+      let _this = this
+      axios.post('http://localhost:9090/schoolUser3/getClass', {
+        id: _this.formInline.majorId
+      }).then(function (response) {
+        _this.classD = response.data.data;
       }).catch(function (error) {
         console.log(error)
       })

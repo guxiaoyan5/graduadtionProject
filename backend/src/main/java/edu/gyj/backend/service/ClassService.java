@@ -1,5 +1,9 @@
 package edu.gyj.backend.service;
 
+import edu.gyj.backend.bean.LevelDayCSBean;
+import edu.gyj.backend.bean.LevelDayTCSBean;
+import edu.gyj.backend.bean.LevelMonthCSBean;
+import edu.gyj.backend.bean.LevelMonthTCSBean;
 import edu.gyj.backend.entity.classCS.*;
 import edu.gyj.backend.result.ClassResult;
 
@@ -32,4 +36,12 @@ public interface ClassService {
     public List<ClassCSEntity> findByClassId(int classId);
 
     public List<ClassTCSEntity> findThreeByClassId(int classId);
+
+    public List<LevelMonthCSBean> findByIdAndMonth(int id, int year, int month);
+
+    public List<LevelDayCSBean> findByIdAndDay(int id, int year, int month, int day);
+
+    public List<LevelMonthTCSBean> findTCSByIdAndMonth(int id, int year, int month);
+
+    public List<LevelDayTCSBean> findTCSByIdAndDay(int id, int year, int month, int day);
 }

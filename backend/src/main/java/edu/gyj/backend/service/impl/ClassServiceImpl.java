@@ -1,8 +1,16 @@
 package edu.gyj.backend.service.impl;
 
+import edu.gyj.backend.bean.LevelDayCSBean;
+import edu.gyj.backend.bean.LevelDayTCSBean;
+import edu.gyj.backend.bean.LevelMonthCSBean;
+import edu.gyj.backend.bean.LevelMonthTCSBean;
 import edu.gyj.backend.entity.classCS.*;
 import edu.gyj.backend.entity.college.CollegeEntity;
 import edu.gyj.backend.entity.major.MajorEntity;
+import edu.gyj.backend.mapper.bean.NewClassDayCSMapper;
+import edu.gyj.backend.mapper.bean.NewClassDayTCSMapper;
+import edu.gyj.backend.mapper.bean.NewClassMonthCSMapper;
+import edu.gyj.backend.mapper.bean.NewClassMonthTCSMapper;
 import edu.gyj.backend.mapper.classCS.*;
 import edu.gyj.backend.mapper.college.CollegeMapper;
 import edu.gyj.backend.mapper.major.MajorMapper;
@@ -35,6 +43,15 @@ public class ClassServiceImpl implements ClassService {
     ClassTCSMapper classTCSMapper;
     @Autowired
     ClassCSMapper classCSMapper;
+    @Autowired
+    NewClassDayTCSMapper newClassDayTCSMapper;
+    @Autowired
+    NewClassMonthCSMapper newClassMonthCSMapper;
+    @Autowired
+    NewClassMonthTCSMapper newClassMonthTCSMapper;
+    @Autowired
+    NewClassDayCSMapper newClassDayCSMapper;
+
     @Override
     public List<ClassResult> getAll() {
         List<ClassResult> classResults = new ArrayList<>();
@@ -92,22 +109,22 @@ public class ClassServiceImpl implements ClassService {
 
     @Override
     public List<ClassDayCSEntity> findByClassIdAndDates(int classId, Date start, Date end) {
-        return classDayCSMapper.findByDates(classId,new java.sql.Date(start.getTime()),new java.sql.Date(end.getTime()));
+        return classDayCSMapper.findByDates(classId, new java.sql.Date(start.getTime()), new java.sql.Date(end.getTime()));
     }
 
     @Override
     public List<ClassMonthTCSEntity> findThreeByClassIdAndYearAndMonth(int classId, int year, int month) {
-        return classMonthTCSMapper.findByClassIdAndYearAndMonth(classId,year,month);
+        return classMonthTCSMapper.findByClassIdAndYearAndMonth(classId, year, month);
     }
 
     @Override
     public List<ClassMonthTCSEntity> findThreeByClassIdAndYear(int classId, int year) {
-        return classMonthTCSMapper.findByClassIdAndYear(classId,year);
+        return classMonthTCSMapper.findByClassIdAndYear(classId, year);
     }
 
     @Override
     public List<ClassDayTCSEntity> findThreeByClassIdAndDates(int classId, Date start, Date end) {
-        return classDayTCSMapper.findByDates(classId,new java.sql.Date(start.getTime()),new java.sql.Date(end.getTime()));
+        return classDayTCSMapper.findByDates(classId, new java.sql.Date(start.getTime()), new java.sql.Date(end.getTime()));
     }
 
     @Override
@@ -118,6 +135,26 @@ public class ClassServiceImpl implements ClassService {
     @Override
     public List<ClassTCSEntity> findThreeByClassId(int classId) {
         return classTCSMapper.findByClassId(classId);
+    }
+
+    @Override
+    public List<LevelMonthCSBean> findByIdAndMonth(int id, int year, int month) {
+        return newClassMonthCSMapper.findByIdAndMonth(id, year, month);
+    }
+
+    @Override
+    public List<LevelDayCSBean> findByIdAndDay(int id, int year, int month, int day) {
+        return newClassDayCSMapper.findByIdAndDay(id, java.sql.Date.valueOf(year + "-" + month + "-" + day));
+    }
+
+    @Override
+    public List<LevelMonthTCSBean> findTCSByIdAndMonth(int id, int year, int month) {
+        return newClassMonthTCSMapper.findByIdAndMonth(id, year, month);
+    }
+
+    @Override
+    public List<LevelDayTCSBean> findTCSByIdAndDay(int id, int year, int month, int day) {
+        return newClassDayTCSMapper.findByIdAndDay(id, java.sql.Date.valueOf(year + "-" + month + "-" + day));
     }
 
 }
