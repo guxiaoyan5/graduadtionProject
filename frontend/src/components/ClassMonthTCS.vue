@@ -66,7 +66,7 @@
       <el-col :span="24" style="border-radius: 4px;">
         <el-card shadow="always" style="width: content-box;height: content-box;text-align: left"
                  body-style="padding: 10px 5px 0px 20px;height:60px">
-          <span style="margin-right: 5px">学院</span>
+          <span style="margin-right: 5px">班级</span>
           <el-select
             v-model="college"
             style="width: 200px;"

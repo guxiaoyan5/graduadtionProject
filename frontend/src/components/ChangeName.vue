@@ -34,7 +34,7 @@ export default {
   data() {
     const validateName = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请输入密码'));
+        callback(new Error('请输入昵称'));
       }
         callback();
     };

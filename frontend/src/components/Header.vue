@@ -50,7 +50,7 @@ export default {
   watch: {
     getSchoolUSer: function (state) {
       let _this = this;
-      this.id = state.id,
+      this.id = state.id;
       this.name = state.name
     },
   },
