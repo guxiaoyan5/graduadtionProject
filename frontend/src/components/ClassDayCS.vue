@@ -62,8 +62,8 @@
         </el-card>
       </el-col>
     </el-row>
-    <el-row :gutter="20" style="margin-top: 10px;height: 550px">
-      <el-col :span="24" style="height: 500px;">
+    <el-row :gutter="20" style="margin-top: 10px;height: 750px">
+      <el-col :span="24" style="height: 700px;">
         <el-card style="height:inherit;width: content-box;padding: 20px"
                  body-style="height:100%;width: 100%;padding:0px">
           <div id="chart2" ref="chart2" style="height: 100%;width: 100%;margin-left: 10px"></div>

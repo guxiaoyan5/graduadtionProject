@@ -22,40 +22,47 @@ public class StudentMonthCStatisticsToDB {
                 .option("user", StaticConstant.jdbcUser)
                 .option("password", StaticConstant.jdbcPassword)
                 .option("driver", StaticConstant.jdbcDriver)
-                .option("query", "select sid,year,month,consumption_category,consumption_total_money from student_month_three_meals_statistics")
+                .option("query", "select sid,year,month,consumption_category,count,consumption_total_money from student_month_three_meals_statistics")
                 .load().as(Encoders.bean(StudentMonthTCSBean.class));
-        JavaPairRDD<Tuple3<String,Integer,Integer>,Double> studentMonthTCSJavaPairRDD = studentMonthTCSBeanDataset.toJavaRDD()
-                .mapToPair(new PairFunction<StudentMonthTCSBean, Tuple3<String, Integer, Integer>, Double>() {
+        JavaPairRDD<Tuple3<String, Integer, Integer>, Tuple2<Double, Integer>> studentMonthTCSJavaPairRDD = studentMonthTCSBeanDataset.toJavaRDD()
+                .mapToPair(new PairFunction<StudentMonthTCSBean, Tuple3<String, Integer, Integer>, Tuple2<Double, Integer>>() {
                     @Override
-                    public Tuple2<Tuple3<String, Integer, Integer>, Double> call(StudentMonthTCSBean studentMonthTCSBean) throws Exception {
+                    public Tuple2<Tuple3<String, Integer, Integer>, Tuple2<Double, Integer>> call(StudentMonthTCSBean studentMonthTCSBean) throws Exception {
                         return new Tuple2<>(
                                 new Tuple3<>(
                                         studentMonthTCSBean.getSid(),
                                         studentMonthTCSBean.getYear(),
                                         studentMonthTCSBean.getMonth()
                                 ),
-                                studentMonthTCSBean.getConsumption_total_money()
+                                new Tuple2<>(
+                                        studentMonthTCSBean.getConsumption_total_money(),
+                                        studentMonthTCSBean.getCount()
+                                )
                         );
                     }
                 });
-        JavaPairRDD<Tuple3<String,Integer,Integer>,Double> studentMonthCSJavaPairRDD =studentMonthTCSJavaPairRDD.reduceByKey(new Function2<Double, Double, Double>() {
-                    @Override
-                    public Double call(Double aDouble, Double aDouble2) throws Exception {
-                        return aDouble+aDouble2;
-                    }
-                });
-        JavaRDD<StudentMonthCSBean> studentMonthCSBeanJavaRDD = studentMonthCSJavaPairRDD.map(new Function<Tuple2<Tuple3<String, Integer, Integer>, Double>, StudentMonthCSBean>() {
+        JavaPairRDD<Tuple3<String, Integer, Integer>, Tuple2<Double, Integer>> studentMonthCSJavaPairRDD = studentMonthTCSJavaPairRDD.reduceByKey(new Function2<Tuple2<Double, Integer>, Tuple2<Double, Integer>, Tuple2<Double, Integer>>() {
             @Override
-            public StudentMonthCSBean call(Tuple2<Tuple3<String, Integer, Integer>, Double> tuple3DoubleTuple2) throws Exception {
+            public Tuple2<Double, Integer> call(Tuple2<Double, Integer> aDouble, Tuple2<Double, Integer> aDouble2) throws Exception {
+                return new Tuple2<>(
+                  aDouble._1()+aDouble2._1(),
+                  aDouble._2()+aDouble2._2()
+                );
+            }
+        });
+        JavaRDD<StudentMonthCSBean> studentMonthCSBeanJavaRDD = studentMonthCSJavaPairRDD.map(new Function<Tuple2<Tuple3<String, Integer, Integer>, Tuple2<Double, Integer>>, StudentMonthCSBean>() {
+            @Override
+            public StudentMonthCSBean call(Tuple2<Tuple3<String, Integer, Integer>, Tuple2<Double, Integer>> tuple3DoubleTuple2) throws Exception {
                 return new StudentMonthCSBean(
                         tuple3DoubleTuple2._1()._1(),
                         tuple3DoubleTuple2._1()._2(),
                         tuple3DoubleTuple2._1()._3(),
-                        tuple3DoubleTuple2._2()
+                        tuple3DoubleTuple2._2()._2(),
+                        tuple3DoubleTuple2._2()._1()
                 );
             }
         });
-        Dataset<StudentMonthCSBean> studentMonthCSBeanDataset = sparkSession.createDataFrame(studentMonthCSBeanJavaRDD,StudentMonthCSBean.class).as(Encoders.bean(StudentMonthCSBean.class));
+        Dataset<StudentMonthCSBean> studentMonthCSBeanDataset = sparkSession.createDataFrame(studentMonthCSBeanJavaRDD, StudentMonthCSBean.class).as(Encoders.bean(StudentMonthCSBean.class));
         studentMonthCSBeanDataset.write().format("jdbc")
                 .option("url", StaticConstant.jdbcUrl)
                 .option("user", StaticConstant.jdbcUser)

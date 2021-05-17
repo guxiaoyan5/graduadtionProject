@@ -6,15 +6,18 @@ public class StudentMonthCSBean implements Serializable {
     private String sid;
     private int year;
     private int month;
+    private int count;
     private double consumption_total_money;
 
     public StudentMonthCSBean() {
     }
 
-    public StudentMonthCSBean(String sid, int year, int month, double consumption_total_money) {
+
+    public StudentMonthCSBean(String sid, int year, int month, int count, double consumption_total_money) {
         this.sid = sid;
         this.year = year;
         this.month = month;
+        this.count = count;
         this.consumption_total_money = consumption_total_money;
     }
 
@@ -54,6 +57,14 @@ public class StudentMonthCSBean implements Serializable {
 
     public double getConsumption_total_money() {
         return consumption_total_money;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 
     public void setConsumption_total_money(double consumption_total_money) {

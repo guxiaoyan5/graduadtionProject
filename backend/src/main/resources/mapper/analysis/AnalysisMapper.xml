@@ -33,6 +33,6 @@
           and class.id = student.class_id
           and college.id = student.college_id
           and major.id = student.major_id
-          and analysisnorm.prediction = 3
+          and analysisnorm.prediction = 4
     </select>
 </mapper>

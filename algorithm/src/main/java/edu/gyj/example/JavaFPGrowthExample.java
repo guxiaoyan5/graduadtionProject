@@ -25,9 +25,9 @@ public class JavaFPGrowthExample {
                 RowFactory.create(Arrays.asList("1 2".split(" ")))
         );
         StructType structType = new StructType(new StructField[]{new StructField(
-                "items",new ArrayType(DataTypes.StringType,true),false,Metadata.empty()
+                "items", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()
         )});
-        Dataset<Row> itemsDF = sparkSession.createDataFrame(data,structType);
+        Dataset<Row> itemsDF = sparkSession.createDataFrame(data, structType);
         FPGrowthModel model = new FPGrowth()
                 .setItemsCol("items")
                 .setMinSupport(0.5)

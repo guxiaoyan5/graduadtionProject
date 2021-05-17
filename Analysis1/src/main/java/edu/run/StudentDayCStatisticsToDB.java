@@ -28,36 +28,41 @@ public class StudentDayCStatisticsToDB {
                 .option("driver", StaticConstant.jdbcDriver)
                 .option("query", "select sid,day,consumption_category,consumption_total_money from student_day_three_meals_statistics")
                 .load().as(Encoders.bean(StudentDayTCSBean.class));
-        JavaPairRDD<Tuple2<String, Date>,Double> studentDayCSJavaPairRDD = studentDayTCSBeanDataset
-                .toJavaRDD().mapToPair(new PairFunction<StudentDayTCSBean, Tuple2<String, Date>, Double>() {
+        JavaPairRDD<Tuple2<String, Date>, Tuple2<Double, Integer>> studentDayCSJavaPairRDD = studentDayTCSBeanDataset
+                .toJavaRDD().mapToPair(new PairFunction<StudentDayTCSBean, Tuple2<String, Date>, Tuple2<Double, Integer>>() {
                     @Override
-                    public Tuple2<Tuple2<String, Date>, Double> call(StudentDayTCSBean studentDayTCSBean) throws Exception {
+                    public Tuple2<Tuple2<String, Date>, Tuple2<Double, Integer>> call(StudentDayTCSBean studentDayTCSBean) throws Exception {
                         return new Tuple2<>(
                                 new Tuple2<>(
                                         studentDayTCSBean.getSid(),
                                         studentDayTCSBean.getDay()
-                                ),
-                                studentDayTCSBean.getConsumption_total_money()
+                                ), new Tuple2<>(
+                                studentDayTCSBean.getConsumption_total_money(),
+                                1)
                         );
                     }
                 });
-        JavaPairRDD<Tuple2<String,Date>,Double> studentDayCSSumJavaPairRDD = studentDayCSJavaPairRDD.reduceByKey(new Function2<Double, Double, Double>() {
+        JavaPairRDD<Tuple2<String, Date>, Tuple2<Double, Integer>> studentDayCSSumJavaPairRDD = studentDayCSJavaPairRDD.reduceByKey(new Function2<Tuple2<Double, Integer>, Tuple2<Double, Integer>, Tuple2<Double, Integer>>() {
             @Override
-            public Double call(Double aDouble, Double aDouble2) throws Exception {
-                return aDouble+aDouble2;
-            }
-        });
-        JavaRDD<StudentDayCSBean> studentDayCSBeanJavaRDD = studentDayCSSumJavaPairRDD.map(new Function<Tuple2<Tuple2<String, Date>, Double>, StudentDayCSBean>() {
-            @Override
-            public StudentDayCSBean call(Tuple2<Tuple2<String, Date>, Double> tuple2DoubleTuple2) throws Exception {
-                return new StudentDayCSBean(
-                        tuple2DoubleTuple2._1()._1(),
-                        (java.sql.Date) tuple2DoubleTuple2._1()._2(),
-                        tuple2DoubleTuple2._2()
+            public Tuple2<Double, Integer> call(Tuple2<Double, Integer> aDouble, Tuple2<Double, Integer> aDouble2) throws Exception {
+                return new Tuple2<>(
+                        aDouble._1() + aDouble2._1(),
+                        aDouble._2() + aDouble2._2()
                 );
             }
         });
-        Dataset<StudentDayCSBean> studentDayCSBeanDataset = sparkSession.createDataFrame(studentDayCSBeanJavaRDD,StudentDayCSBean.class).as(Encoders.bean(StudentDayCSBean.class));
+        JavaRDD<StudentDayCSBean> studentDayCSBeanJavaRDD = studentDayCSSumJavaPairRDD.map(new Function<Tuple2<Tuple2<String, Date>, Tuple2<Double,Integer>>, StudentDayCSBean>() {
+            @Override
+            public StudentDayCSBean call(Tuple2<Tuple2<String, Date>, Tuple2<Double,Integer>> tuple2DoubleTuple2) throws Exception {
+                return new StudentDayCSBean(
+                        tuple2DoubleTuple2._1()._1(),
+                        (java.sql.Date) tuple2DoubleTuple2._1()._2(),
+                        tuple2DoubleTuple2._2()._2(),
+                        tuple2DoubleTuple2._2()._1()
+                );
+            }
+        });
+        Dataset<StudentDayCSBean> studentDayCSBeanDataset = sparkSession.createDataFrame(studentDayCSBeanJavaRDD, StudentDayCSBean.class).as(Encoders.bean(StudentDayCSBean.class));
         studentDayCSBeanDataset.write().format("jdbc")
                 .option("url", StaticConstant.jdbcUrl)
                 .option("user", StaticConstant.jdbcUser)

@@ -1,5 +1,6 @@
 package edu.gyj.run;
 
+
 import edu.gyj.bean.student.StudentMonthCS;
 import edu.gyj.bean.student.StudentToTalCS;
 import edu.gyj.bean.student.StudentTotalMoneyValue;
@@ -31,7 +32,7 @@ public class PoorStudentAnalysis {
                 .option("user", StaticConstant.jdbcUser)
                 .option("password", StaticConstant.jdbcPassword)
                 .option("driver", StaticConstant.jdbcDriver)
-                .option("query", "select sid,month,year,consumption_count,consumption_total_money,consumption_average_money from student_month_data")
+                .option("query", "select sid,month,year,count,consumption_total_money from student_month_data1")
                 .load().as(Encoders.bean(StudentMonthCS.class));
         JavaRDD<StudentMonthCS> studentMonthCSJavaRDD = studentMonthCSDataset.toJavaRDD();
         JavaPairRDD<String, StudentTotalMoneyValue> studentTotalMoneyValueJavaPairRDD = studentMonthCSJavaRDD.mapToPair(new PairFunction<StudentMonthCS, String, StudentTotalMoneyValue>() {
@@ -39,9 +40,8 @@ public class PoorStudentAnalysis {
             public Tuple2<String, StudentTotalMoneyValue> call(StudentMonthCS studentMonthCS) throws Exception {
                 return new Tuple2<>(studentMonthCS.getSid(),
                         new StudentTotalMoneyValue(
-                                studentMonthCS.getConsumption_count(),
-                                studentMonthCS.getConsumption_total_money(),
-                                studentMonthCS.getConsumption_average_money()
+                                studentMonthCS.getCount(),
+                                studentMonthCS.getConsumption_total_money()
                         )
                 );
             }
@@ -51,8 +51,7 @@ public class PoorStudentAnalysis {
             public StudentTotalMoneyValue call(StudentTotalMoneyValue studentTotalMoneyValue, StudentTotalMoneyValue studentTotalMoneyValue2) throws Exception {
                 int count = studentTotalMoneyValue.getConsumption_count() + studentTotalMoneyValue2.getConsumption_count();
                 double totalMoney = studentTotalMoneyValue.getConsumption_total_money() + studentTotalMoneyValue2.getConsumption_total_money();
-                double average = totalMoney / count;
-                return new StudentTotalMoneyValue(count, totalMoney, average);
+                return new StudentTotalMoneyValue(count, totalMoney);
             }
         });
         JavaRDD<StudentToTalCS> studentMoneyInfo = studentTotalMoney.map(new Function<Tuple2<String, StudentTotalMoneyValue>, StudentToTalCS>() {
@@ -61,7 +60,8 @@ public class PoorStudentAnalysis {
                 return new StudentToTalCS(stringStudentTotalMoneyValueTuple2._1(),
                         stringStudentTotalMoneyValueTuple2._2().getConsumption_count(),
                         stringStudentTotalMoneyValueTuple2._2().getConsumption_total_money(),
-                        stringStudentTotalMoneyValueTuple2._2().getConsumption_average_money());
+                        stringStudentTotalMoneyValueTuple2._2().getConsumption_total_money() / stringStudentTotalMoneyValueTuple2._2().getConsumption_count()
+                );
             }
         });
         Dataset<StudentToTalCS> studentMoneyInfoRow = sparkSession.createDataFrame(studentMoneyInfo, StudentToTalCS.class).as(Encoders.bean(StudentToTalCS.class));
@@ -86,7 +86,7 @@ public class PoorStudentAnalysis {
             System.out.println(center);
         }
         predictions.show();
-        predictions.select("sid","consumption_average_money","consumption_count","consumption_total_money","prediction").write().format("jdbc")
+        predictions.select("sid", "consumption_average_money", "consumption_count", "consumption_total_money", "prediction").write().format("jdbc")
                 .option("url", StaticConstant.jdbcUrl)
                 .option("user", StaticConstant.jdbcUser)
                 .option("password", StaticConstant.jdbcPassword)

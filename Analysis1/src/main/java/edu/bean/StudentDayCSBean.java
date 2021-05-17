@@ -6,14 +6,16 @@ import java.sql.Date;
 public class StudentDayCSBean implements Serializable {
     private String sid;
     private Date day;
+    private int count;
     private double consumption_total_money;
 
     public StudentDayCSBean() {
     }
 
-    public StudentDayCSBean(String sid, Date day, double consumption_total_money) {
+    public StudentDayCSBean(String sid, Date day, int count, double consumption_total_money) {
         this.sid = sid;
         this.day = day;
+        this.count = count;
         this.consumption_total_money = consumption_total_money;
     }
 
@@ -28,6 +30,14 @@ public class StudentDayCSBean implements Serializable {
 
     public String getSid() {
         return sid;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 
     public void setSid(String sid) {

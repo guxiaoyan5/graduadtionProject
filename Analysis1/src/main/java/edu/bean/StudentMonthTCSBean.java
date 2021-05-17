@@ -7,16 +7,18 @@ public class StudentMonthTCSBean implements Serializable {
     private int year;
     private int month;
     private String consumption_category;
+    private int count;
     private double consumption_total_money;
 
     public StudentMonthTCSBean() {
     }
 
-    public StudentMonthTCSBean(String sid, int year, int month, String consumption_category, double consumption_total_money) {
+    public StudentMonthTCSBean(String sid, int year, int month, String consumption_category, int count, double consumption_total_money) {
         this.sid = sid;
         this.year = year;
         this.month = month;
         this.consumption_category = consumption_category;
+        this.count = count;
         this.consumption_total_money = consumption_total_money;
     }
 
@@ -29,6 +31,14 @@ public class StudentMonthTCSBean implements Serializable {
                 ", consumption_category='" + consumption_category + '\'' +
                 ", consumption_total_money=" + consumption_total_money +
                 '}';
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 
     public String getSid() {

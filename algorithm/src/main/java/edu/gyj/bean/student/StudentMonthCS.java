@@ -1,37 +1,33 @@
 package edu.gyj.bean.student;
 
 import java.io.Serializable;
-import java.time.Year;
 
 public class StudentMonthCS implements Serializable {
     private String sid;
     private int month;
     private int year;
-    private int consumption_count;
+    private int count;
     private double consumption_total_money;
-    private double consumption_average_money;
 
     public StudentMonthCS() {
     }
 
-    public StudentMonthCS(String sid, int month, int year, int consumption_count, double consumption_total_money, double consumption_average_money) {
+    public StudentMonthCS(String sid, int month, int year, int count, double consumption_total_money) {
         this.sid = sid;
         this.month = month;
         this.year = year;
-        this.consumption_count = consumption_count;
+        this.count = count;
         this.consumption_total_money = consumption_total_money;
-        this.consumption_average_money = consumption_average_money;
     }
 
     @Override
     public String toString() {
-        return "StudentMonthCSEntity{" +
+        return "StudentMonthCS{" +
                 "sid='" + sid + '\'' +
                 ", month=" + month +
                 ", year=" + year +
-                ", consumption_count=" + consumption_count +
+                ", count=" + count +
                 ", consumption_total_money=" + consumption_total_money +
-                ", consumption_average_money=" + consumption_average_money +
                 '}';
     }
 
@@ -59,13 +55,6 @@ public class StudentMonthCS implements Serializable {
         this.year = year;
     }
 
-    public int getConsumption_count() {
-        return consumption_count;
-    }
-
-    public void setConsumption_count(int consumption_count) {
-        this.consumption_count = consumption_count;
-    }
 
     public double getConsumption_total_money() {
         return consumption_total_money;
@@ -75,11 +64,11 @@ public class StudentMonthCS implements Serializable {
         this.consumption_total_money = consumption_total_money;
     }
 
-    public double getConsumption_average_money() {
-        return consumption_average_money;
+    public int getCount() {
+        return count;
     }
 
-    public void setConsumption_average_money(double consumption_average_money) {
-        this.consumption_average_money = consumption_average_money;
+    public void setCount(int count) {
+        this.count = count;
     }
 }

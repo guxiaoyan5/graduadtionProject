@@ -29,19 +29,27 @@ public class StudentMonthTCStatisticsToDB {
                 .option("driver", StaticConstant.jdbcDriver)
                 .option("query", "select sid,day,consumption_category,consumption_total_money from student_day_three_meals_statistics")
                 .load().as(Encoders.bean(StudentDayTCSBean.class));
-        JavaPairRDD<Tuple3<String, String, Date>, Double> studentDayTCSBeanJavaRDD = studentDayTCSBeanDataset.toJavaRDD().mapToPair(new PairFunction<StudentDayTCSBean, Tuple3<String, String, Date>, Double>() {
+        JavaPairRDD<Tuple3<String, String, Date>, Tuple2<Double, Integer>> studentDayTCSBeanJavaRDD = studentDayTCSBeanDataset.toJavaRDD().mapToPair(new PairFunction<StudentDayTCSBean, Tuple3<String, String, Date>, Tuple2<Double, Integer>>() {
             @Override
-            public Tuple2<Tuple3<String, String, Date>, Double> call(StudentDayTCSBean studentDayTCSBean) throws Exception {
-                return new Tuple2<>(new Tuple3<>(studentDayTCSBean.getSid(), studentDayTCSBean.getConsumption_category(), studentDayTCSBean.getDay()), studentDayTCSBean.getConsumption_total_money());
+            public Tuple2<Tuple3<String, String, Date>, Tuple2<Double, Integer>> call(StudentDayTCSBean studentDayTCSBean) throws Exception {
+                return new Tuple2<>(
+                        new Tuple3<>(
+                                studentDayTCSBean.getSid(),
+                                studentDayTCSBean.getConsumption_category(),
+                                studentDayTCSBean.getDay()),
+                        new Tuple2<>(
+                                studentDayTCSBean.getConsumption_total_money(), 1
+                        )
+                );
             }
         });
-        JavaPairRDD<Tuple4<String, String, Integer, Integer>, Double> studentMonthTCSJavaRDD = studentDayTCSBeanJavaRDD.mapToPair(new PairFunction<Tuple2<Tuple3<String, String, Date>, Double>, Tuple4<String, String, Integer, Integer>, Double>() {
+        JavaPairRDD<Tuple4<String, String, Integer, Integer>, Tuple2<Double, Integer>> studentMonthTCSJavaRDD = studentDayTCSBeanJavaRDD.mapToPair(new PairFunction<Tuple2<Tuple3<String, String, Date>, Tuple2<Double, Integer>>, Tuple4<String, String, Integer, Integer>, Tuple2<Double, Integer>>() {
             @Override
-            public Tuple2<Tuple4<String, String, Integer, Integer>, Double> call(Tuple2<Tuple3<String, String, Date>, Double> tuple3DoubleTuple2) throws Exception {
+            public Tuple2<Tuple4<String, String, Integer, Integer>, Tuple2<Double, Integer>> call(Tuple2<Tuple3<String, String, Date>, Tuple2<Double, Integer>> tuple3DoubleTuple2) throws Exception {
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(tuple3DoubleTuple2._1()._3());
                 int year = calendar.get(Calendar.YEAR);
-                int month = calendar.get(Calendar.MONTH)+1;
+                int month = calendar.get(Calendar.MONTH) + 1;
                 return new Tuple2<>(
                         new Tuple4<>(
                                 tuple3DoubleTuple2._1()._1(),
@@ -49,28 +57,32 @@ public class StudentMonthTCStatisticsToDB {
                                 year,
                                 month
                         ),
-                        tuple3DoubleTuple2._2());
+                        new Tuple2<>(tuple3DoubleTuple2._2()._1(), tuple3DoubleTuple2._2()._2()));
             }
         });
-        JavaPairRDD<Tuple4<String, String, Integer, Integer>, Double> studentMonthTCSSumJavaRDD = studentMonthTCSJavaRDD.reduceByKey(new Function2<Double, Double, Double>() {
+        JavaPairRDD<Tuple4<String, String, Integer, Integer>, Tuple2<Double, Integer>> studentMonthTCSSumJavaRDD = studentMonthTCSJavaRDD.reduceByKey(new Function2<Tuple2<Double, Integer>, Tuple2<Double, Integer>, Tuple2<Double, Integer>>() {
             @Override
-            public Double call(Double aDouble, Double aDouble2) throws Exception {
-                return aDouble+aDouble2;
+            public Tuple2<Double, Integer> call(Tuple2<Double, Integer> aDouble, Tuple2<Double, Integer> aDouble2) throws Exception {
+                return new Tuple2<>(
+                        aDouble._1() + aDouble2._1(),
+                        aDouble._2() + aDouble2._2()
+                );
             }
         });
-        JavaRDD<StudentMonthTCSBean> studentMonthTCSBeanJavaRDD = studentMonthTCSSumJavaRDD.map(new Function<Tuple2<Tuple4<String, String, Integer, Integer>, Double>, StudentMonthTCSBean>() {
+        JavaRDD<StudentMonthTCSBean> studentMonthTCSBeanJavaRDD = studentMonthTCSSumJavaRDD.map(new Function<Tuple2<Tuple4<String, String, Integer, Integer>, Tuple2<Double, Integer>>, StudentMonthTCSBean>() {
             @Override
-            public StudentMonthTCSBean call(Tuple2<Tuple4<String, String, Integer, Integer>, Double> tuple4DoubleTuple2) throws Exception {
+            public StudentMonthTCSBean call(Tuple2<Tuple4<String, String, Integer, Integer>, Tuple2<Double, Integer>> tuple4DoubleTuple2) throws Exception {
                 return new StudentMonthTCSBean(
                         tuple4DoubleTuple2._1()._1(),
                         tuple4DoubleTuple2._1()._3(),
                         tuple4DoubleTuple2._1()._4(),
                         tuple4DoubleTuple2._1()._2(),
-                        tuple4DoubleTuple2._2()
+                        tuple4DoubleTuple2._2()._2(),
+                        tuple4DoubleTuple2._2()._1()
                 );
             }
         });
-        Dataset<StudentMonthTCSBean> studentMonthTCSBeanDataset = sparkSession.createDataFrame(studentMonthTCSBeanJavaRDD,StudentMonthTCSBean.class).as(Encoders.bean(StudentMonthTCSBean.class));
+        Dataset<StudentMonthTCSBean> studentMonthTCSBeanDataset = sparkSession.createDataFrame(studentMonthTCSBeanJavaRDD, StudentMonthTCSBean.class).as(Encoders.bean(StudentMonthTCSBean.class));
         studentMonthTCSBeanDataset.write().format("jdbc")
                 .option("url", StaticConstant.jdbcUrl)
                 .option("user", StaticConstant.jdbcUser)

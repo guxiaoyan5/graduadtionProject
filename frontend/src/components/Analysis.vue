@@ -9,7 +9,7 @@
       </el-col>
     </el-row>
     <el-row :gutter="20" style="margin-top: 10px;height:500px">
-      <el-col :span="24" style="height: 450px">
+      <el-col :span="24" style="height: 750px">
         <el-card style="height:inherit;width: content-box;padding: 20px"
                  body-style="height:90%;width: 100%;padding:0px">
           <div slot="header" class="clearfix">
@@ -18,7 +18,7 @@
           <el-table
             :data="tableData"
             style="width: 100%;text-align: center"
-            height="500">
+            height="700">
             <el-table-column
               type="index"
               width="50"

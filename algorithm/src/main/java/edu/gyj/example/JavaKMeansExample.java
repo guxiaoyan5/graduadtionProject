@@ -1,6 +1,5 @@
 package edu.gyj.example;
 
-import org.apache.spark.ml.Model;
 import org.apache.spark.ml.clustering.KMeans;
 import org.apache.spark.ml.clustering.KMeansModel;
 import org.apache.spark.ml.evaluation.ClusteringEvaluator;
@@ -24,7 +23,7 @@ public class JavaKMeansExample {
         System.out.println("Silhouette with squared euclidean distance = " + silhouette);
         Vector[] centers = kMeansModel.clusterCenters();
         System.out.println("Cluster Centers: ");
-        for (Vector center: centers) {
+        for (Vector center : centers) {
             System.out.println(center);
         }
         // $example off$

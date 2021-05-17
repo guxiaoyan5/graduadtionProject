@@ -5,16 +5,13 @@ import scala.Serializable;
 public class StudentTotalMoneyValue implements Serializable {
     private int consumption_count;
     private double consumption_total_money;
-    private double consumption_average_money;
-
 
     public StudentTotalMoneyValue() {
     }
 
-    public StudentTotalMoneyValue(int consumption_count, double consumption_total_money, double consumption_average_money) {
+    public StudentTotalMoneyValue(int consumption_count, double consumption_total_money) {
         this.consumption_count = consumption_count;
         this.consumption_total_money = consumption_total_money;
-        this.consumption_average_money = consumption_average_money;
     }
 
     @Override
@@ -22,7 +19,6 @@ public class StudentTotalMoneyValue implements Serializable {
         return "studentTotalMoneyValue{" +
                 "consumption_count=" + consumption_count +
                 ", consumption_total_money=" + consumption_total_money +
-                ", consumption_average_money=" + consumption_average_money +
                 '}';
     }
 
@@ -42,11 +38,5 @@ public class StudentTotalMoneyValue implements Serializable {
         this.consumption_total_money = consumption_total_money;
     }
 
-    public double getConsumption_average_money() {
-        return consumption_average_money;
-    }
 
-    public void setConsumption_average_money(double consumption_average_money) {
-        this.consumption_average_money = consumption_average_money;
-    }
 }
