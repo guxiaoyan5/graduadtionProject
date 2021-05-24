@@ -147,6 +147,8 @@ export default {
     onSubmit(formName) {
       this.college = ''
       let _this = this;
+      this.chart1.showLoading()
+      this.chart2.showLoading()
       this.$refs[formName].validate((valid) => {
         if (valid) {
           axios.post('http://localhost:9090/schoolUser3/getClassMonthTCS', {
@@ -154,6 +156,66 @@ export default {
             year: _this.formInline.year
           }).then(function (response) {
             _this.collegeData = response.data.data;
+            _this.collegeName = [];
+            // for (let i = 0; i < _this.colleges.length; i++) {
+            //   for (let j = 0; j < _this.formInline.id.length; j++) {
+            //     if (_this.colleges[i].id === _this.formInline.id[j]) {
+            //       _this.collegeName.push(_this.colleges[i]);
+            //     }
+            //   }
+            // }
+            let name = new Set();
+            for (let i = 0; i < _this.collegeData.length; i++) {
+              if (!name.has(_this.collegeData[i].name)) {
+                _this.collegeName.push({
+                  id: _this.collegeData[i].id,
+                  college: _this.collegeData[i].name
+                });
+              }
+              name.add(_this.collegeData[i].name);
+            }
+            name = Array.from(name);
+            let data = Array.from({length: 12}).map(item => (
+              Array.from({length: 3}).map(item1 =>
+                Array.from({length: name.length}).map(item3 => (0))
+              )
+            ));
+            for (let k = 0; k < _this.collegeData.length; k++) {
+              for (let i = 0; i < 12; i++) {
+                for (let j = 0; j < name.length; j++) {
+                  if (_this.collegeData[k].name == name[j] && _this.collegeData[k].month == i) {
+                    if (_this.collegeData[k].consumption_category == '早') {
+                      data[i][0][j] = Math.round(_this.collegeData[k].consumption_average_money * 100) / 100
+                    } else if (_this.collegeData[k].consumption_category == '午') {
+                      data[i][1][j] = Math.round(_this.collegeData[k].consumption_average_money * 100) / 100
+                    } else {
+                      data[i][2][j] = Math.round(_this.collegeData[k].consumption_average_money * 100) / 100
+                    }
+                  }
+                }
+              }
+            }
+            let options = [];
+            for (let i = 0; i < 12; i++) {
+              options.push({
+                title: {text: (i+1) + '月人均三餐消费'},
+                series: [
+                  {data: data[i][0]},
+                  {data: data[i][1]},
+                  {data: data[i][2]},
+                ]
+              })
+            }
+            _this.chart1.setOption({
+              baseOption: {
+                xAxis: [{
+                  'data': name,
+                }],
+              },
+              options: options
+            })
+            _this.chart1.hideLoading()
+            _this.chart2.hideLoading()
           }).catch(function (error) {
             console.log(error)
           })
@@ -161,64 +223,6 @@ export default {
           console.log('error submit!!');
           return false;
         }
-        _this.collegeName = [];
-        // for (let i = 0; i < _this.colleges.length; i++) {
-        //   for (let j = 0; j < _this.formInline.id.length; j++) {
-        //     if (_this.colleges[i].id === _this.formInline.id[j]) {
-        //       _this.collegeName.push(_this.colleges[i]);
-        //     }
-        //   }
-        // }
-        let name = new Set();
-        for (let i = 0; i < this.collegeData.length; i++) {
-          if (!name.has(_this.collegeData[i].name)) {
-            _this.collegeName.push({
-              id: _this.collegeData[i].id,
-              college: _this.collegeData[i].name
-            });
-          }
-          name.add(_this.collegeData[i].name);
-        }
-        name = Array.from(name);
-        let data = Array.from({length: 12}).map(item => (
-          Array.from({length: 3}).map(item1 =>
-            Array.from({length: name.length}).map(item3 => (0))
-          )
-        ));
-        for (let k = 0; k < _this.collegeData.length; k++) {
-          for (let i = 0; i < 12; i++) {
-            for (let j = 0; j < name.length; j++) {
-              if (_this.collegeData[k].name == name[j] && _this.collegeData[k].month == i) {
-                if (_this.collegeData[k].consumption_category == '早') {
-                  data[i][0][j] = Math.round(_this.collegeData[k].consumption_average_money * 100) / 100
-                } else if (_this.collegeData[k].consumption_category == '午') {
-                  data[i][1][j] = Math.round(_this.collegeData[k].consumption_average_money * 100) / 100
-                } else {
-                  data[i][2][j] = Math.round(_this.collegeData[k].consumption_average_money * 100) / 100
-                }
-              }
-            }
-          }
-        }
-        let options = [];
-        for (let i = 0; i < 12; i++) {
-          options.push({
-            title: {text: (i+1) + '月人均三餐消费'},
-            series: [
-              {data: data[i][0]},
-              {data: data[i][1]},
-              {data: data[i][2]},
-            ]
-          })
-        }
-        _this.chart1.setOption({
-          baseOption: {
-            xAxis: [{
-              'data': name,
-            }],
-          },
-          options: options
-        })
       });
     },
     initChart1() {

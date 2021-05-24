@@ -100,6 +100,8 @@ export default {
   name: "CollegeMonthCS",
   data() {
     let _this = this;
+    this.chart1.showLoading()
+    this.chart2.showLoading()
     axios.get('http://localhost:9090/schoolUser3/getColleges').then(function (response) {
       _this.colleges = response.data.data;
     }).catch(function (error) {
@@ -129,6 +131,8 @@ export default {
   methods: {
     onSubmit(form) {
       let _this = this;
+      this.chart1.showLoading()
+      this.chart2.showLoading()
       this.$refs[form].validate((valid) => {
         this.college = ''
         if (valid) {
@@ -137,6 +141,66 @@ export default {
             year: _this.formInline.year
           }).then(function (response) {
             _this.collegeData = response.data.data;
+            _this.collegeName = [];
+            let source = [
+              ["product", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
+            ];
+            let name = new Set();
+            for (let i = 0; i < _this.colleges.length; i++) {
+              for (let j = 0; j < _this.formInline.id.length; j++) {
+                if (_this.colleges[i].id === _this.formInline.id[j]) {
+                  _this.collegeName.push(_this.colleges[i]);
+                }
+              }
+            }
+            // this.college = this.collegeName[0].id
+            for (let i = 0; i < _this.collegeData.length; i++) {
+              if (name.has(_this.collegeData[i].name)) {
+                for (let j = 0; j < source.length; j++) {
+                  if (source[j][0] == _this.collegeData[i].name) {
+                    source[j][parseInt(_this.collegeData[i].month)] = Math.round(_this.collegeData[i].consumption_average_money * 100) / 100;
+                  }
+                }
+              } else {
+                name.add(_this.collegeData[i].name);
+                let temp = [_this.collegeData[i].name, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                temp[parseInt(_this.collegeData[i].month)] = Math.round(_this.collegeData[i].consumption_average_money * 100) / 100;
+                source.push(temp)
+              }
+            }
+            let series = [];
+            for (let i = 0; i < source.length - 1; i++) {
+              series.push({
+                type: 'line',
+                smooth: true,
+                seriesLayoutBy: 'row',
+                emphasis: {focus: 'series'}
+              })
+            }
+            series.push({
+              type: 'pie',
+              id: 'pie',
+              radius: '30%',
+              center: ['50%', '25%'],
+              emphasis: {focus: 'data'},
+              label: {
+                formatter: '{b}: {@1} ({d}%)'
+              },
+              encode: {
+                itemName: 'product',
+                value: '1',
+                tooltip: '1'
+              }
+            });
+            _this.chart1.setOption({
+              dataset: {
+                source: source
+              },
+              series: series
+            })
+
+            _this.chart1.hideLoading()
+            _this.chart2.hideLoading()
           }).catch(function (error) {
             console.log(error)
           })
@@ -144,63 +208,7 @@ export default {
           console.log('error submit!!');
           return false;
         }
-        _this.collegeName = [];
-        let source = [
-          ["product", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
-        ];
-        let name = new Set();
-        for (let i = 0; i < _this.colleges.length; i++) {
-          for (let j = 0; j < _this.formInline.id.length; j++) {
-            if (_this.colleges[i].id === _this.formInline.id[j]) {
-              _this.collegeName.push(_this.colleges[i]);
-            }
-          }
-        }
-        // this.college = this.collegeName[0].id
-        for (let i = 0; i < _this.collegeData.length; i++) {
-          if (name.has(_this.collegeData[i].name)) {
-            for (let j = 0; j < source.length; j++) {
-              if (source[j][0] == _this.collegeData[i].name) {
-                source[j][parseInt(_this.collegeData[i].month)] = Math.round(_this.collegeData[i].consumption_average_money * 100) / 100;
-              }
-            }
-          } else {
-            name.add(_this.collegeData[i].name);
-            let temp = [_this.collegeData[i].name, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            temp[parseInt(_this.collegeData[i].month)] = Math.round(_this.collegeData[i].consumption_average_money * 100) / 100;
-            source.push(temp)
-          }
-        }
-        let series = [];
-        for (let i = 0; i < source.length - 1; i++) {
-          series.push({
-            type: 'line',
-            smooth: true,
-            seriesLayoutBy: 'row',
-            emphasis: {focus: 'series'}
-          })
-        }
-        series.push({
-          type: 'pie',
-          id: 'pie',
-          radius: '30%',
-          center: ['50%', '25%'],
-          emphasis: {focus: 'data'},
-          label: {
-            formatter: '{b}: {@1} ({d}%)'
-          },
-          encode: {
-            itemName: 'product',
-            value: '1',
-            tooltip: '1'
-          }
-        });
-        _this.chart1.setOption({
-          dataset: {
-            source: source
-          },
-          series: series
-        })
+
       });
 
     },

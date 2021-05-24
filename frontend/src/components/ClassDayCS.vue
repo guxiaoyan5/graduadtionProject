@@ -62,8 +62,8 @@
         </el-card>
       </el-col>
     </el-row>
-    <el-row :gutter="20" style="margin-top: 10px;height: 750px">
-      <el-col :span="24" style="height: 700px;">
+    <el-row :gutter="20" style="margin-top: 10px;height: 550px">
+      <el-col :span="24" style="height: 500px;">
         <el-card style="height:inherit;width: content-box;padding: 20px"
                  body-style="height:100%;width: 100%;padding:0px">
           <div id="chart2" ref="chart2" style="height: 100%;width: 100%;margin-left: 10px"></div>
@@ -119,6 +119,8 @@ export default {
   methods: {
     onSubmit(formName) {
       let _this = this;
+      this.chart1.showLoading()
+      this.chart2.showLoading()
       this.$refs[formName].validate((valid) => {
         if (valid) {
           axios.post('http://localhost:9090/schoolUser3/getClassDayCS', {
@@ -126,6 +128,122 @@ export default {
             day: _this.formInline.day
           }).then(function (response) {
             _this.collegeData = response.data.data;
+            let name = new Set();
+            for (let i = 0; i < _this.collegeData.length; i++) {
+              name.add(_this.collegeData[i].name);
+            }
+            name = Array.from(name);
+            let date = new Date(_this.formInline.day);
+            let dates = [];
+            for (let i = -1; i < 6; i++) {
+              let newDate = new Date(+date + 1000 * 60 * 60 * 24 * i);
+              let month = newDate.getMonth() + 1 < 10 ? '0' + (newDate.getMonth() + 1) : (newDate.getMonth() + 1) + '';
+              dates.push(newDate.getFullYear() + "-" + month + "-" + newDate.getDate())
+            }
+            let data = Array.from({length: name.length}).map(item => (
+              Array.from({length: 7}).map(item => (0))
+            ))
+            let high = Array.from({length: name.length}).map(item => (
+              Array.from({length: 7}).map(item => (0))
+            ))
+            let low = Array.from({length: name.length}).map(item => (
+              Array.from({length: 7}).map(item => (0))
+            ))
+            for (let k = 0; k < _this.collegeData.length; k++) {
+              for (let i = 0; i < 7; i++) {
+                for (let j = 0; j < name.length; j++) {
+                  if (_this.collegeData[k].name == name[j] && _this.collegeData[k].day == dates[i]) {
+                    data[j][i] = Math.round(_this.collegeData[k].consumption_average_money * 100) / 100;
+                    high[j][i] = _this.collegeData[k].high;
+                    low[j][i] = _this.collegeData[k].low;
+                  }
+                }
+              }
+            }
+            let series = [];
+            for (let i = 0; i < name.length; i++) {
+              let temp = {
+                name: name[i],
+                type: 'line',
+                data: data[i],
+                markPoint: {
+                  data: [
+                    {type: 'max', name: '最大值'},
+                    {type: 'min', name: '最小值'}
+                  ]
+                },
+                markLine: {
+                  data: [
+                    {type: 'average', name: '平均值'}
+                  ]
+                }
+              }
+              series.push(temp)
+            }
+            _this.chart1.setOption({
+              xAxis: {
+                data: dates
+              },
+              legend: {
+                data: name
+              },
+              series: series
+            })
+            let series1 = [];
+            let name1 = [];
+            for (let i = 0; i < name.length; i++) {
+              name1.push(name[i] + '高于人均消费')
+              let temp = {
+                name: name[i] + '高于人均消费',
+                type: 'bar',
+                data: high[i],
+                markPoint: {
+                  data: [
+                    {type: 'max', name: '最大值'},
+                    {type: 'min', name: '最小值'}
+                  ]
+                },
+                markLine: {
+                  data: [
+                    {type: 'average', name: '平均值'}
+                  ]
+                }
+              };
+              series1.push(temp);
+            }
+            for (let i = 0; i < name.length; i++) {
+              name1.push(name[i] + '低于人均消费')
+              let temp = {
+                name: name[i] + '低于人均消费',
+                type: 'bar',
+                data: low[i],
+                markPoint: {
+                  data: [
+                    {type: 'max', name: '最大值'},
+                    {type: 'min', name: '最小值'}
+                  ]
+                },
+                markLine: {
+                  data: [
+                    {type: 'average', name: '平均值'}
+                  ]
+                }
+              };
+              series1.push(temp);
+            }
+            _this.chart2.setOption({
+              legend: {
+                data: name1
+              },
+              xAxis: [
+                {
+                  data: dates
+                }
+              ],
+              series: series1
+            })
+            _this.chart1.hideLoading()
+            _this.chart2.hideLoading()
           }).catch(function (error) {
             console.log(error)
           })
@@ -133,121 +251,7 @@ export default {
           console.log('error submit!!');
           return false;
         }
-        let name = new Set();
-        for (let i = 0; i < this.collegeData.length; i++) {
-          name.add(_this.collegeData[i].name);
-        }
-        name = Array.from(name);
-        let date = new Date(_this.formInline.day);
-        let dates = [];
-        for (let i = -1; i < 6; i++) {
-          let newDate = new Date(+date + 1000 * 60 * 60 * 24 * i);
-          let month = newDate.getMonth() + 1 < 10 ? '0' + (newDate.getMonth() + 1) : (newDate.getMonth() + 1) + '';
-          dates.push(newDate.getFullYear() + "-" + month + "-" + newDate.getDate())
-        }
-        let data = Array.from({length: name.length}).map(item => (
-          Array.from({length: 7}).map(item => (0))
-        ))
-        let high = Array.from({length: name.length}).map(item => (
-          Array.from({length: 7}).map(item => (0))
-        ))
-        let low = Array.from({length: name.length}).map(item => (
-          Array.from({length: 7}).map(item => (0))
-        ))
-        for (let k = 0; k < _this.collegeData.length; k++) {
-          console.log(_this.collegeData[k].day)
-          for (let i = 0; i < 7; i++) {
-            for (let j = 0; j < name.length; j++) {
-              if (_this.collegeData[k].name == name[j] && _this.collegeData[k].day == dates[i]) {
-                data[j][i] = Math.round(_this.collegeData[k].consumption_average_money * 100) / 100;
-                high[j][i] = _this.collegeData[k].high;
-                low[j][i] = _this.collegeData[k].low;
-              }
-            }
-          }
-        }
-        let series = [];
-        for (let i = 0; i < name.length; i++) {
-          let temp = {
-            name: name[i],
-            type: 'line',
-            data: data[i],
-            markPoint: {
-              data: [
-                {type: 'max', name: '最大值'},
-                {type: 'min', name: '最小值'}
-              ]
-            },
-            markLine: {
-              data: [
-                {type: 'average', name: '平均值'}
-              ]
-            }
-          }
-          series.push(temp)
-        }
-        _this.chart1.setOption({
-          xAxis: {
-            data: dates
-          },
-          legend: {
-            data: name
-          },
-          series: series
-        })
-        let series1 = [];
-        let name1 = [];
-        for (let i = 0; i < name.length; i++) {
-          name1.push(name[i] + '高于人均消费')
-          let temp = {
-            name: name[i] + '高于人均消费',
-            type: 'bar',
-            data: high[i],
-            markPoint: {
-              data: [
-                {type: 'max', name: '最大值'},
-                {type: 'min', name: '最小值'}
-              ]
-            },
-            markLine: {
-              data: [
-                {type: 'average', name: '平均值'}
-              ]
-            }
-          };
-          series1.push(temp);
-        }
-        for (let i = 0; i < name.length; i++) {
-          name1.push(name[i] + '低于人均消费')
-          let temp = {
-            name: name[i] + '低于人均消费',
-            type: 'bar',
-            data: low[i],
-            markPoint: {
-              data: [
-                {type: 'max', name: '最大值'},
-                {type: 'min', name: '最小值'}
-              ]
-            },
-            markLine: {
-              data: [
-                {type: 'average', name: '平均值'}
-              ]
-            }
-          };
-          series1.push(temp);
-        }
-        _this.chart2.setOption({
-          legend: {
-            data: name1
-          },
-          xAxis: [
-            {
-              data: dates
-            }
-          ],
-          series: series1
-        })
+
       })
     },
     initChart1() {

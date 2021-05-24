@@ -104,6 +104,8 @@ export default {
   methods: {
     onSubmit(formName) {
       let _this = this
+      this.chart1.showLoading()
+      this.chart2.showLoading()
       this.$refs[formName].validate((valid) => {
           if (valid) {
             axios.post('http://localhost:9090/schoolUser3/getCollegeDayTCS', {
@@ -111,6 +113,117 @@ export default {
               day: _this.formInline.day
             }).then(function (response) {
               _this.collegeData = response.data.data;
+              let date = new Date(_this.formInline.day);
+              let dates = [];
+              for (let i = -1; i < 6; i++) {
+                let newDate = new Date(+date + 1000 * 60 * 60 * 24 * i);
+                let month = newDate.getMonth() + 1 < 10 ? '0' + (newDate.getMonth() + 1) : (newDate.getMonth() + 1) + '';
+                dates.push(newDate.getFullYear() + "-" + month + "-" + newDate.getDate())
+              }
+              let b = ['早餐', 0, 0, 0, 0, 0, 0, 0]
+              let l = ['午餐', 0, 0, 0, 0, 0, 0, 0]
+              let d = ['晚餐', 0, 0, 0, 0, 0, 0, 0]
+              let p = ['product']
+              for (let i = 0; i < dates.length; i++) {
+                p.push(dates[i])
+              }
+              for (let i = 0; i < _this.collegeData.length; i++) {
+                for (let j = 0; j < dates.length; j++) {
+                  if (_this.collegeData[i].day == dates[j]) {
+                    if (_this.collegeData[i].consumption_category == '早') {
+                      b[j + 1] = Math.round(_this.collegeData[i].consumption_average_money * 100) / 100
+                    } else if (_this.collegeData[i].consumption_category == '午') {
+                      l[j + 1] = Math.round(_this.collegeData[i].consumption_average_money * 100) / 100
+                    } else {
+                      d[j + 1] = Math.round(_this.collegeData[i].consumption_average_money * 100) / 100
+                    }
+                  }
+                }
+              }
+              _this.chart1.setOption({
+                dataset: {
+                  source: [
+                    p, b, l, d
+                  ]
+                },
+                series: [{type: 'bar', smooth: true, seriesLayoutBy: 'row', emphasis: {focus: 'series'}},
+                  {type: 'bar', smooth: true, seriesLayoutBy: 'row', emphasis: {focus: 'series'}},
+                  {type: 'bar', smooth: true, seriesLayoutBy: 'row', emphasis: {focus: 'series'}},
+                  {
+                    type: 'pie',
+                    id: 'pie',
+                    radius: '30%',
+                    center: ['50%', '25%'],
+                    emphasis: {focus: 'data'},
+                    label: {
+                      formatter: '{b}: {@} ({d}%)'
+                    },
+                    encode: {
+                      itemName: 'product',
+                      value: '',
+                      tooltip: ''
+                    }
+                  }]
+              })
+
+              let blow = Array.from({length: 12}).map(item => (0));
+              let bhigh = Array.from({length: 12}).map(item => (0));
+              let llow = Array.from({length: 12}).map(item => (0));
+              let lhigh = Array.from({length: 12}).map(item => (0));
+              let dlow = Array.from({length: 12}).map(item => (0));
+              let dhigh = Array.from({length: 12}).map(item => (0));
+              for (let k = 0; k < _this.collegeData.length; k++) {
+                for (let i = 0; i < dates.length; i++) {
+                  if (dates[i] == _this.collegeData[k].day) {
+                    if (_this.collegeData[k].consumption_category == '早') {
+                      blow[i] = _this.collegeData[k].low
+                      bhigh[i] = _this.collegeData[k].high
+                    } else if (_this.collegeData[k].consumption_category == '午') {
+                      llow[i] = _this.collegeData[k].low
+                      lhigh[i] = _this.collegeData[k].high
+                    } else {
+                      dlow[i] = _this.collegeData[k].low
+                      dhigh[i] = _this.collegeData[k].high
+                    }
+                  }
+                }
+              }
+              _this.chart2.setOption({
+                xAxis: [
+                  {
+                    data: dates
+                  }
+                ],
+                color: [
+                  '#5470c6',
+                  '#91cc75',
+                  '#fac858',
+                  '#ee6666',
+                  '#73c0de',
+                  '#3ba272',
+                  '#fc8452',
+                  '#9a60b4',
+                  '#ea7ccc',
+                ],
+                series: [
+                  {
+                    data: bhigh,
+                  }, {
+                    data: blow,
+                  },
+                  {
+                    data: lhigh,
+                  }, {
+                    data: llow,
+                  }, {
+                    data: dhigh,
+                  }, {
+                    data: dlow,
+                  }
+                ]
+              })
+              _this.chart1.hideLoading()
+              _this.chart2.hideLoading()
             }).catch(function (error) {
               console.log(error)
             })
@@ -118,115 +231,6 @@ export default {
             console.log('error submit!!');
             return false;
           }
-          let date = new Date(this.formInline.day);
-          let dates = [];
-          for (let i = -1; i < 6; i++) {
-            let newDate = new Date(+date + 1000 * 60 * 60 * 24 * i);
-            let month = newDate.getMonth() + 1 < 10 ? '0' + (newDate.getMonth() + 1) : (newDate.getMonth() + 1) + '';
-            dates.push(newDate.getFullYear() + "-" + month + "-" + newDate.getDate())
-          }
-          let b = ['早餐', 0, 0, 0, 0, 0, 0, 0]
-          let l = ['午餐', 0, 0, 0, 0, 0, 0, 0]
-          let d = ['晚餐', 0, 0, 0, 0, 0, 0, 0]
-          let p = ['product']
-          for (let i = 0; i < dates.length; i++) {
-            p.push(dates[i])
-          }
-          for (let i = 0; i < _this.collegeData.length; i++) {
-            for (let j = 0; j < dates.length; j++) {
-              if (_this.collegeData[i].day == dates[j]) {
-                if (_this.collegeData[i].consumption_category == '早') {
-                  b[j + 1] = Math.round(_this.collegeData[i].consumption_average_money * 100) / 100
-                } else if (_this.collegeData[i].consumption_category == '午') {
-                  l[j + 1] = Math.round(_this.collegeData[i].consumption_average_money * 100) / 100
-                } else {
-                  d[j + 1] = Math.round(_this.collegeData[i].consumption_average_money * 100) / 100
-                }
-              }
-            }
-          }
-          _this.chart1.setOption({
-            dataset: {
-              source: [
-                p, b, l, d
-              ]
-            },
-            series: [{type: 'bar', smooth: true, seriesLayoutBy: 'row', emphasis: {focus: 'series'}},
-              {type: 'bar', smooth: true, seriesLayoutBy: 'row', emphasis: {focus: 'series'}},
-              {type: 'bar', smooth: true, seriesLayoutBy: 'row', emphasis: {focus: 'series'}},
-              {
-                type: 'pie',
-                id: 'pie',
-                radius: '30%',
-                center: ['50%', '25%'],
-                emphasis: {focus: 'data'},
-                label: {
-                  formatter: '{b}: {@} ({d}%)'
-                },
-                encode: {
-                  itemName: 'product',
-                  value: '',
-                  tooltip: ''
-                }
-              }]
-          })
-
-          let blow = Array.from({length: 12}).map(item => (0));
-          let bhigh = Array.from({length: 12}).map(item => (0));
-          let llow = Array.from({length: 12}).map(item => (0));
-          let lhigh = Array.from({length: 12}).map(item => (0));
-          let dlow = Array.from({length: 12}).map(item => (0));
-          let dhigh = Array.from({length: 12}).map(item => (0));
-          for (let k = 0; k < _this.collegeData.length; k++) {
-            for (let i = 0; i < dates.length; i++) {
-              if (dates[i] == _this.collegeData[k].day) {
-                if (_this.collegeData[k].consumption_category == '早') {
-                  blow[i] = _this.collegeData[k].low
-                  bhigh[i] = _this.collegeData[k].high
-                } else if (_this.collegeData[k].consumption_category == '午') {
-                  llow[i] = _this.collegeData[k].low
-                  lhigh[i] = _this.collegeData[k].high
-                } else {
-                  dlow[i] = _this.collegeData[k].low
-                  dhigh[i] = _this.collegeData[k].high
-                }
-              }
-            }
-          }
-          _this.chart2.setOption({
-            xAxis: [
-              {
-                data: dates
-              }
-            ],
-            color: [
-              '#5470c6',
-              '#91cc75',
-              '#fac858',
-              '#ee6666',
-              '#73c0de',
-              '#3ba272',
-              '#fc8452',
-              '#9a60b4',
-              '#ea7ccc',
-            ],
-            series: [
-              {
-                data: bhigh,
-              }, {
-                data: blow,
-              },
-              {
-                data: lhigh,
-              }, {
-                data: llow,
-              }, {
-                data: dhigh,
-              }, {
-                data: dlow,
-              }
-            ]
-          })
         }
       );
     },

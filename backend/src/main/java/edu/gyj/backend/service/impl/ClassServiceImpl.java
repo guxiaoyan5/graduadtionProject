@@ -19,9 +19,7 @@ import edu.gyj.backend.service.ClassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class ClassServiceImpl implements ClassService {
@@ -63,6 +61,18 @@ public class ClassServiceImpl implements ClassService {
                     majorEntity.getMajor(), collegeEntity.getCollege(), majorEntity.getId(),
                     collegeEntity.getId()));
         }
+        classResults.sort(new Comparator<ClassResult>() {
+            @Override
+            public int compare(ClassResult o1, ClassResult o2) {
+                if(o1.getCollegeId()>o2.getCollegeId()){
+                    return 1;
+                }else if(o1.getCollegeId()==o2.getCollegeId()){
+                    return Integer.compare(o1.getMajorId(),o2.getMajorId());
+                }else{
+                    return -1;
+                }
+            }
+        });
         return classResults;
     }
 

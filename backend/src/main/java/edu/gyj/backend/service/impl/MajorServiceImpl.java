@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -58,6 +59,12 @@ public class MajorServiceImpl implements MajorService {
                 majorResults.add(new MajorResult(majorEntity.getId(), majorEntity.getMajor(), collegeEntity.getCollege(), collegeEntity.getId()));
             }
         }
+        majorResults.sort(new Comparator<MajorResult>() {
+            @Override
+            public int compare(MajorResult o1, MajorResult o2) {
+                return Integer.compare(o1.getCollegeId(),o2.getCollegeId());
+            }
+        });
         return majorResults;
     }
 
